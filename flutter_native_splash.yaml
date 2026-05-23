@@ -1,0 +1,9 @@
+flutter_native_splash:
+  color: "#F7F5F2" # Background color — sama dengan AppColors.background
+  image: assets/image/rectangle.png # Padded logo to avoid circle cropping on Android 12+
+  fullscreen: true
+  
+  android_12:
+    color: "#F7F5F2"
+    image: assets/image/rectangle.png
+    icon_background_color: "#F7F5F2"

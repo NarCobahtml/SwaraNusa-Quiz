@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "769197054026",
+    "project_id": "swaranusa-quiz",
+    "storage_bucket": "swaranusa-quiz.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769197054026:android:8e69246f7a802c1e70aeb3",
+        "android_client_info": {
+          "package_name": "com.example.swaranusaquiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "769197054026-75acqf47fjongthr32hunu558qupgv2r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.swaranusaquiz",
+            "certificate_hash": "c7df4252e633c0994325563b14221d4752ae0798"
+          }
+        },
+        {
+          "client_id": "769197054026-b3ch4ukph3au5904578an2ndba5ocs1d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtAqoV757ViGziffzqvVzkiaNdKcdzAbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "769197054026-b3ch4ukph3au5904578an2ndba5ocs1d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "769197054026-eqhb6b17ocel56ev35mttd6l1d49qqd3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.swaranusaquiz"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
