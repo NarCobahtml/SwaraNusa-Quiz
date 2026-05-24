@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swaranusaquiz/app/modules/level_selection/controllers/level_selection_controller.dart';
 import 'package:swaranusaquiz/app/modules/level_selection/widgets/level_selection_view.dart';
-import 'package:swaranusaquiz/app/modules/quiz/views/kuis/kuis_pertanyaan/kuis_pertanyaan1.dart';
 
 class LevelSelectionPage extends StatelessWidget {
   final String modeName;
@@ -15,11 +14,12 @@ class LevelSelectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LevelSelectionView(
+    return LevelSelectionView(
       title: 'Select level',
       activeIcon: Icons.graphic_eq,
       controller: LevelSelectionController(
-        firstLevelPage: KuisPertanyaan1(),
+        quizTitle: modeName,
+        modeId: modeKey,
       ),
     );
   }

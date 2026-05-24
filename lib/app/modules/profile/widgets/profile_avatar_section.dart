@@ -21,7 +21,7 @@ class ProfileAvatarSection extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             GestureDetector(
-              onTap: controller.editPhoto,
+              onTap: () => controller.editPhoto(context),
               child: Container(
                 width: 140,
                 height: 140,
@@ -60,7 +60,7 @@ class ProfileAvatarSection extends StatelessWidget {
               bottom: 4,
               right: 4,
               child: GestureDetector(
-                onTap: controller.editPhoto,
+                onTap: () => controller.editPhoto(context),
                 child: Container(
                   width: 38,
                   height: 38,
@@ -89,7 +89,7 @@ class ProfileAvatarSection extends StatelessWidget {
         const SizedBox(height: 12),
         // Nama dengan tombol edit di sebelah kanan
         GestureDetector(
-          onTap: controller.editName,
+          onTap: () => controller.editName(context),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

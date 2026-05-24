@@ -9,6 +9,7 @@ import 'package:swaranusaquiz/app/data/services/user_service.dart';
 import 'package:swaranusaquiz/app/modules/profile/models/profile_badge.dart';
 import 'package:swaranusaquiz/app/modules/profile/models/profile_data.dart';
 import 'package:swaranusaquiz/app/routes/app_pages.dart';
+import 'package:swaranusaquiz/app/utils/app_snackbar.dart';
 
 class ProfileController extends GetxController {
   ProfileController({UserRepository? userRepository})
@@ -101,75 +102,65 @@ class ProfileController extends GetxController {
     isDarkMode.value = !value;
   }
 
-  Future<void> editName() async {
+  Future<void> editName(BuildContext context) async {
     final uid = auth.FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
 
     final currentName = _userService.currentUser.value?.name ?? '';
-    final textController = TextEditingController(text: currentName);
+    var editedName = currentName;
 
-    final context = Get.context;
-    if (context == null) return;
-
-    // Gunakan showDialog native Flutter — hindari konflik overlay GetX
     final newName = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Edit Nama'),
-        content: TextField(
-          controller: textController,
-          autofocus: true,
+        content: TextFormField(
+          initialValue: currentName,
+          autofocus: false,
           maxLength: 30,
           decoration: const InputDecoration(
             hintText: 'Masukkan nama baru',
             border: OutlineInputBorder(),
           ),
-          onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
+          onChanged: (value) => editedName = value,
+          onFieldSubmitted: (value) => _closeDialogSafely(ctx, value.trim()),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
+            onPressed: () => _closeDialogSafely(ctx, null),
             child: const Text('Batal'),
           ),
           TextButton(
-            onPressed: () => Navigator.of(ctx).pop(textController.text.trim()),
+            onPressed: () => _closeDialogSafely(ctx, editedName.trim()),
             child: const Text('Simpan'),
           ),
         ],
       ),
     );
 
-    textController.dispose();
     if (newName == null || newName.isEmpty || newName == currentName) return;
+    await Future<void>.delayed(const Duration(milliseconds: 120));
 
     isSaving.value = true;
     try {
       await _userRepository.updateProfile(uid: uid, name: newName);
       await _userService.reload();
-      Get.snackbar(
+      AppSnackbar.success(
         'Berhasil',
         'Nama berhasil diperbarui.',
-        snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(16),
       );
     } catch (_) {
-      Get.snackbar(
+      AppSnackbar.error(
         'Gagal',
         'Tidak dapat memperbarui nama. Coba lagi.',
-        snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(16),
       );
     } finally {
       isSaving.value = false;
     }
   }
 
-  Future<void> editPhoto() async {
+  Future<void> editPhoto(BuildContext context) async {
     final uid = auth.FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
-
-    final context = Get.context;
-    if (context == null) return;
 
     final source = await showDialog<ImageSource>(
       context: context,
@@ -223,22 +214,25 @@ class ProfileController extends GetxController {
         } catch (_) {}
       }
       await _userService.reload();
-      Get.snackbar(
+      AppSnackbar.success(
         'Berhasil',
         'Foto profil berhasil diperbarui.',
-        snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(16),
       );
     } catch (error) {
-      Get.snackbar(
+      AppSnackbar.error(
         'Gagal',
         error.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(16),
       );
     } finally {
       isSaving.value = false;
     }
+  }
+
+  Future<void> _closeDialogSafely(BuildContext context, Object? result) async {
+    FocusScope.of(context).unfocus();
+    await Future<void>.delayed(const Duration(milliseconds: 80));
+    if (!context.mounted) return;
+    Navigator.of(context, rootNavigator: true).pop(result);
   }
 
   Future<void> logout() async {

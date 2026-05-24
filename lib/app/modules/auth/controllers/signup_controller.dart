@@ -10,8 +10,8 @@ class SignUpController extends GetxController {
   SignUpController({
     AuthRepository? authRepository,
     UserRepository? userRepository,
-  })  : _authRepository = authRepository ?? AuthRepository(),
-        _userRepository = userRepository ?? UserRepository();
+  }) : _authRepository = authRepository ?? AuthRepository(),
+       _userRepository = userRepository ?? UserRepository();
 
   final AuthRepository _authRepository;
   final UserRepository _userRepository;
@@ -59,7 +59,12 @@ class SignUpController extends GetxController {
         username: username,
       );
       Get.offAllNamed(AppRoutes.mainNavigation);
-      AppSnackbar.success('Registrasi berhasil', 'Akun kamu sudah siap dipakai.');
+      // Delay agar AppSnackbarHost di halaman baru sempat mount
+      await Future.delayed(const Duration(milliseconds: 300));
+      AppSnackbar.success(
+        'Registrasi berhasil',
+        'Akun kamu sudah siap dipakai.',
+      );
     }, title: 'Registrasi gagal');
   }
 
@@ -120,6 +125,8 @@ class SignUpController extends GetxController {
       username: _usernameFromEmail(email),
     );
     Get.offAllNamed(AppRoutes.mainNavigation);
+    // Delay agar AppSnackbarHost di halaman baru sempat mount
+    await Future.delayed(const Duration(milliseconds: 300));
     AppSnackbar.success('Registrasi berhasil', 'Akun kamu sudah siap dipakai.');
   }
 

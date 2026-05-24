@@ -72,19 +72,34 @@ class _AnswerImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final path = imagePath;
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
-      child: imagePath != null
-          ? Image.asset(
-              imagePath!,
-              width: 130,
-              height: 90,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>
-                  const _ImageFallback(width: 150, height: 125),
-            )
+      child: path != null && path.isNotEmpty
+          ? _isNetworkImage(path)
+              ? Image.network(
+                  path,
+                  width: 130,
+                  height: 90,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const _ImageFallback(width: 150, height: 125),
+                )
+              : Image.asset(
+                  path,
+                  width: 130,
+                  height: 90,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const _ImageFallback(width: 150, height: 125),
+                )
           : const _ImageFallback(width: 130, height: 90),
     );
+  }
+
+  bool _isNetworkImage(String path) {
+    final normalized = path.toLowerCase();
+    return normalized.startsWith('http://') || normalized.startsWith('https://');
   }
 }
 

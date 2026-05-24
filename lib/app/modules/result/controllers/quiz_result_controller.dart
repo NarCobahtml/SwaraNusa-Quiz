@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/data/models/quiz_answer.dart';
+import 'package:swaranusaquiz/app/data/services/backend_services.dart';
 import 'package:swaranusaquiz/app/routes/app_pages.dart';
 import 'package:swaranusaquiz/app/modules/result/models/quiz_result_summary.dart';
 
@@ -17,9 +18,22 @@ class QuizResultController extends GetxController {
   }
 
   void openReview() {
+    final answers = QuizEngineService.instance.answers.map((answer) {
+      return QuizAnswer(
+        questionNumber: answer.questionNumber,
+        userAnswer: answer.userAnswer.isEmpty
+            ? 'Tidak menjawab'
+            : answer.userAnswer,
+        correctAnswer: answer.correctAnswer,
+        imagePath: answer.mediaType == 'image' && answer.mediaUrl.isNotEmpty
+            ? answer.mediaUrl
+            : null,
+      );
+    }).toList();
+
     Get.toNamed(
       AppRoutes.review,
-      arguments: ReviewAnswersData.getSampleData(),
+      arguments: answers.isEmpty ? ReviewAnswersData.getSampleData() : answers,
     );
   }
 }

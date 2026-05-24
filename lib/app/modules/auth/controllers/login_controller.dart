@@ -47,6 +47,8 @@ class LoginController extends GetxController {
         );
       }
       Get.offAllNamed(AppRoutes.mainNavigation);
+      // Delay agar AppSnackbarHost di halaman baru sempat mount
+      await Future.delayed(const Duration(milliseconds: 300));
       AppSnackbar.success('Login berhasil', 'Selamat datang kembali.');
     });
   }
@@ -102,6 +104,8 @@ class LoginController extends GetxController {
       username: _usernameFromEmail(email),
     );
     Get.offAllNamed(AppRoutes.mainNavigation);
+    // Delay agar AppSnackbarHost di halaman baru sempat mount
+    await Future.delayed(const Duration(milliseconds: 300));
     AppSnackbar.success('Login berhasil', 'Selamat datang kembali.');
   }
 

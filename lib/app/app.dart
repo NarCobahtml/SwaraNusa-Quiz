@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/routes/app_pages.dart';
+import 'package:swaranusaquiz/app/utils/app_snackbar.dart';
 import 'package:swaranusaquiz/app/utils/app_theme.dart';
 
 class SwaraNusaQuizApp extends StatelessWidget {
@@ -14,6 +15,9 @@ class SwaraNusaQuizApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       initialRoute: AppRoutes.splash,
       getPages: AppPages.pages,
+      builder: (context, child) {
+        return AppSnackbarHost(child: child ?? const SizedBox.shrink());
+      },
     );
   }
 }

@@ -1,8 +1,5 @@
 import 'package:get/get.dart';
-import 'package:swaranusaquiz/app/modules/guess_sound/views/tebak/tebak_pertanyaan/tebak_pertanyaan1.dart';
-import 'package:swaranusaquiz/app/modules/history_quiz/views/sejarah/sejarah_pertanyaan/sejarah_pertanyaan1.dart';
 import 'package:swaranusaquiz/app/modules/level_selection/controllers/level_selection_controller.dart';
-import 'package:swaranusaquiz/app/modules/quiz/views/kuis/kuis_pertanyaan/kuis_pertanyaan1.dart';
 import 'package:swaranusaquiz/app/routes/app_routes.dart';
 
 class LevelBinding extends Bindings {
@@ -12,17 +9,20 @@ class LevelBinding extends Bindings {
       switch (Get.currentRoute) {
         case AppRoutes.levelTebakSuara:
           return const LevelSelectionController(
-            firstLevelPage: TebakPertanyaan1(),
+            quizTitle: 'Tebak Suara',
+            modeId: 'tebak_suara',
           );
         case AppRoutes.levelSejarah:
           return const LevelSelectionController(
-            firstLevelPage: SejarahPertanyaan1(),
+            quizTitle: 'Sejarah',
+            modeId: 'sejarah',
           );
         case AppRoutes.level:
         case AppRoutes.levelTebakGambar:
         default:
           return const LevelSelectionController(
-            firstLevelPage: KuisPertanyaan1(),
+            quizTitle: 'Tebak Gambar',
+            modeId: 'tebak_gambar',
           );
       }
     });

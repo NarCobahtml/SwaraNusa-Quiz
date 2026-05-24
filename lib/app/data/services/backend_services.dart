@@ -11,6 +11,8 @@ class QuizAnswerRecord {
   final String userAnswer;
   final String correctAnswer;
   final bool isCorrect;
+  final String mediaUrl;
+  final String mediaType;
   final int timeSpentSeconds;
   final int pointsEarned;
 
@@ -20,6 +22,8 @@ class QuizAnswerRecord {
     required this.userAnswer,
     required this.correctAnswer,
     required this.isCorrect,
+    this.mediaUrl = '',
+    this.mediaType = '',
     required this.timeSpentSeconds,
     required this.pointsEarned,
   });
@@ -30,6 +34,8 @@ class QuizAnswerRecord {
     'userAnswer': userAnswer,
     'correctAnswer': correctAnswer,
     'isCorrect': isCorrect,
+    'mediaUrl': mediaUrl,
+    'mediaType': mediaType,
     'timeSpentSeconds': timeSpentSeconds,
     'pointsEarned': pointsEarned,
     'createdAt': FieldValue.serverTimestamp(),
@@ -93,9 +99,15 @@ class QuizEngineService {
     required String correctAnswer,
     int points = 10,
     int timeSpentSeconds = 0,
+    String mediaUrl = '',
+    String mediaType = '',
   }) {
-    if (_startedAt == null || questionNumber == 1 && _answers.isEmpty) {
-      start();
+    if (_startedAt == null) {
+      start(
+        modeId: _modeId,
+        levelId: _levelId,
+        totalQuestions: _totalQuestions,
+      );
     }
     final question = BackendBootstrap.instance.questionsById[questionId];
     final authoritativeCorrectAnswer = question?.correctAnswer ?? correctAnswer;
@@ -109,6 +121,8 @@ class QuizEngineService {
         userAnswer: selectedAnswer,
         correctAnswer: authoritativeCorrectAnswer,
         isCorrect: isCorrect,
+        mediaUrl: mediaUrl,
+        mediaType: mediaType,
         timeSpentSeconds: timeSpentSeconds,
         pointsEarned: isCorrect ? authoritativePoints : 0,
       ),

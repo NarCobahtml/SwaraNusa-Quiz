@@ -7,10 +7,6 @@ import 'package:swaranusaquiz/app/modules/auth/bindings/signup_binding.dart';
 import 'package:swaranusaquiz/app/modules/auth/views/forgot_password.dart';
 import 'package:swaranusaquiz/app/modules/auth/views/login.dart';
 import 'package:swaranusaquiz/app/modules/auth/views/signup.dart';
-import 'package:swaranusaquiz/app/modules/guess_sound/bindings/guess_sound_binding.dart';
-import 'package:swaranusaquiz/app/modules/guess_sound/views/tebak/tebak_pertanyaan/tebak_pertanyaan1.dart';
-import 'package:swaranusaquiz/app/modules/history_quiz/bindings/history_quiz_binding.dart';
-import 'package:swaranusaquiz/app/modules/history_quiz/views/sejarah/sejarah_pertanyaan/sejarah_pertanyaan1.dart';
 import 'package:swaranusaquiz/app/modules/home/bindings/home_binding.dart';
 import 'package:swaranusaquiz/app/modules/home/views/home_page.dart';
 import 'package:swaranusaquiz/app/modules/leaderboard/bindings/leaderboard_binding.dart';
@@ -28,8 +24,7 @@ import 'package:swaranusaquiz/app/modules/mode/bindings/mode_binding.dart';
 import 'package:swaranusaquiz/app/modules/mode/views/mode_page.dart';
 import 'package:swaranusaquiz/app/modules/profile/bindings/profile_binding.dart';
 import 'package:swaranusaquiz/app/modules/profile/views/profil.dart';
-import 'package:swaranusaquiz/app/modules/quiz/bindings/quiz_question_binding.dart';
-import 'package:swaranusaquiz/app/modules/quiz/views/kuis/kuis_pertanyaan/kuis_pertanyaan1.dart';
+import 'package:swaranusaquiz/app/modules/quiz/views/quiz_session_page.dart';
 import 'package:swaranusaquiz/app/modules/result/bindings/result_binding.dart';
 import 'package:swaranusaquiz/app/modules/result/models/quiz_result_summary.dart';
 import 'package:swaranusaquiz/app/modules/result/views/result.dart';
@@ -152,18 +147,15 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.kuisPertanyaan1,
-      page: () => const KuisPertanyaan1(),
-      binding: QuizQuestionBinding(),
+      page: () => const QuizSessionPage.tebakGambar(),
     ),
     GetPage(
       name: AppRoutes.tebakPertanyaan1,
-      page: () => const TebakPertanyaan1(),
-      binding: GuessSoundBinding(),
+      page: () => const QuizSessionPage.tebakSuara(),
     ),
     GetPage(
       name: AppRoutes.sejarahPertanyaan1,
-      page: () => const SejarahPertanyaan1(),
-      binding: HistoryQuizBinding(),
+      page: () => const QuizSessionPage.sejarah(),
     ),
   ];
 }

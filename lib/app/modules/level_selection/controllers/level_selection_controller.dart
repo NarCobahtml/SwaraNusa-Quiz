@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/modules/level_selection/models/level_data.dart';
+import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_config.dart';
+import 'package:swaranusaquiz/app/modules/quiz/views/quiz_session_page.dart';
 
 class LevelSelectionController {
-  final Widget firstLevelPage;
+  final String quizTitle;
+  final String modeId;
   final Duration transitionDuration;
 
   const LevelSelectionController({
-    required this.firstLevelPage,
+    required this.quizTitle,
+    required this.modeId,
     this.transitionDuration = const Duration(milliseconds: 300),
   });
 
@@ -30,7 +34,13 @@ class LevelSelectionController {
     if (level.isLocked || level.number != 1) return;
 
     Get.to(
-      () => firstLevelPage,
+      () => QuizSessionPage(
+        config: QuizSessionConfig(
+          title: quizTitle,
+          modeId: modeId,
+          levelId: '${modeId}_${level.number}',
+        ),
+      ),
       transition: Transition.fade,
       duration: transitionDuration,
     );
