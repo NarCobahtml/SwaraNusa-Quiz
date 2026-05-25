@@ -4,6 +4,6 @@ import 'package:swaranusaquiz/app/modules/leaderboard/controllers/leaderboard_co
 class LeaderboardBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<LeaderboardController>(() => LeaderboardController.sample());
+    Get.lazyPut<LeaderboardController>(() => LeaderboardController());
   }
 }

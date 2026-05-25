@@ -5,7 +5,7 @@ import 'package:swaranusaquiz/app/data/models/leaderboard_user.dart';
 
 class LeaderboardList extends StatelessWidget {
   final List<LeaderboardUser> users;
-  final int? currentUserId;
+  final String? currentUserId;
 
   const LeaderboardList({
     super.key,
@@ -23,11 +23,10 @@ class LeaderboardList extends StatelessWidget {
       itemCount: users.length,
       itemBuilder: (context, index) {
         final user = users[index];
-        final rank = index + 4;
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: LeaderboardListItem(
-            rank: rank,
+            rank: user.rank,
             user: user,
             isCurrentUser: user.id == currentUserId,
           ),
@@ -83,8 +82,8 @@ class LeaderboardListItem extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: AppColors.divider, width: 2),
-              image: const DecorationImage(
-                image: AssetImage('assets/image/profil1.png'),
+              image: DecorationImage(
+                image: _avatarImage(user.avatarPath),
                 fit: BoxFit.cover,
               ),
             ),
@@ -97,6 +96,8 @@ class LeaderboardListItem extends StatelessWidget {
               children: [
                 Text(
                   user.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: AppColors.textDark,
                     fontSize: 15,
@@ -104,13 +105,41 @@ class LeaderboardListItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  'Skor: $formattedScore',
-                  style: const TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        'Skor: $formattedScore',
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: AppColors.textMuted,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    if (isCurrentUser) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.gold,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: const Text(
+                          'Anda',
+                          style: TextStyle(
+                            color: AppColors.textLight,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ],
             ),
@@ -126,5 +155,12 @@ class LeaderboardListItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  ImageProvider _avatarImage(String? path) {
+    if (path != null && path.startsWith('http')) {
+      return NetworkImage(path);
+    }
+    return AssetImage(path ?? 'assets/image/profil1.png');
   }
 }

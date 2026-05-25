@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swaranusaquiz/app/modules/quiz/services/quiz_media_service.dart';
 import 'package:swaranusaquiz/app/utils/app_colors.dart';
 import 'package:swaranusaquiz/app/modules/review/models/review_answer_item.dart';
 
@@ -68,6 +69,8 @@ class ReviewAnswerCard extends StatelessWidget {
 
 class _AnswerImage extends StatelessWidget {
   final String? imagePath;
+  static const _mediaService = QuizMediaService();
+
   const _AnswerImage({required this.imagePath});
 
   @override
@@ -76,7 +79,7 @@ class _AnswerImage extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: path != null && path.isNotEmpty
-          ? _isNetworkImage(path)
+          ? _mediaService.isNetworkUrl(path)
               ? Image.network(
                   path,
                   width: 130,
@@ -95,11 +98,6 @@ class _AnswerImage extends StatelessWidget {
                 )
           : const _ImageFallback(width: 130, height: 90),
     );
-  }
-
-  bool _isNetworkImage(String path) {
-    final normalized = path.toLowerCase();
-    return normalized.startsWith('http://') || normalized.startsWith('https://');
   }
 }
 

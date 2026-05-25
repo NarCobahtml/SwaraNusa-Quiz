@@ -26,7 +26,7 @@ class DailyLoginBonusCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               border: claimed
                   ? Border.all(color: AppColors.divider)
-                  : Border.all(color: AppColors.gold.withOpacity(0.4)),
+                  : Border.all(color: AppColors.gold.withValues(alpha: 0.4)),
             ),
             child: Row(
               children: [

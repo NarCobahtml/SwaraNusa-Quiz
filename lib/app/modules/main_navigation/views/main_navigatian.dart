@@ -2,7 +2,6 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/utils/app_colors.dart';
-import 'package:swaranusaquiz/app/data/models/leaderboard_user.dart';
 import 'package:swaranusaquiz/app/modules/home/views/home_page.dart';
 import 'package:swaranusaquiz/app/modules/leaderboard/views/leaderboard.dart';
 import 'package:swaranusaquiz/app/modules/main_navigation/controllers/main_navigation_controller.dart';
@@ -38,10 +37,7 @@ class MainNavigation extends StatelessWidget {
 
     final List<Widget> pages = [
       HomePage(onNavigateToMode: () => controller.selectTab(4)),
-      LeaderboardScreen(
-        leaderboardData: LeaderboardData.getSampleData(),
-        showNavbar: false,
-      ),
+      const LeaderboardScreen(showNavbar: false),
       const RewardPage(),
       ProfileScreen(
         showNavbar: false,

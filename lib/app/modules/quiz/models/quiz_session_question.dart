@@ -1,5 +1,25 @@
 import 'package:swaranusaquiz/app/data/models/backend_models.dart';
 
+enum QuizType {
+  tebakGambar,
+  tebakSuara,
+  sejarah,
+  unknown;
+
+  static QuizType fromModeId(String value) {
+    switch (value.trim().toLowerCase()) {
+      case 'tebak_gambar':
+        return QuizType.tebakGambar;
+      case 'tebak_suara':
+        return QuizType.tebakSuara;
+      case 'sejarah':
+        return QuizType.sejarah;
+      default:
+        return QuizType.unknown;
+    }
+  }
+}
+
 enum QuizMediaType {
   image,
   audio,
@@ -21,7 +41,17 @@ enum QuizMediaType {
   }
 }
 
-class QuizSessionQuestion {
+class QuizOption {
+  final String id;
+  final String text;
+
+  const QuizOption({
+    required this.id,
+    required this.text,
+  });
+}
+
+class QuizQuestion {
   final String id;
   final String modeId;
   final String levelId;
@@ -36,7 +66,7 @@ class QuizSessionQuestion {
   final int timeLimitSeconds;
   final int points;
 
-  const QuizSessionQuestion({
+  const QuizQuestion({
     required this.id,
     required this.modeId,
     required this.levelId,
@@ -52,8 +82,17 @@ class QuizSessionQuestion {
     this.points = 10,
   });
 
-  factory QuizSessionQuestion.fromDoc(QuestionDoc doc) {
-    return QuizSessionQuestion(
+  QuizType get type => QuizType.fromModeId(modeId);
+
+  List<QuizOption> get optionItems {
+    return List<QuizOption>.generate(
+      options.length,
+      (index) => QuizOption(id: '${id}_option_$index', text: options[index]),
+    );
+  }
+
+  factory QuizQuestion.fromDoc(QuestionDoc doc) {
+    return QuizQuestion(
       id: doc.id,
       modeId: doc.modeId,
       levelId: doc.levelId,
@@ -69,4 +108,55 @@ class QuizSessionQuestion {
       points: doc.points > 0 ? doc.points : 10,
     );
   }
+}
+
+class QuizSessionQuestion extends QuizQuestion {
+  const QuizSessionQuestion({
+    required super.id,
+    required super.modeId,
+    required super.levelId,
+    required super.questionNumber,
+    required super.title,
+    required super.questionText,
+    required super.mediaType,
+    required super.mediaUrl,
+    required super.options,
+    required super.correctAnswer,
+    super.explanation = '',
+    super.timeLimitSeconds = 45,
+    super.points = 10,
+  });
+
+  factory QuizSessionQuestion.fromDoc(QuestionDoc doc) {
+    final question = QuizQuestion.fromDoc(doc);
+    return QuizSessionQuestion(
+      id: question.id,
+      modeId: question.modeId,
+      levelId: question.levelId,
+      questionNumber: question.questionNumber,
+      title: question.title,
+      questionText: question.questionText,
+      mediaType: question.mediaType,
+      mediaUrl: question.mediaUrl,
+      options: question.options,
+      correctAnswer: question.correctAnswer,
+      explanation: question.explanation,
+      timeLimitSeconds: question.timeLimitSeconds,
+      points: question.points,
+    );
+  }
+}
+
+class QuizResult {
+  final int correctAnswers;
+  final int wrongAnswers;
+  final int totalQuestions;
+  final int score;
+
+  const QuizResult({
+    required this.correctAnswers,
+    required this.wrongAnswers,
+    required this.totalQuestions,
+    required this.score,
+  });
 }

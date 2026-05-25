@@ -5,8 +5,13 @@ import 'package:swaranusaquiz/app/data/models/leaderboard_user.dart';
 
 class LeaderboardPodium extends StatelessWidget {
   final List<LeaderboardUser> users;
+  final String? currentUserId;
 
-  const LeaderboardPodium({super.key, required this.users});
+  const LeaderboardPodium({
+    super.key,
+    required this.users,
+    required this.currentUserId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,19 +20,37 @@ class LeaderboardPodium extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: SizedBox(
-        height: 160,
+        height: 190,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (users.length >= 2)
-              Expanded(child: _PodiumItem(user: users[1], avatarSize: 76)),
+              Expanded(
+                child: _PodiumItem(
+                  user: users[1],
+                  avatarSize: 76,
+                  isCurrentUser: users[1].id == currentUserId,
+                ),
+              ),
             const SizedBox(width: 20),
             if (users.isNotEmpty)
-              Expanded(child: _PodiumItem(user: users[0], avatarSize: 96)),
+              Expanded(
+                child: _PodiumItem(
+                  user: users[0],
+                  avatarSize: 96,
+                  isCurrentUser: users[0].id == currentUserId,
+                ),
+              ),
             const SizedBox(width: 20),
             if (users.length >= 3)
-              Expanded(child: _PodiumItem(user: users[2], avatarSize: 76)),
+              Expanded(
+                child: _PodiumItem(
+                  user: users[2],
+                  avatarSize: 76,
+                  isCurrentUser: users[2].id == currentUserId,
+                ),
+              ),
           ],
         ),
       ),
@@ -38,8 +61,13 @@ class LeaderboardPodium extends StatelessWidget {
 class _PodiumItem extends StatelessWidget {
   final LeaderboardUser user;
   final double avatarSize;
+  final bool isCurrentUser;
 
-  const _PodiumItem({required this.user, required this.avatarSize});
+  const _PodiumItem({
+    required this.user,
+    required this.avatarSize,
+    required this.isCurrentUser,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,23 +79,51 @@ class _PodiumItem extends StatelessWidget {
           height: avatarSize,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
+            border: Border.all(
+              color: isCurrentUser ? AppColors.gold : Colors.transparent,
+              width: isCurrentUser ? 3 : 0,
+            ),
             image: DecorationImage(
-              image: AssetImage(
-                  user.avatarPath ?? 'assets/image/profil1.png'),
+              image: _avatarImage(user.avatarPath),
               fit: BoxFit.cover,
             ),
           ),
         ),
         const SizedBox(height: 10),
-        Text(
-          user.name,
-          style: const TextStyle(
-            color: AppColors.textDark,
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
+        Column(
+          children: [
+            Text(
+              user.name,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: AppColors.textDark,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            if (isCurrentUser) ...[
+              const SizedBox(height: 3),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.gold,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: const Text(
+                  'Anda',
+                  style: TextStyle(
+                    color: AppColors.textLight,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ],
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: isCurrentUser ? 3 : 4),
         Text(
           NumberFormatter.compactThousands(user.score),
           style: const TextStyle(
@@ -78,5 +134,12 @@ class _PodiumItem extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  ImageProvider _avatarImage(String? path) {
+    if (path != null && path.startsWith('http')) {
+      return NetworkImage(path);
+    }
+    return AssetImage(path ?? 'assets/image/profil1.png');
   }
 }

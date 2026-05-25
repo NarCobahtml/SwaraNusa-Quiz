@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_question.dart';
+import 'package:swaranusaquiz/app/modules/quiz/services/quiz_media_service.dart';
 import 'package:swaranusaquiz/app/utils/app_colors.dart';
 
 class QuizQuestionMedia extends StatefulWidget {
-  final QuizSessionQuestion question;
+  final QuizQuestion question;
 
   const QuizQuestionMedia({
     super.key,
@@ -18,6 +19,8 @@ class QuizQuestionMedia extends StatefulWidget {
 }
 
 class _QuizQuestionMediaState extends State<QuizQuestionMedia> {
+  static const _mediaService = QuizMediaService();
+
   final AudioPlayer _audioPlayer = AudioPlayer();
   StreamSubscription<dynamic>? _completeSubscription;
   bool _isPlaying = false;
@@ -80,7 +83,7 @@ class _QuizQuestionMediaState extends State<QuizQuestionMedia> {
     }
 
     return _MediaFrame(
-      child: _isNetworkMedia(mediaUrl)
+      child: _mediaService.isNetworkUrl(mediaUrl)
           ? Image.network(
               mediaUrl,
               fit: BoxFit.cover,
@@ -121,11 +124,11 @@ class _QuizQuestionMediaState extends State<QuizQuestionMedia> {
               width: 76,
               height: 76,
               decoration: BoxDecoration(
-                color: AppColors.surface.withOpacity(0.94),
+                color: AppColors.surface.withValues(alpha: 0.94),
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.overlay.withOpacity(0.22),
+                    color: AppColors.overlay.withValues(alpha: 0.22),
                     blurRadius: 18,
                     offset: const Offset(0, 8),
                   ),
@@ -153,28 +156,8 @@ class _QuizQuestionMediaState extends State<QuizQuestionMedia> {
     final mediaUrl = widget.question.mediaUrl;
     if (mediaUrl.isEmpty) return;
 
-    await _audioPlayer.play(_audioSource(mediaUrl));
+    await _audioPlayer.play(_mediaService.audioSource(mediaUrl));
     if (mounted) setState(() => _isPlaying = true);
-  }
-
-  Source _audioSource(String mediaUrl) {
-    if (_isNetworkMedia(mediaUrl)) {
-      return UrlSource(mediaUrl);
-    }
-    return AssetSource(_assetAudioPath(mediaUrl));
-  }
-
-  bool _isNetworkMedia(String value) {
-    final normalized = value.toLowerCase();
-    return normalized.startsWith('http://') || normalized.startsWith('https://');
-  }
-
-  String _assetAudioPath(String value) {
-    const assetPrefix = 'assets/';
-    if (value.startsWith(assetPrefix)) {
-      return value.substring(assetPrefix.length);
-    }
-    return value;
   }
 }
 
@@ -193,7 +176,7 @@ class _MediaFrame extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.overlay.withOpacity(0.3),
+            color: AppColors.overlay.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -242,7 +225,7 @@ class _TextQuestionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.overlay.withOpacity(0.3),
+            color: AppColors.overlay.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),

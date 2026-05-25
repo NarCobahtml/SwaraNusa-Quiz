@@ -67,7 +67,7 @@ class ProfileBadgeItem extends StatelessWidget {
                       width: 70,
                       height: 70,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) =>
+                      errorBuilder: (context, error, stackTrace) =>
                           _BadgeStars(stars: badge.stars),
                     ),
                   )

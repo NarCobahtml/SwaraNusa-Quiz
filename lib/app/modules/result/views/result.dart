@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/utils/app_colors.dart';
 import 'package:swaranusaquiz/app/modules/result/controllers/quiz_result_controller.dart';
 import 'package:swaranusaquiz/app/modules/result/models/quiz_result_summary.dart';
@@ -21,13 +22,15 @@ class QuizResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = QuizResultController(
-      QuizResultSummary(
-        correctAnswers: correctAnswers,
-        wrongAnswers: wrongAnswers,
-        totalQuestions: totalQuestions,
-      ),
-    );
+    final controller = Get.isRegistered<QuizResultController>()
+        ? Get.find<QuizResultController>()
+        : QuizResultController(
+            QuizResultSummary(
+              correctAnswers: correctAnswers,
+              wrongAnswers: wrongAnswers,
+              totalQuestions: totalQuestions,
+            ),
+          );
 
     return Scaffold(
       backgroundColor: AppColors.background,

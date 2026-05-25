@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:swaranusaquiz/app/data/repositories/firebase_repositories.dart';
 import 'package:swaranusaquiz/app/data/services/backend_services.dart';
-import 'package:swaranusaquiz/app/modules/quiz/data/quiz_fallback_questions.dart';
 import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_config.dart';
 import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_question.dart';
+import 'package:swaranusaquiz/app/modules/quiz/repositories/quiz_repository.dart';
 import 'package:swaranusaquiz/app/modules/result/models/quiz_result_summary.dart';
 import 'package:swaranusaquiz/app/routes/app_routes.dart';
 
@@ -19,96 +18,83 @@ enum QuizSessionPhase {
   error,
 }
 
-class QuizSessionController extends ChangeNotifier {
+class QuizSessionController extends GetxController {
   QuizSessionController({
     required this.config,
-    ContentRepository? contentRepository,
+    QuizRepository? quizRepository,
     QuizEngineService? quizEngine,
-  }) : _contentRepository = contentRepository ?? ContentRepository(),
+  }) : _quizRepository = quizRepository ?? QuizRepository(),
        _quizEngine = quizEngine ?? QuizEngineService.instance;
 
   final QuizSessionConfig config;
-  final ContentRepository _contentRepository;
+  final QuizRepository _quizRepository;
   final QuizEngineService _quizEngine;
 
-  final List<QuizSessionQuestion> _questions = [];
+  final phase = QuizSessionPhase.loading.obs;
+  final questions = <QuizQuestion>[].obs;
+  final currentIndex = 0.obs;
+  final timeRemaining = 45.obs;
+  final errorMessage = RxnString();
+
   Timer? _questionTimer;
   Timer? _feedbackTimer;
-  bool _disposed = false;
 
-  QuizSessionPhase _phase = QuizSessionPhase.loading;
-  int _currentIndex = 0;
-  int _timeRemaining = 45;
-  String? _errorMessage;
+  int get questionNumber => currentIndex.value + 1;
+  int get totalQuestions => questions.length;
 
-  QuizSessionPhase get phase => _phase;
-  List<QuizSessionQuestion> get questions => List.unmodifiable(_questions);
-  int get currentIndex => _currentIndex;
-  int get questionNumber => _currentIndex + 1;
-  int get totalQuestions => _questions.length;
-  int get timeRemaining => _timeRemaining;
-  String? get errorMessage => _errorMessage;
-
-  QuizSessionQuestion? get currentQuestion {
-    if (_questions.isEmpty || _currentIndex >= _questions.length) return null;
-    return _questions[_currentIndex];
+  QuizQuestion? get currentQuestion {
+    if (questions.isEmpty || currentIndex.value >= questions.length) {
+      return null;
+    }
+    return questions[currentIndex.value];
   }
 
   Future<void> load() async {
     _cancelTimers();
-    _phase = QuizSessionPhase.loading;
-    _errorMessage = null;
-    _questions.clear();
-    _currentIndex = 0;
-    _safeNotify();
+    phase.value = QuizSessionPhase.loading;
+    errorMessage.value = null;
+    questions.clear();
+    currentIndex.value = 0;
 
-    final fallbackQuestions = QuizFallbackQuestions.forConfig(config);
-    Object? loadError;
-
+    late final List<QuizQuestion> loadedQuestions;
     try {
-      final docs = await _contentRepository.loadQuestions(config.levelId);
-      _questions.addAll(
-        docs
-            .map(QuizSessionQuestion.fromDoc)
-            .where((question) => question.options.isNotEmpty)
-            .where((question) => question.correctAnswer.isNotEmpty),
-      );
-    } catch (error) {
-      loadError = error;
-    }
-
-    if (_disposed) return;
-
-    if (_questions.isEmpty) {
-      _questions.addAll(fallbackQuestions);
-    }
-
-    if (_questions.isEmpty) {
-      _phase = QuizSessionPhase.error;
-      _errorMessage = loadError == null
-          ? 'Belum ada soal untuk level ini.'
-          : 'Gagal memuat soal: $loadError';
-      _safeNotify();
+      loadedQuestions = await _quizRepository
+          .loadQuestions(config)
+          .timeout(const Duration(seconds: 15));
+      if (isClosed) return;
+    } catch (error, stackTrace) {
+      debugPrint('Gagal memuat soal dari Firestore: $error');
+      debugPrintStack(stackTrace: stackTrace);
+      if (isClosed) return;
+      phase.value = QuizSessionPhase.error;
+      errorMessage.value =
+          'Gagal memuat soal dari Firestore. Pastikan data sudah di-import dan koneksi internet aktif.';
       return;
     }
 
-    _questions.sort((a, b) => a.questionNumber.compareTo(b.questionNumber));
+    if (loadedQuestions.isEmpty) {
+      phase.value = QuizSessionPhase.error;
+      errorMessage.value = 'Belum ada soal untuk level ini.';
+      return;
+    }
+
+    questions.assignAll(loadedQuestions);
     _quizEngine.start(
       modeId: config.modeId,
       levelId: config.levelId,
-      totalQuestions: _questions.length,
+      totalQuestions: questions.length,
     );
     _showQuestionAt(0);
   }
 
   void answer(String selectedAnswer) {
-    if (_phase != QuizSessionPhase.question) return;
+    if (phase.value != QuizSessionPhase.question) return;
 
     final question = currentQuestion;
     if (question == null) return;
 
     _questionTimer?.cancel();
-    final timeSpent = (question.timeLimitSeconds - _timeRemaining)
+    final timeSpent = (question.timeLimitSeconds - timeRemaining.value)
         .clamp(0, question.timeLimitSeconds)
         .toInt();
     final isCorrect = _quizEngine.checkAnswer(
@@ -124,8 +110,7 @@ class QuizSessionController extends ChangeNotifier {
       mediaType: question.mediaType.name,
     );
 
-    _phase = isCorrect ? QuizSessionPhase.correct : QuizSessionPhase.wrong;
-    _safeNotify();
+    phase.value = isCorrect ? QuizSessionPhase.correct : QuizSessionPhase.wrong;
 
     _feedbackTimer?.cancel();
     _feedbackTimer = Timer(const Duration(seconds: 1), () {
@@ -134,9 +119,9 @@ class QuizSessionController extends ChangeNotifier {
   }
 
   Future<void> _moveNext() async {
-    if (_disposed) return;
-    final nextIndex = _currentIndex + 1;
-    if (nextIndex >= _questions.length) {
+    if (isClosed) return;
+    final nextIndex = currentIndex.value + 1;
+    if (nextIndex >= questions.length) {
       await _finish();
       return;
     }
@@ -145,38 +130,33 @@ class QuizSessionController extends ChangeNotifier {
 
   void _showQuestionAt(int index) {
     _cancelTimers();
-    _currentIndex = index;
-    final question = currentQuestion;
-    _timeRemaining = question?.timeLimitSeconds ?? 45;
-    _phase = QuizSessionPhase.question;
-    _safeNotify();
+    currentIndex.value = index;
+    timeRemaining.value = currentQuestion?.timeLimitSeconds ?? 45;
+    phase.value = QuizSessionPhase.question;
     _startTimer();
   }
 
   void _startTimer() {
     _questionTimer?.cancel();
     _questionTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_disposed || _phase != QuizSessionPhase.question) {
+      if (isClosed || phase.value != QuizSessionPhase.question) {
         timer.cancel();
         return;
       }
 
-      if (_timeRemaining <= 1) {
-        _timeRemaining = 0;
-        _safeNotify();
+      if (timeRemaining.value <= 1) {
+        timeRemaining.value = 0;
         answer('');
         return;
       }
 
-      _timeRemaining -= 1;
-      _safeNotify();
+      timeRemaining.value -= 1;
     });
   }
 
   Future<void> _finish() async {
     _cancelTimers();
-    _phase = QuizSessionPhase.finishing;
-    _safeNotify();
+    phase.value = QuizSessionPhase.finishing;
 
     QuizSessionSummary summary;
     try {
@@ -185,7 +165,7 @@ class QuizSessionController extends ChangeNotifier {
       summary = _quizEngine.currentSummary();
     }
 
-    if (_disposed) return;
+    if (isClosed) return;
     Get.offNamed(
       AppRoutes.result,
       arguments: QuizResultSummary(
@@ -203,14 +183,9 @@ class QuizSessionController extends ChangeNotifier {
     _feedbackTimer = null;
   }
 
-  void _safeNotify() {
-    if (!_disposed) notifyListeners();
-  }
-
   @override
-  void dispose() {
-    _disposed = true;
+  void onClose() {
     _cancelTimers();
-    super.dispose();
+    super.onClose();
   }
 }

@@ -104,7 +104,8 @@ class _HomeAvatar extends StatelessWidget {
         width: 64,
         height: 64,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const _AvatarPlaceholder(),
+        errorBuilder: (context, error, stackTrace) =>
+            const _AvatarPlaceholder(),
       );
     }
 
@@ -113,7 +114,7 @@ class _HomeAvatar extends StatelessWidget {
       width: 64,
       height: 64,
       fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) => const _AvatarPlaceholder(),
+      errorBuilder: (context, error, stackTrace) => const _AvatarPlaceholder(),
     );
   }
 }

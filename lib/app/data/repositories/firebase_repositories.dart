@@ -120,8 +120,9 @@ class UserRepository {
       'updatedAt': FieldValue.serverTimestamp(),
     };
     if (name != null && name.isNotEmpty) updates['name'] = name;
-    if (avatarUrl != null && avatarUrl.isNotEmpty)
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
       updates['avatarUrl'] = avatarUrl;
+    }
     await _firestore.doc(FirestorePaths.user(uid)).update(updates);
   }
 
@@ -198,9 +199,10 @@ class ContentRepository {
         .collection(FirestorePaths.questions)
         .where('levelId', isEqualTo: levelId)
         .where('isActive', isEqualTo: true)
-        .orderBy('questionNumber')
         .get();
-    return snapshot.docs.map(QuestionDoc.fromSnapshot).toList();
+    final docs = snapshot.docs.map(QuestionDoc.fromSnapshot).toList();
+    docs.sort((a, b) => a.questionNumber.compareTo(b.questionNumber));
+    return docs;
   }
 
   Future<List<InstrumentDoc>> loadInstruments() async {
@@ -234,11 +236,14 @@ class ContentRepository {
     int limit = 50,
   }) async {
     final snapshot = await _firestore
-        .collection('${FirestorePaths.leaderboards}/$periodKey/entries')
-        .orderBy('score', descending: true)
+        .collection(FirestorePaths.users)
+        .orderBy('xp', descending: true)
         .limit(limit)
         .get();
-    final docs = snapshot.docs.map(LeaderboardEntryDoc.fromSnapshot).toList();
+    final docs = snapshot.docs
+        .where((doc) => !doc.id.startsWith('_'))
+        .map(_leaderboardEntryFromUserSnapshot)
+        .toList();
     return [
       for (var i = 0; i < docs.length; i++)
         LeaderboardEntryDoc(
@@ -254,4 +259,66 @@ class ContentRepository {
         ),
     ];
   }
+
+  Stream<List<LeaderboardEntryDoc>> watchLeaderboard({
+    String periodKey = 'global',
+    int limit = 50,
+  }) {
+    return _firestore
+        .collection(FirestorePaths.users)
+        .orderBy('xp', descending: true)
+        .limit(limit)
+        .snapshots()
+        .map((snapshot) {
+          final docs = snapshot.docs
+              .where((doc) => !doc.id.startsWith('_'))
+              .map(_leaderboardEntryFromUserSnapshot)
+              .toList();
+          return [
+            for (var i = 0; i < docs.length; i++)
+              LeaderboardEntryDoc(
+                uid: docs[i].uid,
+                rank: i + 1,
+                name: docs[i].name,
+                username: docs[i].username,
+                avatarUrl: docs[i].avatarUrl,
+                level: docs[i].level,
+                xp: docs[i].xp,
+                score: docs[i].score,
+                quizCompleted: docs[i].quizCompleted,
+              ),
+          ];
+        });
+  }
+
+  LeaderboardEntryDoc _leaderboardEntryFromUserSnapshot(
+    QueryDocumentSnapshot<Map<String, dynamic>> snapshot,
+  ) {
+    final data = snapshot.data();
+    final xp = _repositoryIntValue(data['xp']);
+    final name = _repositoryStringValue(data['name']).trim();
+    final username = _repositoryStringValue(data['username']).trim();
+    final email = _repositoryStringValue(data['email']).trim();
+
+    return LeaderboardEntryDoc(
+      uid: snapshot.id,
+      rank: 0,
+      name: name.isNotEmpty
+          ? name
+          : username.isNotEmpty
+              ? username
+              : email.isNotEmpty
+                  ? email
+                  : 'User',
+      username: username,
+      avatarUrl: _repositoryStringValue(data['avatarUrl']),
+      level: _repositoryIntValue(data['level']),
+      xp: xp,
+      score: xp,
+      quizCompleted: _repositoryIntValue(data['quizCompleted']),
+    );
+  }
 }
+
+int _repositoryIntValue(Object? value) => value is num ? value.toInt() : 0;
+String _repositoryStringValue(Object? value) => value?.toString() ?? '';

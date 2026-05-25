@@ -40,7 +40,7 @@ class ProfileAvatarSection extends StatelessWidget {
                         width: 140,
                         height: 140,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) =>
+                        errorBuilder: (context, error, stackTrace) =>
                             const _AvatarPlaceholder(),
                       );
                     }
@@ -49,7 +49,8 @@ class ProfileAvatarSection extends StatelessWidget {
                       width: 140,
                       height: 140,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => const _AvatarPlaceholder(),
+                      errorBuilder: (context, error, stackTrace) =>
+                          const _AvatarPlaceholder(),
                     );
                   }),
                 ),
@@ -70,7 +71,7 @@ class ProfileAvatarSection extends StatelessWidget {
                     border: Border.all(color: AppColors.background, width: 2.5),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primary.withOpacity(0.3),
+                        color: AppColors.primary.withValues(alpha: 0.3),
                         blurRadius: 6,
                         offset: const Offset(0, 2),
                       ),

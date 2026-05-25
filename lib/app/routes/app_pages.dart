@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:swaranusaquiz/app/data/models/leaderboard_user.dart';
 import 'package:swaranusaquiz/app/data/models/quiz_answer.dart';
 import 'package:swaranusaquiz/app/modules/auth/bindings/forgot_password_binding.dart';
 import 'package:swaranusaquiz/app/modules/auth/bindings/login_binding.dart';
@@ -24,6 +23,7 @@ import 'package:swaranusaquiz/app/modules/mode/bindings/mode_binding.dart';
 import 'package:swaranusaquiz/app/modules/mode/views/mode_page.dart';
 import 'package:swaranusaquiz/app/modules/profile/bindings/profile_binding.dart';
 import 'package:swaranusaquiz/app/modules/profile/views/profil.dart';
+import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_config.dart';
 import 'package:swaranusaquiz/app/modules/quiz/views/quiz_session_page.dart';
 import 'package:swaranusaquiz/app/modules/result/bindings/result_binding.dart';
 import 'package:swaranusaquiz/app/modules/result/models/quiz_result_summary.dart';
@@ -78,8 +78,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.leaderboard,
-      page: () =>
-          LeaderboardScreen(leaderboardData: LeaderboardData.getSampleData()),
+      page: () => const LeaderboardScreen(),
       binding: LeaderboardBinding(),
     ),
     GetPage(
@@ -147,15 +146,33 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.kuisPertanyaan1,
-      page: () => const QuizSessionPage.tebakGambar(),
+      page: () => const QuizSessionPage(
+        config: QuizSessionConfig(
+          title: 'Tebak Gambar',
+          modeId: 'tebak_gambar',
+          levelId: 'tebak_gambar_1',
+        ),
+      ),
     ),
     GetPage(
       name: AppRoutes.tebakPertanyaan1,
-      page: () => const QuizSessionPage.tebakSuara(),
+      page: () => const QuizSessionPage(
+        config: QuizSessionConfig(
+          title: 'Tebak Suara',
+          modeId: 'tebak_suara',
+          levelId: 'tebak_suara_1',
+        ),
+      ),
     ),
     GetPage(
       name: AppRoutes.sejarahPertanyaan1,
-      page: () => const QuizSessionPage.sejarah(),
+      page: () => const QuizSessionPage(
+        config: QuizSessionConfig(
+          title: 'Sejarah',
+          modeId: 'sejarah',
+          levelId: 'sejarah_1',
+        ),
+      ),
     ),
   ];
 }

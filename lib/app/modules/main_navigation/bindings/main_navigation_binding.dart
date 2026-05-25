@@ -13,7 +13,7 @@ class MainNavigationBinding extends Bindings {
     Get.put<UserService>(UserService(), permanent: false);
     Get.lazyPut<MainNavigationController>(() => MainNavigationController());
     Get.lazyPut<HomeController>(() => HomeController());
-    Get.lazyPut<LeaderboardController>(() => LeaderboardController.sample());
+    Get.lazyPut<LeaderboardController>(() => LeaderboardController());
     Get.lazyPut<RewardController>(() => RewardController());
     Get.lazyPut<ProfileController>(() => ProfileController());
   }

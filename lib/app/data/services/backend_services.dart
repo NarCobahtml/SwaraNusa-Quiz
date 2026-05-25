@@ -446,8 +446,9 @@ class RewardService {
     await _firestore.runTransaction((transaction) async {
       final login = await transaction.get(loginRef);
       final data = login.data() ?? {};
-      if (data['lastLoginDate'] == today && data['claimedToday'] == true)
+      if (data['lastLoginDate'] == today && data['claimedToday'] == true) {
         return;
+      }
       final streak = (data['currentStreak'] as num?)?.toInt() ?? 0;
       final nextStreak = streak + 1;
       final rewardId = 'day_${((nextStreak - 1) % 7) + 1}';
