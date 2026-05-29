@@ -7,7 +7,7 @@ class ReviewBinding extends Bindings {
   void dependencies() {
     final answers = Get.arguments is List<QuizAnswer>
         ? Get.arguments as List<QuizAnswer>
-        : ReviewAnswersData.getSampleData();
+        : const <QuizAnswer>[];
 
     Get.lazyPut<ReviewAnswersController>(
       () => ReviewAnswersController(answers),

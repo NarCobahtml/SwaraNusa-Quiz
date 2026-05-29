@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/data/services/backend_services.dart';
+import 'package:swaranusaquiz/app/data/services/user_service.dart';
 import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_config.dart';
 import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_question.dart';
 import 'package:swaranusaquiz/app/modules/quiz/repositories/quiz_repository.dart';
@@ -161,7 +162,12 @@ class QuizSessionController extends GetxController {
     QuizSessionSummary summary;
     try {
       summary = await _quizEngine.finish();
-    } catch (_) {
+      if (Get.isRegistered<UserService>()) {
+        await UserService.to.reload();
+      }
+    } catch (error, stackTrace) {
+      debugPrint('Gagal menyimpan hasil kuis: $error');
+      debugPrintStack(stackTrace: stackTrace);
       summary = _quizEngine.currentSummary();
     }
 
@@ -172,6 +178,9 @@ class QuizSessionController extends GetxController {
         correctAnswers: summary.correctAnswers,
         wrongAnswers: summary.wrongAnswers,
         totalQuestions: summary.totalQuestions,
+        title: config.title,
+        modeId: config.modeId,
+        levelId: config.levelId,
       ),
     );
   }

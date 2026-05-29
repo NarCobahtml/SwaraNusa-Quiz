@@ -9,7 +9,7 @@ class ScoreCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 280,
+      width: 180,
       height: 180,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -29,13 +29,19 @@ class ScoreCircle extends StatelessWidget {
           color: AppColors.primary,
         ),
         child: Center(
-          child: Text(
-            '$percentage%',
-            style: const TextStyle(
-              color: AppColors.textLight,
-              fontSize: 56,
-              fontWeight: FontWeight.w900,
-              height: 1,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                '$percentage%',
+                style: const TextStyle(
+                  color: AppColors.textLight,
+                  fontSize: 48,
+                  fontWeight: FontWeight.w900,
+                  height: 1,
+                ),
+              ),
             ),
           ),
         ),

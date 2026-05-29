@@ -32,16 +32,39 @@ class ReviewAnswersScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     const SizedBox(height: 12),
-                    for (var index = 0; index < items.length; index++) ...[
-                      if (index > 0) const SizedBox(height: 16),
-                      ReviewAnswerCard(item: items[index]),
-                    ],
+                    if (items.isEmpty)
+                      const _EmptyReviewState()
+                    else
+                      for (var index = 0; index < items.length; index++) ...[
+                        if (index > 0) const SizedBox(height: 16),
+                        ReviewAnswerCard(item: items[index]),
+                      ],
                     const SizedBox(height: 24),
                   ],
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyReviewState extends StatelessWidget {
+  const _EmptyReviewState();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 48),
+      child: Text(
+        'Belum ada data jawaban untuk ditinjau.',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: AppColors.textMuted,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

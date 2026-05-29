@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/data/models/quiz_answer.dart';
 import 'package:swaranusaquiz/app/data/services/backend_services.dart';
+import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_config.dart';
+import 'package:swaranusaquiz/app/modules/quiz/views/quiz_session_page.dart';
 import 'package:swaranusaquiz/app/routes/app_pages.dart';
 import 'package:swaranusaquiz/app/modules/result/models/quiz_result_summary.dart';
 
@@ -9,13 +11,10 @@ class QuizResultController extends GetxController {
 
   QuizResultController(this.summary);
 
-  int get scorePercentage {
-    if (summary.totalQuestions <= 0) return 0;
+  int get scorePercentage => summary.scorePercentage;
 
-    final percentage =
-        (summary.correctAnswers / summary.totalQuestions) * 100;
-    return percentage.isFinite ? percentage.toInt() : 0;
-  }
+  int get correctAnswers => summary.correctAnswers;
+  int get wrongAnswers => summary.wrongAnswers;
 
   void openReview() {
     final answers = QuizEngineService.instance.answers.map((answer) {
@@ -33,7 +32,27 @@ class QuizResultController extends GetxController {
 
     Get.toNamed(
       AppRoutes.review,
-      arguments: answers.isEmpty ? ReviewAnswersData.getSampleData() : answers,
+      arguments: answers,
     );
+  }
+
+  void retryQuiz() {
+    if (summary.modeId.isEmpty || summary.levelId.isEmpty) return;
+
+    Get.off(
+      () => QuizSessionPage(
+        config: QuizSessionConfig(
+          title: summary.title.isEmpty ? 'Kuis' : summary.title,
+          modeId: summary.modeId,
+          levelId: summary.levelId,
+        ),
+      ),
+      transition: Transition.fade,
+      duration: const Duration(milliseconds: 150),
+    );
+  }
+
+  void backToMode() {
+    Get.offAllNamed(AppRoutes.mainNavigation, arguments: 4);
   }
 }

@@ -30,7 +30,7 @@ class ProfileBadgesSection extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             mainAxisSpacing: 20,
             crossAxisSpacing: 16,
-            childAspectRatio: 0.85,
+            childAspectRatio: 0.75,
             children: [
               for (final badge in badges) ProfileBadgeItem(badge: badge),
             ],
@@ -78,9 +78,9 @@ class ProfileBadgeItem extends StatelessWidget {
         Text(
           badge.label,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: AppColors.textDark,
-            fontSize: badge.fontSize,
+            fontSize: 12,
             fontWeight: FontWeight.w500,
             height: 1.2,
           ),

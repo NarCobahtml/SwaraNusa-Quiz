@@ -21,10 +21,16 @@ class DailyMissionsSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        for (var index = 0; index < missions.length; index++) ...[
-          if (index > 0) const SizedBox(height: 12),
-          MissionCard(mission: missions[index]),
-        ],
+        if (missions.isEmpty)
+          const Text(
+            'Belum ada misi aktif.',
+            style: TextStyle(color: AppColors.textMuted, fontSize: 13),
+          )
+        else
+          for (var index = 0; index < missions.length; index++) ...[
+            if (index > 0) const SizedBox(height: 12),
+            MissionCard(mission: missions[index]),
+          ],
       ],
     );
   }
@@ -91,7 +97,9 @@ class MissionCard extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: LinearProgressIndicator(
-                          value: mission.progress / mission.total,
+                          value: (mission.progress / mission.total)
+                              .clamp(0.0, 1.0)
+                              .toDouble(),
                           backgroundColor: AppColors.divider,
                           valueColor: AlwaysStoppedAnimation<Color>(
                             mission.isCompleted

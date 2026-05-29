@@ -27,7 +27,7 @@ class InstrumentCollectionSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 150,
+          height: 160,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: instruments.length,
@@ -55,6 +55,7 @@ class InstrumentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 120,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
@@ -63,15 +64,11 @@ class InstrumentCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                image: AssetImage(instrument.imagePath),
-                fit: BoxFit.cover,
-              ),
-            ),
+            width: 75,
+            height: 75,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+            clipBehavior: Clip.antiAlias,
+            child: _InstrumentImage(source: instrument.imageSource),
           ),
           const SizedBox(height: 8),
           Text(
@@ -81,14 +78,69 @@ class InstrumentCard extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 2),
           Text(
             instrument.region,
             style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _InstrumentImage extends StatelessWidget {
+  final String source;
+
+  const _InstrumentImage({required this.source});
+
+  @override
+  Widget build(BuildContext context) {
+    final normalizedSource = source.trim();
+    if (normalizedSource.isEmpty) return const _InstrumentFallbackIcon();
+
+    if (normalizedSource.startsWith('http://') ||
+        normalizedSource.startsWith('https://')) {
+      return Image.network(
+        normalizedSource,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            const _InstrumentFallbackIcon(),
+      );
+    }
+
+    return Image.asset(
+      _assetPath(normalizedSource),
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) =>
+          const _InstrumentFallbackIcon(),
+    );
+  }
+
+  String _assetPath(String value) {
+    if (value.startsWith('assets/')) return value;
+    if (value.startsWith('image/')) return 'assets/$value';
+    return 'assets/image/$value';
+  }
+}
+
+class _InstrumentFallbackIcon extends StatelessWidget {
+  const _InstrumentFallbackIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.background,
+      child: const Icon(
+        Icons.music_note_rounded,
+        color: AppColors.primary,
+        size: 32,
       ),
     );
   }

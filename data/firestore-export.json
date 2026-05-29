@@ -1,0 +1,2639 @@
+{
+  "projectId": "swaranusa-quiz",
+  "exportedAt": "2026-05-28T13:22:06.432Z",
+  "collections": {
+    "achievements": {
+      "path": "achievements",
+      "count": 8,
+      "documents": {
+        "_template": {
+          "id": "_template",
+          "path": "achievements/_template",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "name": "",
+            "conditionValue": 0,
+            "description": "",
+            "conditionType": "",
+            "iconUrl": "",
+            "stars": 0,
+            "isActive": false,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "account_created": {
+          "id": "account_created",
+          "path": "achievements/account_created",
+          "exists": true,
+          "data": {
+            "name": "Buat Akun",
+            "stars": 1,
+            "isActive": true,
+            "createdAt": null,
+            "conditionValue": 1,
+            "description": "Berhasil membuat akun SwaraNusa.",
+            "conditionType": "manual",
+            "iconUrl": "assets/image/icon_footer3.png",
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "angklung_pro": {
+          "id": "angklung_pro",
+          "path": "achievements/angklung_pro",
+          "exists": true,
+          "data": {
+            "name": "Angklung Pro",
+            "description": "",
+            "stars": 3,
+            "conditionType": "angklung_unlocked",
+            "conditionValue": 3,
+            "isActive": true,
+            "createdAt": "2026-05-26T06:01:26.000Z",
+            "iconUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/badges/1779803942047-yhufuy8oryh.png",
+            "updatedAt": "2026-05-26T13:59:03.000Z"
+          },
+          "subcollections": {}
+        },
+        "instrument_collected": {
+          "id": "instrument_collected",
+          "path": "achievements/instrument_collected",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "name": "Kolektor",
+            "conditionValue": 1,
+            "description": "Miliki 1 instrumen.",
+            "conditionType": "instrument_collected",
+            "iconUrl": "assets/image/icon_pelajari.png",
+            "stars": 2,
+            "isActive": true,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "instrument_mastery": {
+          "id": "instrument_mastery",
+          "path": "achievements/instrument_mastery",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "name": "Maestro",
+            "conditionValue": 1,
+            "description": "Mainkan seluruh nada pada 1 instrumen.",
+            "conditionType": "instrument_mastery",
+            "iconUrl": "assets/image/icon_footer5.png",
+            "stars": 3,
+            "isActive": true,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "perfect_score": {
+          "id": "perfect_score",
+          "path": "achievements/perfect_score",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "name": "Skor Sempurna",
+            "conditionValue": 1,
+            "description": "Dapatkan nilai 100% pada kuis.",
+            "conditionType": "perfect_score",
+            "iconUrl": "assets/image/icon_footer2.png",
+            "stars": 2,
+            "isActive": true,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "quiz_completed": {
+          "id": "quiz_completed",
+          "path": "achievements/quiz_completed",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "name": "Kuis Selesai",
+            "conditionValue": 1,
+            "description": "Selesaikan 1 kuis.",
+            "conditionType": "quiz_completed",
+            "iconUrl": "assets/image/icon_mainkan.png",
+            "stars": 1,
+            "isActive": true,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "xp_reached": {
+          "id": "xp_reached",
+          "path": "achievements/xp_reached",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "name": "XP Tercapai",
+            "conditionValue": 500,
+            "description": "Kumpulkan 500 XP.",
+            "conditionType": "xp_reached",
+            "iconUrl": "assets/image/icon_footer4.png",
+            "stars": 2,
+            "isActive": true,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        }
+      }
+    },
+    "daily_login_rewards": {
+      "path": "daily_login_rewards",
+      "count": 1,
+      "documents": {
+        "_template": {
+          "id": "_template",
+          "path": "daily_login_rewards/_template",
+          "exists": true,
+          "data": {
+            "rewardCoin": 0,
+            "dayNumber": 0,
+            "isActive": false,
+            "rewardInstrumentId": "",
+            "rewardXp": 0
+          },
+          "subcollections": {}
+        }
+      }
+    },
+    "instruments": {
+      "path": "instruments",
+      "count": 5,
+      "documents": {
+        "_template": {
+          "id": "_template",
+          "path": "instruments/_template",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "opensMinigame": false,
+            "price": 0,
+            "imageUrl": "",
+            "sortOrder": 0,
+            "name": "",
+            "noteUrls": [],
+            "isActive": false,
+            "region": "",
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "angklung": {
+          "id": "angklung",
+          "path": "instruments/angklung",
+          "exists": true,
+          "data": {
+            "isActive": true,
+            "opensMinigame": false,
+            "price": 0,
+            "sortOrder": 1,
+            "region": "Jawa Barat",
+            "createdAt": "2026-05-26T16:05:37.297Z",
+            "noteUrls": [
+              "https://your-project-ref.supabase.co/storage/v1/object/public/instruments/reward/instrument-sound/suara_angklung.mp3"
+            ],
+            "updatedAt": "2026-05-26T16:05:37.297Z",
+            "imageUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/instrument-sound/gambar_angklung.png",
+            "name": "Angklung"
+          },
+          "subcollections": {}
+        },
+        "gamelan": {
+          "id": "gamelan",
+          "path": "instruments/gamelan",
+          "exists": true,
+          "data": {
+            "isActive": true,
+            "opensMinigame": true,
+            "price": 0,
+            "sortOrder": 2,
+            "name": "Gamelan",
+            "region": "Jawa Tengah",
+            "createdAt": "2026-05-26T16:05:37.297Z",
+            "updatedAt": "2026-05-26T16:05:37.297Z",
+            "imageUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/instrument-sound/gambar_gamelan.png",
+            "noteUrls": [
+              "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/instrument-sound/gamelan1.mp3",
+              "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/instrument-sound/gamelan2.mp3",
+              "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/instrument-sound/gamelan3.mp3",
+              "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/instrument-sound/gamelan4.mp3",
+              "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/instrument-sound/gamelan5.mp3",
+              "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/instrument-sound/gamelan6.mpeg"
+            ]
+          },
+          "subcollections": {}
+        },
+        "kolintang": {
+          "id": "kolintang",
+          "path": "instruments/kolintang",
+          "exists": true,
+          "data": {
+            "isActive": true,
+            "opensMinigame": false,
+            "price": 0,
+            "sortOrder": 3,
+            "name": "Kolintang",
+            "region": "Sulawesi Utara",
+            "createdAt": "2026-05-26T16:05:37.297Z",
+            "noteUrls": [
+              "https://your-project-ref.supabase.co/storage/v1/object/public/instruments/reward/instrument-sound/2.mp3"
+            ],
+            "updatedAt": "2026-05-26T16:05:37.297Z",
+            "imageUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/instrument-sound/gambar_kolintang.png"
+          },
+          "subcollections": {}
+        },
+        "sasando": {
+          "id": "sasando",
+          "path": "instruments/sasando",
+          "exists": true,
+          "data": {
+            "isActive": true,
+            "opensMinigame": false,
+            "sortOrder": 4,
+            "name": "Sasando",
+            "region": "Nusa Tenggara Timur",
+            "createdAt": "2026-05-26T16:05:37.297Z",
+            "noteUrls": [
+              "https://your-project-ref.supabase.co/storage/v1/object/public/instruments/reward/instrument-sound/3.mp3"
+            ],
+            "updatedAt": "2026-05-26T16:05:37.297Z",
+            "imageUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/reward/instrument-sound/gambar_sasando.png",
+            "price": 500
+          },
+          "subcollections": {}
+        }
+      }
+    },
+    "leaderboards": {
+      "path": "leaderboards",
+      "count": 0,
+      "documents": {}
+    },
+    "levels": {
+      "path": "levels",
+      "count": 4,
+      "documents": {
+        "_template": {
+          "id": "_template",
+          "path": "levels/_template",
+          "exists": true,
+          "data": {
+            "unlockAfterLevelId": "",
+            "createdAt": null,
+            "totalQuestions": 0,
+            "requiredXp": 0,
+            "modeId": "",
+            "rewardCoin": 0,
+            "levelNumber": 0,
+            "description": "",
+            "isActive": false,
+            "title": "",
+            "rewardXp": 0,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "sejarah_1": {
+          "id": "sejarah_1",
+          "path": "levels/sejarah_1",
+          "exists": true,
+          "data": {
+            "unlockAfterLevelId": "",
+            "totalQuestions": 1,
+            "requiredXp": 0,
+            "modeId": "sejarah",
+            "rewardCoin": 100,
+            "levelNumber": 1,
+            "description": "",
+            "isActive": true,
+            "title": "Sejarah Level 1",
+            "rewardXp": 50,
+            "updatedAt": "2026-05-25T06:46:54.750Z"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1": {
+          "id": "tebak_gambar_1",
+          "path": "levels/tebak_gambar_1",
+          "exists": true,
+          "data": {
+            "modeId": "tebak_gambar",
+            "levelNumber": 1,
+            "title": "Tebak Gambar Level 1",
+            "description": "",
+            "totalQuestions": 11,
+            "requiredXp": 0,
+            "unlockAfterLevelId": "",
+            "rewardXp": 50,
+            "rewardCoin": 100,
+            "isActive": true,
+            "updatedAt": "2026-05-26T04:51:08.000Z",
+            "createdAt": "2026-05-26T04:51:08.000Z"
+          },
+          "subcollections": {}
+        },
+        "tebak_suara_1": {
+          "id": "tebak_suara_1",
+          "path": "levels/tebak_suara_1",
+          "exists": true,
+          "data": {
+            "modeId": "tebak_suara",
+            "levelNumber": 1,
+            "title": "Tebak Suara Level 1",
+            "description": "",
+            "totalQuestions": 2,
+            "requiredXp": 0,
+            "unlockAfterLevelId": "",
+            "rewardXp": 50,
+            "rewardCoin": 100,
+            "isActive": true,
+            "updatedAt": "2026-05-26T06:43:13.000Z",
+            "createdAt": "2026-05-26T06:43:13.000Z"
+          },
+          "subcollections": {}
+        }
+      }
+    },
+    "missions": {
+      "path": "missions",
+      "count": 4,
+      "documents": {
+        "_template": {
+          "id": "_template",
+          "path": "missions/_template",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "rewardCoin": 0,
+            "targetValue": 0,
+            "description": "",
+            "targetType": "",
+            "iconUrl": "",
+            "isActive": false,
+            "title": "",
+            "type": "",
+            "rewardInstrumentId": "",
+            "rewardXp": 0,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "daily_collect_instrument": {
+          "id": "daily_collect_instrument",
+          "path": "missions/daily_collect_instrument",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "rewardCoin": 150,
+            "targetValue": 1,
+            "description": "Beli atau dapatkan 1 instrumen baru.",
+            "targetType": "unlock_instrument",
+            "iconUrl": "assets/image/icon_pelajari.png",
+            "isActive": true,
+            "title": "Koleksi instrumen baru",
+            "type": "daily",
+            "rewardInstrumentId": "",
+            "rewardXp": 75,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "daily_complete_quiz": {
+          "id": "daily_complete_quiz",
+          "path": "missions/daily_complete_quiz",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "rewardCoin": 100,
+            "targetValue": 1,
+            "description": "Selesaikan kuis apa pun hari ini.",
+            "targetType": "complete_quiz",
+            "iconUrl": "assets/image/icon_mainkan.png",
+            "isActive": true,
+            "title": "Selesaikan 1 kuis",
+            "type": "daily",
+            "rewardInstrumentId": "",
+            "rewardXp": 50,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "daily_play_game": {
+          "id": "daily_play_game",
+          "path": "missions/daily_play_game",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "rewardCoin": 50,
+            "targetValue": 1,
+            "description": "Mainkan minigame instrumen hari ini.",
+            "targetType": "play_game",
+            "iconUrl": "assets/image/icon_mainkan.png",
+            "isActive": true,
+            "title": "Mainkan minigame",
+            "type": "daily",
+            "rewardInstrumentId": "",
+            "rewardXp": 25,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        }
+      }
+    },
+    "modes": {
+      "path": "modes",
+      "count": 1,
+      "documents": {
+        "image_guess": {
+          "id": "image_guess",
+          "path": "modes/image_guess",
+          "exists": true,
+          "data": {
+            "isActive": true,
+            "title": "Tebak Gambar"
+          },
+          "subcollections": {
+            "levels": {
+              "path": "modes/image_guess/levels",
+              "count": 1,
+              "documents": {
+                "level_1": {
+                  "id": "level_1",
+                  "path": "modes/image_guess/levels/level_1",
+                  "exists": true,
+                  "data": {
+                    "title": "Level 1",
+                    "questionCount": 10
+                  },
+                  "subcollections": {
+                    "questions": {
+                      "path": "modes/image_guess/levels/level_1/questions",
+                      "count": 2,
+                      "documents": {
+                        "q1": {
+                          "id": "q1",
+                          "path": "modes/image_guess/levels/level_1/questions/q1",
+                          "exists": true,
+                          "data": {
+                            "questionNumber": 1,
+                            "options": [
+                              "Tifa",
+                              "Kolintang",
+                              "Gamelan",
+                              "Angklung"
+                            ],
+                            "correctAnswer": "Tifa",
+                            "mediaType": "image",
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_tifa.png",
+                            "isActive": true
+                          },
+                          "subcollections": {}
+                        },
+                        "q2": {
+                          "id": "q2",
+                          "path": "modes/image_guess/levels/level_1/questions/q2",
+                          "exists": true,
+                          "data": {
+                            "correctAnswer": "Gamelan",
+                            "options": [
+                              "Sasando",
+                              "Tifa",
+                              "Angklung",
+                              "Gamelan"
+                            ],
+                            "mediaType": "image",
+                            "questionNumber": 2,
+                            "isActive": true,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_gamelan.png"
+                          },
+                          "subcollections": {}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "questions": {
+      "path": "questions",
+      "count": 14,
+      "documents": {
+        "_template": {
+          "id": "_template",
+          "path": "questions/_template",
+          "exists": true,
+          "data": {
+            "mediaUrl": "",
+            "mediaType": "",
+            "explanation": "",
+            "isActive": false,
+            "title": "",
+            "questionText": "",
+            "points": 0,
+            "questionNumber": 0,
+            "createdAt": null,
+            "modeId": "",
+            "levelId": "",
+            "timeLimitSeconds": 0,
+            "options": [
+              "",
+              "",
+              "",
+              ""
+            ],
+            "correctAnswer": "",
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "sejarah_1_q1": {
+          "id": "sejarah_1_q1",
+          "path": "questions/sejarah_1_q1",
+          "exists": true,
+          "data": {
+            "mediaUrl": "",
+            "mediaType": "text",
+            "explanation": "",
+            "isActive": true,
+            "title": "Sejarah",
+            "questionText": "Kolintang adalah alat musik tradisional dari Minahasa, Sulawesi Utara. Dahulu, kolintang digunakan untuk...",
+            "points": 10,
+            "questionNumber": 1,
+            "modeId": "sejarah",
+            "levelId": "sejarah_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Mengiringi pertunjukan wayang",
+              "Tanda dimulainya perdagangan",
+              "Mengiringi upacara adat tarian",
+              "Lagu-lagu kerajaan Jawa"
+            ],
+            "correctAnswer": "Mengiringi upacara adat tarian",
+            "updatedAt": "2026-05-25T06:46:54.750Z"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1_q1": {
+          "id": "tebak_gambar_1_q1",
+          "path": "questions/tebak_gambar_1_q1",
+          "exists": true,
+          "data": {
+            "mediaType": "image",
+            "title": "Tebak Gambar",
+            "points": 10,
+            "questionNumber": 1,
+            "modeId": "tebak_gambar",
+            "levelId": "tebak_gambar_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Tifa",
+              "Kolintang",
+              "Gamelan",
+              "Angklung"
+            ],
+            "correctAnswer": "Tifa",
+            "explanation": "",
+            "isActive": true,
+            "questionText": "Tebak Gambar",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/1779805806221-elruyocp6h7.png",
+            "updatedAt": "2026-05-26T14:30:07.000Z"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1_q10": {
+          "id": "tebak_gambar_1_q10",
+          "path": "questions/tebak_gambar_1_q10",
+          "exists": true,
+          "data": {
+            "mediaType": "image",
+            "explanation": "",
+            "isActive": true,
+            "title": "Tebak Gambar",
+            "points": 10,
+            "questionNumber": 10,
+            "modeId": "tebak_gambar",
+            "levelId": "tebak_gambar_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Gendang",
+              "Tifa",
+              "Kecapi",
+              "Rebab"
+            ],
+            "correctAnswer": "Kecapi",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/1779806008390-vlesd0clird.png",
+            "questionText": "Tebak Gambar",
+            "updatedAt": "2026-05-26T14:33:29.000Z"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1_q2": {
+          "id": "tebak_gambar_1_q2",
+          "path": "questions/tebak_gambar_1_q2",
+          "exists": true,
+          "data": {
+            "mediaType": "image",
+            "explanation": "",
+            "isActive": true,
+            "title": "Tebak Gambar",
+            "points": 10,
+            "questionNumber": 2,
+            "modeId": "tebak_gambar",
+            "levelId": "tebak_gambar_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Sasando",
+              "Tifa",
+              "Angklung",
+              "Gamelan"
+            ],
+            "correctAnswer": "Gamelan",
+            "questionText": "Tebak Gambar",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/1779805903722-w7k3azq3vsa.png",
+            "updatedAt": "2026-05-26T14:31:45.000Z"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1_q3": {
+          "id": "tebak_gambar_1_q3",
+          "path": "questions/tebak_gambar_1_q3",
+          "exists": true,
+          "data": {
+            "mediaType": "image",
+            "explanation": "",
+            "isActive": true,
+            "title": "Tebak Gambar",
+            "questionText": "",
+            "points": 10,
+            "questionNumber": 3,
+            "modeId": "tebak_gambar",
+            "levelId": "tebak_gambar_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Tifa",
+              "Kolintang",
+              "Gamelan",
+              "Angklung"
+            ],
+            "correctAnswer": "Kolintang",
+            "updatedAt": "2026-05-25T06:46:54.750Z",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_kolintang.png"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1_q4": {
+          "id": "tebak_gambar_1_q4",
+          "path": "questions/tebak_gambar_1_q4",
+          "exists": true,
+          "data": {
+            "mediaType": "image",
+            "explanation": "",
+            "isActive": true,
+            "title": "Tebak Gambar",
+            "questionText": "",
+            "points": 10,
+            "questionNumber": 4,
+            "modeId": "tebak_gambar",
+            "levelId": "tebak_gambar_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Tifa",
+              "Gendang",
+              "Sape",
+              "Gambus"
+            ],
+            "correctAnswer": "Gambus",
+            "updatedAt": "2026-05-25T06:46:54.750Z",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_gambus.png"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1_q5": {
+          "id": "tebak_gambar_1_q5",
+          "path": "questions/tebak_gambar_1_q5",
+          "exists": true,
+          "data": {
+            "mediaType": "image",
+            "explanation": "",
+            "isActive": true,
+            "title": "Tebak Gambar",
+            "questionText": "",
+            "points": 10,
+            "questionNumber": 5,
+            "modeId": "tebak_gambar",
+            "levelId": "tebak_gambar_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Gamelan",
+              "Sape",
+              "Gamelan",
+              "Sasando"
+            ],
+            "correctAnswer": "Sasando",
+            "updatedAt": "2026-05-25T06:46:54.750Z",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_sasando.png"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1_q6": {
+          "id": "tebak_gambar_1_q6",
+          "path": "questions/tebak_gambar_1_q6",
+          "exists": true,
+          "data": {
+            "mediaType": "image",
+            "explanation": "",
+            "isActive": true,
+            "title": "Tebak Gambar",
+            "questionText": "",
+            "points": 10,
+            "questionNumber": 6,
+            "modeId": "tebak_gambar",
+            "levelId": "tebak_gambar_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Rebab",
+              "Angklung",
+              "Gamelan",
+              "Kolintang"
+            ],
+            "correctAnswer": "Rebab",
+            "updatedAt": "2026-05-25T06:46:54.750Z",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_rebab.png"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1_q7": {
+          "id": "tebak_gambar_1_q7",
+          "path": "questions/tebak_gambar_1_q7",
+          "exists": true,
+          "data": {
+            "mediaType": "image",
+            "explanation": "",
+            "isActive": true,
+            "title": "Tebak Gambar",
+            "questionText": "",
+            "points": 10,
+            "questionNumber": 7,
+            "modeId": "tebak_gambar",
+            "levelId": "tebak_gambar_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Gendang",
+              "Sape",
+              "Kolintang",
+              "Angklung"
+            ],
+            "correctAnswer": "Angklung",
+            "updatedAt": "2026-05-25T06:46:54.750Z",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_angklung.png"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1_q8": {
+          "id": "tebak_gambar_1_q8",
+          "path": "questions/tebak_gambar_1_q8",
+          "exists": true,
+          "data": {
+            "mediaType": "image",
+            "explanation": "",
+            "isActive": true,
+            "title": "Tebak Gambar",
+            "questionText": "",
+            "points": 10,
+            "questionNumber": 8,
+            "modeId": "tebak_gambar",
+            "levelId": "tebak_gambar_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Kolintang",
+              "Sape",
+              "Gendang",
+              "Gambus"
+            ],
+            "correctAnswer": "Gendang",
+            "updatedAt": "2026-05-25T06:46:54.750Z",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_gendang.png"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar_1_q9": {
+          "id": "tebak_gambar_1_q9",
+          "path": "questions/tebak_gambar_1_q9",
+          "exists": true,
+          "data": {
+            "mediaType": "image",
+            "explanation": "",
+            "isActive": true,
+            "title": "Tebak Gambar",
+            "questionText": "",
+            "points": 10,
+            "questionNumber": 9,
+            "modeId": "tebak_gambar",
+            "levelId": "tebak_gambar_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Sape",
+              "Kolintang",
+              "Gamelan",
+              "Angklung"
+            ],
+            "correctAnswer": "Sape",
+            "updatedAt": "2026-05-25T06:46:54.750Z",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_sape.png"
+          },
+          "subcollections": {}
+        },
+        "tebak_suara_1_q1": {
+          "id": "tebak_suara_1_q1",
+          "path": "questions/tebak_suara_1_q1",
+          "exists": true,
+          "data": {
+            "mediaType": "audio",
+            "explanation": "",
+            "isActive": true,
+            "title": "Tebak Suara",
+            "questionText": "Dengarkan suara alat musik ini.",
+            "points": 10,
+            "questionNumber": 1,
+            "modeId": "tebak_suara",
+            "levelId": "tebak_suara_1",
+            "timeLimitSeconds": 30,
+            "options": [
+              "Angklung",
+              "Gamelan",
+              "Kolintang",
+              "Sasando"
+            ],
+            "correctAnswer": "Angklung",
+            "updatedAt": "2026-05-25T06:46:54.750Z",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_suara/level_1/suara_angklung.mp3"
+          },
+          "subcollections": {}
+        },
+        "tebak_suara_1_q2": {
+          "id": "tebak_suara_1_q2",
+          "path": "questions/tebak_suara_1_q2",
+          "exists": true,
+          "data": {
+            "modeId": "tebak_suara",
+            "levelId": "tebak_suara_1",
+            "questionNumber": 2,
+            "title": "Tebak Suara",
+            "questionText": "-",
+            "mediaType": "audio",
+            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/quiz-media/1779777788969-179fff9latd.mp3",
+            "options": [
+              "Gamelan",
+              "Sasando",
+              "Angklung",
+              "Tifa"
+            ],
+            "correctAnswer": "Angklung",
+            "explanation": "",
+            "timeLimitSeconds": 30,
+            "points": 10,
+            "isActive": true,
+            "updatedAt": "2026-05-26T06:43:17.000Z",
+            "createdAt": "2026-05-26T06:43:17.000Z"
+          },
+          "subcollections": {}
+        }
+      }
+    },
+    "quiz_modes": {
+      "path": "quiz_modes",
+      "count": 4,
+      "documents": {
+        "_template": {
+          "id": "_template",
+          "path": "quiz_modes/_template",
+          "exists": true,
+          "data": {
+            "createdAt": null,
+            "description": "",
+            "iconUrl": "",
+            "isActive": false,
+            "title": "",
+            "order": 0,
+            "updatedAt": null
+          },
+          "subcollections": {}
+        },
+        "sejarah": {
+          "id": "sejarah",
+          "path": "quiz_modes/sejarah",
+          "exists": true,
+          "data": {
+            "description": "Jawab pertanyaan sejarah alat musik tradisional.",
+            "iconUrl": "assets/image/sejarah_alat.png",
+            "isActive": true,
+            "title": "Sejarah",
+            "order": 3,
+            "updatedAt": "2026-05-25T06:46:54.750Z"
+          },
+          "subcollections": {}
+        },
+        "tebak_gambar": {
+          "id": "tebak_gambar",
+          "path": "quiz_modes/tebak_gambar",
+          "exists": true,
+          "data": {
+            "description": "Tebak nama alat musik dari gambar.",
+            "iconUrl": "assets/image/tebak_gambar.png",
+            "isActive": true,
+            "title": "Tebak Gambar",
+            "order": 1,
+            "updatedAt": "2026-05-25T06:46:54.750Z"
+          },
+          "subcollections": {}
+        },
+        "tebak_suara": {
+          "id": "tebak_suara",
+          "path": "quiz_modes/tebak_suara",
+          "exists": true,
+          "data": {
+            "description": "Tebak nama alat musik dari suara.",
+            "iconUrl": "assets/image/tebak_suara.png",
+            "isActive": true,
+            "title": "Tebak Suara",
+            "order": 2,
+            "updatedAt": "2026-05-25T06:46:54.750Z"
+          },
+          "subcollections": {}
+        }
+      }
+    },
+    "users": {
+      "path": "users",
+      "count": 10,
+      "documents": {
+        "3tzTUxo2xKNGrFnW8WSi0ww8jbf2": {
+          "id": "3tzTUxo2xKNGrFnW8WSi0ww8jbf2",
+          "path": "users/3tzTUxo2xKNGrFnW8WSi0ww8jbf2",
+          "exists": true,
+          "data": {
+            "badgesEarned": 1,
+            "quizCompleted": 0,
+            "wrongAnswerCount": 0,
+            "level": 1,
+            "username": "nar",
+            "correctAnswerCount": 0,
+            "email": "nar@gmail.com",
+            "isDarkMode": true,
+            "createdAt": "2026-05-25T01:50:12.259Z",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/3tzTUxo2xKNGrFnW8WSi0ww8jbf2/profile_1779673889582.jpg",
+            "name": "nar",
+            "xp": 50,
+            "coin": 100,
+            "updatedAt": "2026-05-25T07:36:24.727Z"
+          },
+          "subcollections": {
+            "achievements": {
+              "path": "users/3tzTUxo2xKNGrFnW8WSi0ww8jbf2/achievements",
+              "count": 1,
+              "documents": {
+                "account_created": {
+                  "id": "account_created",
+                  "path": "users/3tzTUxo2xKNGrFnW8WSi0ww8jbf2/achievements/account_created",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-25T01:50:12.259Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "daily_login": {
+              "path": "users/3tzTUxo2xKNGrFnW8WSi0ww8jbf2/daily_login",
+              "count": 1,
+              "documents": {
+                "current": {
+                  "id": "current",
+                  "path": "users/3tzTUxo2xKNGrFnW8WSi0ww8jbf2/daily_login/current",
+                  "exists": true,
+                  "data": {
+                    "currentStreak": 1,
+                    "claimedToday": true,
+                    "lastLoginDate": "2026-05-25",
+                    "totalLoginDays": 1,
+                    "updatedAt": "2026-05-25T07:36:24.727Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            }
+          }
+        },
+        "4zjKf3QeakbvmTOfdUqSTDf4Gyr2": {
+          "id": "4zjKf3QeakbvmTOfdUqSTDf4Gyr2",
+          "path": "users/4zjKf3QeakbvmTOfdUqSTDf4Gyr2",
+          "exists": true,
+          "data": {
+            "level": 1,
+            "wrongAnswerCount": 0,
+            "username": "Elizabeth",
+            "isDarkMode": true,
+            "correctAnswerCount": 0,
+            "quizCompleted": 0,
+            "name": "Ahmad Elizabeth",
+            "badgesEarned": 1,
+            "email": "ahmad@mail.com",
+            "createdAt": "2026-05-27T06:03:01.326Z",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/4zjKf3QeakbvmTOfdUqSTDf4Gyr2/profile_1779861827272.jpg",
+            "xp": 50,
+            "coin": 100,
+            "updatedAt": "2026-05-27T06:19:11.567Z"
+          },
+          "subcollections": {
+            "achievements": {
+              "path": "users/4zjKf3QeakbvmTOfdUqSTDf4Gyr2/achievements",
+              "count": 1,
+              "documents": {
+                "account_created": {
+                  "id": "account_created",
+                  "path": "users/4zjKf3QeakbvmTOfdUqSTDf4Gyr2/achievements/account_created",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-27T06:03:01.326Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "daily_login": {
+              "path": "users/4zjKf3QeakbvmTOfdUqSTDf4Gyr2/daily_login",
+              "count": 1,
+              "documents": {
+                "current": {
+                  "id": "current",
+                  "path": "users/4zjKf3QeakbvmTOfdUqSTDf4Gyr2/daily_login/current",
+                  "exists": true,
+                  "data": {
+                    "currentStreak": 1,
+                    "claimedToday": true,
+                    "lastLoginDate": "2026-05-27",
+                    "totalLoginDays": 1,
+                    "updatedAt": "2026-05-27T06:19:11.567Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            }
+          }
+        },
+        "5wxKG9ALNDNhIAvUhdlj1huvNtF2": {
+          "id": "5wxKG9ALNDNhIAvUhdlj1huvNtF2",
+          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2",
+          "exists": true,
+          "data": {
+            "email": "akunainar004@gmail.com",
+            "isDarkMode": true,
+            "wrongAnswerCount": 0,
+            "level": 1,
+            "username": "akunainar004",
+            "createdAt": "2026-05-27T12:34:27.029Z",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/5wxKG9ALNDNhIAvUhdlj1huvNtF2/profile_1779885280578.jpg",
+            "name": "HyKaq",
+            "ownedInstrumentCount": 0,
+            "quizCompleted": 2,
+            "correctAnswerCount": 12,
+            "xp": 230,
+            "perfectScoreCount": 1,
+            "coin": 160,
+            "badgesEarned": 3,
+            "updatedAt": "2026-05-28T01:28:50.434Z"
+          },
+          "subcollections": {
+            "achievements": {
+              "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/achievements",
+              "count": 3,
+              "documents": {
+                "account_created": {
+                  "id": "account_created",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/achievements/account_created",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-27T12:34:27.029Z"
+                  },
+                  "subcollections": {}
+                },
+                "perfect_score": {
+                  "id": "perfect_score",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/achievements/perfect_score",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-28T01:28:50.434Z"
+                  },
+                  "subcollections": {}
+                },
+                "quiz_completed": {
+                  "id": "quiz_completed",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/achievements/quiz_completed",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-28T01:28:28.561Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "daily_login": {
+              "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/daily_login",
+              "count": 1,
+              "documents": {
+                "current": {
+                  "id": "current",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/daily_login/current",
+                  "exists": true,
+                  "data": {
+                    "currentStreak": 1,
+                    "claimedToday": true,
+                    "lastLoginDate": "2026-05-28",
+                    "totalLoginDays": 1,
+                    "updatedAt": "2026-05-28T01:28:26.625Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "level_progress": {
+              "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/level_progress",
+              "count": 4,
+              "documents": {
+                "tebak_gambar_1": {
+                  "id": "tebak_gambar_1",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/level_progress/tebak_gambar_1",
+                  "exists": true,
+                  "data": {
+                    "score": 100,
+                    "bestCorrectAnswers": 10,
+                    "completedAt": "2026-05-27T12:35:43.542Z",
+                    "modeId": "tebak_gambar",
+                    "bestScore": 100,
+                    "levelId": "tebak_gambar_1",
+                    "levelNumber": 1,
+                    "isUnlocked": true,
+                    "attemptCount": 1,
+                    "stars": 3,
+                    "status": "completed",
+                    "updatedAt": "2026-05-27T12:35:43.542Z"
+                  },
+                  "subcollections": {}
+                },
+                "tebak_gambar_2": {
+                  "id": "tebak_gambar_2",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/level_progress/tebak_gambar_2",
+                  "exists": true,
+                  "data": {
+                    "score": 0,
+                    "bestCorrectAnswers": 0,
+                    "modeId": "tebak_gambar",
+                    "bestScore": 0,
+                    "levelId": "tebak_gambar_2",
+                    "levelNumber": 2,
+                    "isUnlocked": true,
+                    "attemptCount": 0,
+                    "stars": 0,
+                    "status": "unlocked",
+                    "updatedAt": "2026-05-27T12:35:43.542Z"
+                  },
+                  "subcollections": {}
+                },
+                "tebak_suara_1": {
+                  "id": "tebak_suara_1",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/level_progress/tebak_suara_1",
+                  "exists": true,
+                  "data": {
+                    "score": 100,
+                    "bestCorrectAnswers": 2,
+                    "completedAt": "2026-05-28T01:28:48.074Z",
+                    "modeId": "tebak_suara",
+                    "bestScore": 100,
+                    "levelId": "tebak_suara_1",
+                    "levelNumber": 1,
+                    "isUnlocked": true,
+                    "attemptCount": 1,
+                    "stars": 3,
+                    "status": "completed",
+                    "updatedAt": "2026-05-28T01:28:48.074Z"
+                  },
+                  "subcollections": {}
+                },
+                "tebak_suara_2": {
+                  "id": "tebak_suara_2",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/level_progress/tebak_suara_2",
+                  "exists": true,
+                  "data": {
+                    "score": 0,
+                    "bestCorrectAnswers": 0,
+                    "modeId": "tebak_suara",
+                    "bestScore": 0,
+                    "levelId": "tebak_suara_2",
+                    "levelNumber": 2,
+                    "isUnlocked": true,
+                    "attemptCount": 0,
+                    "stars": 0,
+                    "status": "unlocked",
+                    "updatedAt": "2026-05-28T01:28:48.074Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "mission_progress": {
+              "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/mission_progress",
+              "count": 2,
+              "documents": {
+                "daily_complete_quiz": {
+                  "id": "daily_complete_quiz",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/mission_progress/daily_complete_quiz",
+                  "exists": true,
+                  "data": {
+                    "claimedAt": null,
+                    "completedAt": "2026-05-28T01:28:48.887Z",
+                    "dateKey": "2026-05-28",
+                    "progress": 1,
+                    "isClaimed": false,
+                    "target": 1,
+                    "isCompleted": true,
+                    "updatedAt": "2026-05-28T01:28:48.887Z"
+                  },
+                  "subcollections": {}
+                },
+                "daily_play_game": {
+                  "id": "daily_play_game",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/mission_progress/daily_play_game",
+                  "exists": true,
+                  "data": {
+                    "claimedAt": null,
+                    "completedAt": "2026-05-28T01:43:32.294Z",
+                    "dateKey": "2026-05-28",
+                    "progress": 1,
+                    "isClaimed": false,
+                    "target": 1,
+                    "isCompleted": true,
+                    "updatedAt": "2026-05-28T01:43:32.294Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "quiz_attempts": {
+              "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts",
+              "count": 2,
+              "documents": {
+                "Boo9EwSPQUgQZAQzP7Fs": {
+                  "id": "Boo9EwSPQUgQZAQzP7Fs",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/Boo9EwSPQUgQZAQzP7Fs",
+                  "exists": true,
+                  "data": {
+                    "totalQuestions": 2,
+                    "score": 100,
+                    "wrongAnswers": 0,
+                    "modeId": "tebak_suara",
+                    "durationSeconds": 8,
+                    "earnedXp": 30,
+                    "levelId": "tebak_suara_1",
+                    "startedAt": "2026-05-28T01:28:38.481Z",
+                    "correctAnswers": 2,
+                    "earnedCoin": 10,
+                    "createdAt": "2026-05-28T01:28:48.317Z",
+                    "finishedAt": "2026-05-28T01:28:48.317Z"
+                  },
+                  "subcollections": {
+                    "answers": {
+                      "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/Boo9EwSPQUgQZAQzP7Fs/answers",
+                      "count": 2,
+                      "documents": {
+                        "q1": {
+                          "id": "q1",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/Boo9EwSPQUgQZAQzP7Fs/answers/q1",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_suara_1_q1",
+                            "userAnswer": "Angklung",
+                            "timeSpentSeconds": 0,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_suara/level_1/suara_angklung.mp3",
+                            "mediaType": "audio",
+                            "correctAnswer": "Angklung",
+                            "questionNumber": 1,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-28T01:28:48.317Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q2": {
+                          "id": "q2",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/Boo9EwSPQUgQZAQzP7Fs/answers/q2",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_suara_1_q2",
+                            "userAnswer": "Angklung",
+                            "timeSpentSeconds": 4,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/quiz-media/1779777788969-179fff9latd.mp3",
+                            "mediaType": "audio",
+                            "correctAnswer": "Angklung",
+                            "questionNumber": 2,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-28T01:28:48.317Z"
+                          },
+                          "subcollections": {}
+                        }
+                      }
+                    }
+                  }
+                },
+                "QWzLoGoESmhPga1Oz5rh": {
+                  "id": "QWzLoGoESmhPga1Oz5rh",
+                  "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh",
+                  "exists": true,
+                  "data": {
+                    "totalQuestions": 10,
+                    "score": 100,
+                    "wrongAnswers": 0,
+                    "modeId": "tebak_gambar",
+                    "durationSeconds": 44,
+                    "earnedXp": 150,
+                    "levelId": "tebak_gambar_1",
+                    "startedAt": "2026-05-27T12:34:57.555Z",
+                    "correctAnswers": 10,
+                    "earnedCoin": 50,
+                    "createdAt": "2026-05-27T12:35:43.731Z",
+                    "finishedAt": "2026-05-27T12:35:43.731Z"
+                  },
+                  "subcollections": {
+                    "answers": {
+                      "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers",
+                      "count": 10,
+                      "documents": {
+                        "q1": {
+                          "id": "q1",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers/q1",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_gambar_1_q1",
+                            "userAnswer": "Tifa",
+                            "timeSpentSeconds": 1,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/1779805806221-elruyocp6h7.png",
+                            "mediaType": "image",
+                            "correctAnswer": "Tifa",
+                            "questionNumber": 1,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:35:43.731Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q10": {
+                          "id": "q10",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers/q10",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_gambar_1_q10",
+                            "userAnswer": "Kecapi",
+                            "timeSpentSeconds": 4,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/1779806008390-vlesd0clird.png",
+                            "mediaType": "image",
+                            "correctAnswer": "Kecapi",
+                            "questionNumber": 10,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:35:43.731Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q2": {
+                          "id": "q2",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers/q2",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_gambar_1_q2",
+                            "userAnswer": "Gamelan",
+                            "timeSpentSeconds": 3,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/1779805903722-w7k3azq3vsa.png",
+                            "mediaType": "image",
+                            "correctAnswer": "Gamelan",
+                            "questionNumber": 2,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:35:43.731Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q3": {
+                          "id": "q3",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers/q3",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_gambar_1_q3",
+                            "userAnswer": "Kolintang",
+                            "timeSpentSeconds": 1,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_kolintang.png",
+                            "mediaType": "image",
+                            "correctAnswer": "Kolintang",
+                            "questionNumber": 3,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:35:43.731Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q4": {
+                          "id": "q4",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers/q4",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_gambar_1_q4",
+                            "userAnswer": "Gambus",
+                            "timeSpentSeconds": 2,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_gambus.png",
+                            "mediaType": "image",
+                            "correctAnswer": "Gambus",
+                            "questionNumber": 4,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:35:43.731Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q5": {
+                          "id": "q5",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers/q5",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_gambar_1_q5",
+                            "userAnswer": "Sasando",
+                            "timeSpentSeconds": 7,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_sasando.png",
+                            "mediaType": "image",
+                            "correctAnswer": "Sasando",
+                            "questionNumber": 5,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:35:43.731Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q6": {
+                          "id": "q6",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers/q6",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_gambar_1_q6",
+                            "userAnswer": "Rebab",
+                            "timeSpentSeconds": 2,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_rebab.png",
+                            "mediaType": "image",
+                            "correctAnswer": "Rebab",
+                            "questionNumber": 6,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:35:43.731Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q7": {
+                          "id": "q7",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers/q7",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_gambar_1_q7",
+                            "userAnswer": "Angklung",
+                            "timeSpentSeconds": 4,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_angklung.png",
+                            "mediaType": "image",
+                            "correctAnswer": "Angklung",
+                            "questionNumber": 7,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:35:43.731Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q8": {
+                          "id": "q8",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers/q8",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_gambar_1_q8",
+                            "userAnswer": "Gendang",
+                            "timeSpentSeconds": 4,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_gendang.png",
+                            "mediaType": "image",
+                            "correctAnswer": "Gendang",
+                            "questionNumber": 8,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:35:43.731Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q9": {
+                          "id": "q9",
+                          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/QWzLoGoESmhPga1Oz5rh/answers/q9",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_gambar_1_q9",
+                            "userAnswer": "Sape",
+                            "timeSpentSeconds": 2,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_gambar/level_1/gambar_sape.png",
+                            "mediaType": "image",
+                            "correctAnswer": "Sape",
+                            "questionNumber": 9,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:35:43.731Z"
+                          },
+                          "subcollections": {}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "AnLZrep7soRxsoc02dPjEd06sve2": {
+          "id": "AnLZrep7soRxsoc02dPjEd06sve2",
+          "path": "users/AnLZrep7soRxsoc02dPjEd06sve2",
+          "exists": true,
+          "data": {
+            "quizCompleted": 0,
+            "correctAnswerCount": 0,
+            "isDarkMode": true,
+            "name": "halo",
+            "badgesEarned": 1,
+            "username": "halo",
+            "wrongAnswerCount": 0,
+            "level": 1,
+            "email": "halo@mail.com",
+            "createdAt": "2026-05-25T07:42:12.586Z",
+            "coin": 200,
+            "xp": 200,
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/AnLZrep7soRxsoc02dPjEd06sve2/profile_1779696437905.jpg",
+            "updatedAt": "2026-05-25T08:07:19.508Z"
+          },
+          "subcollections": {
+            "achievements": {
+              "path": "users/AnLZrep7soRxsoc02dPjEd06sve2/achievements",
+              "count": 1,
+              "documents": {
+                "account_created": {
+                  "id": "account_created",
+                  "path": "users/AnLZrep7soRxsoc02dPjEd06sve2/achievements/account_created",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-25T07:42:12.586Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "daily_login": {
+              "path": "users/AnLZrep7soRxsoc02dPjEd06sve2/daily_login",
+              "count": 1,
+              "documents": {
+                "current": {
+                  "id": "current",
+                  "path": "users/AnLZrep7soRxsoc02dPjEd06sve2/daily_login/current",
+                  "exists": true,
+                  "data": {
+                    "claimedToday": true,
+                    "currentStreak": 2,
+                    "lastLoginDate": "2026-05-26",
+                    "totalLoginDays": 2,
+                    "updatedAt": "2026-05-25T07:47:59.161Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            }
+          }
+        },
+        "GIoQl7cuviTI2BKDFj01Y5iM5Hy1": {
+          "id": "GIoQl7cuviTI2BKDFj01Y5iM5Hy1",
+          "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1",
+          "exists": true,
+          "data": {
+            "isDarkMode": true,
+            "wrongAnswerCount": 0,
+            "email": "nararyawirazahranprasetyo@gmail.com",
+            "username": "nararyawirazahranprasetyo",
+            "level": 1,
+            "badgesEarned": 1,
+            "createdAt": "2026-05-23T09:49:36.059Z",
+            "name": "Nararya",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/profile_1779553710787.jpg",
+            "quizCompleted": 1,
+            "correctAnswerCount": 1,
+            "xp": 65,
+            "coin": 105,
+            "updatedAt": "2026-05-27T12:34:03.161Z"
+          },
+          "subcollections": {
+            "achievements": {
+              "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/achievements",
+              "count": 1,
+              "documents": {
+                "account_created": {
+                  "id": "account_created",
+                  "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/achievements/account_created",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-23T09:49:36.059Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "daily_login": {
+              "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/daily_login",
+              "count": 1,
+              "documents": {
+                "current": {
+                  "id": "current",
+                  "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/daily_login/current",
+                  "exists": true,
+                  "data": {
+                    "currentStreak": 1,
+                    "claimedToday": true,
+                    "lastLoginDate": "2026-05-23",
+                    "totalLoginDays": 1,
+                    "updatedAt": "2026-05-23T09:50:04.347Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "level_progress": {
+              "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/level_progress",
+              "count": 2,
+              "documents": {
+                "sejarah_1": {
+                  "id": "sejarah_1",
+                  "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/level_progress/sejarah_1",
+                  "exists": true,
+                  "data": {
+                    "score": 100,
+                    "bestCorrectAnswers": 1,
+                    "completedAt": "2026-05-27T12:34:03.267Z",
+                    "modeId": "sejarah",
+                    "bestScore": 100,
+                    "levelId": "sejarah_1",
+                    "levelNumber": 1,
+                    "isUnlocked": true,
+                    "attemptCount": 1,
+                    "stars": 3,
+                    "status": "completed",
+                    "updatedAt": "2026-05-27T12:34:03.267Z"
+                  },
+                  "subcollections": {}
+                },
+                "sejarah_2": {
+                  "id": "sejarah_2",
+                  "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/level_progress/sejarah_2",
+                  "exists": true,
+                  "data": {
+                    "score": 0,
+                    "bestCorrectAnswers": 0,
+                    "modeId": "sejarah",
+                    "bestScore": 0,
+                    "levelId": "sejarah_2",
+                    "levelNumber": 2,
+                    "isUnlocked": true,
+                    "attemptCount": 0,
+                    "stars": 0,
+                    "status": "unlocked",
+                    "updatedAt": "2026-05-27T12:34:03.267Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "quiz_attempts": {
+              "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/quiz_attempts",
+              "count": 1,
+              "documents": {
+                "Xm5WoRFURk2ohQPZTTQO": {
+                  "id": "Xm5WoRFURk2ohQPZTTQO",
+                  "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/quiz_attempts/Xm5WoRFURk2ohQPZTTQO",
+                  "exists": true,
+                  "data": {
+                    "totalQuestions": 1,
+                    "score": 100,
+                    "wrongAnswers": 0,
+                    "modeId": "sejarah",
+                    "durationSeconds": 2,
+                    "earnedXp": 15,
+                    "levelId": "sejarah_1",
+                    "startedAt": "2026-05-27T12:33:59.646Z",
+                    "correctAnswers": 1,
+                    "earnedCoin": 5,
+                    "createdAt": "2026-05-27T12:34:03.372Z",
+                    "finishedAt": "2026-05-27T12:34:03.372Z"
+                  },
+                  "subcollections": {
+                    "answers": {
+                      "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/quiz_attempts/Xm5WoRFURk2ohQPZTTQO/answers",
+                      "count": 1,
+                      "documents": {
+                        "q1": {
+                          "id": "q1",
+                          "path": "users/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/quiz_attempts/Xm5WoRFURk2ohQPZTTQO/answers/q1",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "sejarah_1_q1",
+                            "userAnswer": "Mengiringi upacara adat tarian",
+                            "timeSpentSeconds": 1,
+                            "mediaUrl": "",
+                            "mediaType": "text",
+                            "correctAnswer": "Mengiringi upacara adat tarian",
+                            "questionNumber": 1,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:34:03.372Z"
+                          },
+                          "subcollections": {}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "VuTiMvdstqP26cOp5bArpvNWJjw2": {
+          "id": "VuTiMvdstqP26cOp5bArpvNWJjw2",
+          "path": "users/VuTiMvdstqP26cOp5bArpvNWJjw2",
+          "exists": true,
+          "data": {
+            "level": 1,
+            "wrongAnswerCount": 0,
+            "username": "nararya09",
+            "quizCompleted": 0,
+            "xp": 0,
+            "email": "nararya09@gmail.com",
+            "coin": 0,
+            "correctAnswerCount": 0,
+            "isDarkMode": true,
+            "badgesEarned": 1,
+            "createdAt": "2026-05-23T16:17:01.475Z",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/VuTiMvdstqP26cOp5bArpvNWJjw2/profile_1779696512472.jpg",
+            "name": "Nirnur",
+            "updatedAt": "2026-05-25T08:08:47.140Z"
+          },
+          "subcollections": {
+            "achievements": {
+              "path": "users/VuTiMvdstqP26cOp5bArpvNWJjw2/achievements",
+              "count": 1,
+              "documents": {
+                "account_created": {
+                  "id": "account_created",
+                  "path": "users/VuTiMvdstqP26cOp5bArpvNWJjw2/achievements/account_created",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-23T16:17:01.475Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "daily_login": {
+              "path": "users/VuTiMvdstqP26cOp5bArpvNWJjw2/daily_login",
+              "count": 1,
+              "documents": {
+                "current": {
+                  "id": "current",
+                  "path": "users/VuTiMvdstqP26cOp5bArpvNWJjw2/daily_login/current",
+                  "exists": true,
+                  "data": {
+                    "claimedToday": false,
+                    "lastLoginDate": "",
+                    "totalLoginDays": 0,
+                    "currentStreak": 0,
+                    "updatedAt": "2026-05-23T16:17:01.475Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            }
+          }
+        },
+        "_template": {
+          "id": "_template",
+          "path": "users/_template",
+          "exists": true,
+          "data": {
+            "instrumentMasteryCount": 0,
+            "wrongAnswerCount": 0,
+            "avatarUrl": "",
+            "level": 0,
+            "badgesEarned": 0,
+            "perfectScoreCount": 0,
+            "ownedInstrumentCount": 0,
+            "quizCompleted": 0,
+            "createdAt": null,
+            "correctAnswerCount": 0,
+            "name": "",
+            "xp": 0,
+            "email": "",
+            "coin": 0,
+            "updatedAt": null,
+            "username": ""
+          },
+          "subcollections": {
+            "achievements": {
+              "path": "users/_template/achievements",
+              "count": 1,
+              "documents": {
+                "_template": {
+                  "id": "_template",
+                  "path": "users/_template/achievements/_template",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": null
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "daily_login": {
+              "path": "users/_template/daily_login",
+              "count": 1,
+              "documents": {
+                "current": {
+                  "id": "current",
+                  "path": "users/_template/daily_login/current",
+                  "exists": true,
+                  "data": {
+                    "currentStreak": 0,
+                    "claimedToday": false,
+                    "lastLoginDate": "",
+                    "totalLoginDays": 0,
+                    "updatedAt": null
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "level_progress": {
+              "path": "users/_template/level_progress",
+              "count": 1,
+              "documents": {
+                "_template": {
+                  "id": "_template",
+                  "path": "users/_template/level_progress/_template",
+                  "exists": true,
+                  "data": {
+                    "bestCorrectAnswers": 0,
+                    "completedAt": null,
+                    "modeId": "",
+                    "bestScore": 0,
+                    "isUnlocked": false,
+                    "attemptCount": 0,
+                    "stars": 0,
+                    "status": "",
+                    "updatedAt": null
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "mission_progress": {
+              "path": "users/_template/mission_progress",
+              "count": 1,
+              "documents": {
+                "_template": {
+                  "id": "_template",
+                  "path": "users/_template/mission_progress/_template",
+                  "exists": true,
+                  "data": {
+                    "claimedAt": null,
+                    "completedAt": null,
+                    "dateKey": "",
+                    "progress": 0,
+                    "isClaimed": false,
+                    "isCompleted": false,
+                    "target": 0,
+                    "updatedAt": null
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "owned_instruments": {
+              "path": "users/_template/owned_instruments",
+              "count": 1,
+              "documents": {
+                "_template": {
+                  "id": "_template",
+                  "path": "users/_template/owned_instruments/_template",
+                  "exists": true,
+                  "data": {
+                    "unlockedAt": null,
+                    "isUnlocked": false,
+                    "source": ""
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "quiz_attempts": {
+              "path": "users/_template/quiz_attempts",
+              "count": 1,
+              "documents": {
+                "_template": {
+                  "id": "_template",
+                  "path": "users/_template/quiz_attempts/_template",
+                  "exists": true,
+                  "data": {
+                    "createdAt": null,
+                    "score": 0,
+                    "totalQuestions": 0,
+                    "wrongAnswers": 0,
+                    "durationSeconds": 0,
+                    "modeId": "",
+                    "earnedXp": 0,
+                    "levelId": "",
+                    "startedAt": null,
+                    "correctAnswers": 0,
+                    "earnedCoin": 0,
+                    "finishedAt": null
+                  },
+                  "subcollections": {
+                    "answers": {
+                      "path": "users/_template/quiz_attempts/_template/answers",
+                      "count": 1,
+                      "documents": {
+                        "_template": {
+                          "id": "_template",
+                          "path": "users/_template/quiz_attempts/_template/answers/_template",
+                          "exists": true,
+                          "data": {
+                            "createdAt": null,
+                            "pointsEarned": 0,
+                            "questionId": "",
+                            "timeSpentSeconds": 0,
+                            "userAnswer": "",
+                            "correctAnswer": "",
+                            "isCorrect": false,
+                            "questionNumber": 0
+                          },
+                          "subcollections": {}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "qtbiZQujlOensXw1w6mWcRWdPCR2": {
+          "id": "qtbiZQujlOensXw1w6mWcRWdPCR2",
+          "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2",
+          "exists": true,
+          "data": {
+            "badgesEarned": 1,
+            "level": 1,
+            "username": "aryaganzz09",
+            "isDarkMode": true,
+            "email": "aryaganzz09@gmail.com",
+            "createdAt": "2026-05-23T09:48:42.009Z",
+            "name": "Narr",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/qtbiZQujlOensXw1w6mWcRWdPCR2/profile_1779764572704.jpg",
+            "wrongAnswerCount": 2,
+            "quizCompleted": 4,
+            "correctAnswerCount": 3,
+            "xp": 245,
+            "coin": 415,
+            "updatedAt": "2026-05-27T12:33:33.148Z"
+          },
+          "subcollections": {
+            "achievements": {
+              "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/achievements",
+              "count": 1,
+              "documents": {
+                "account_created": {
+                  "id": "account_created",
+                  "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/achievements/account_created",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-23T09:48:42.009Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "daily_login": {
+              "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/daily_login",
+              "count": 1,
+              "documents": {
+                "current": {
+                  "id": "current",
+                  "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/daily_login/current",
+                  "exists": true,
+                  "data": {
+                    "claimedToday": true,
+                    "currentStreak": 4,
+                    "lastLoginDate": "2026-05-27",
+                    "totalLoginDays": 4,
+                    "updatedAt": "2026-05-27T11:59:28.660Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "level_progress": {
+              "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/level_progress",
+              "count": 4,
+              "documents": {
+                "sejarah_1": {
+                  "id": "sejarah_1",
+                  "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/level_progress/sejarah_1",
+                  "exists": true,
+                  "data": {
+                    "modeId": "sejarah",
+                    "levelId": "sejarah_1",
+                    "levelNumber": 1,
+                    "isUnlocked": true,
+                    "status": "completed",
+                    "score": 100,
+                    "bestCorrectAnswers": 1,
+                    "completedAt": "2026-05-27T12:19:50.532Z",
+                    "bestScore": 100,
+                    "attemptCount": 3,
+                    "stars": 3,
+                    "updatedAt": "2026-05-27T12:19:50.532Z"
+                  },
+                  "subcollections": {}
+                },
+                "sejarah_2": {
+                  "id": "sejarah_2",
+                  "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/level_progress/sejarah_2",
+                  "exists": true,
+                  "data": {
+                    "score": 0,
+                    "bestCorrectAnswers": 0,
+                    "modeId": "sejarah",
+                    "bestScore": 0,
+                    "levelId": "sejarah_2",
+                    "levelNumber": 2,
+                    "isUnlocked": true,
+                    "attemptCount": 0,
+                    "stars": 0,
+                    "status": "unlocked",
+                    "updatedAt": "2026-05-27T12:19:50.532Z"
+                  },
+                  "subcollections": {}
+                },
+                "tebak_suara_1": {
+                  "id": "tebak_suara_1",
+                  "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/level_progress/tebak_suara_1",
+                  "exists": true,
+                  "data": {
+                    "score": 100,
+                    "bestCorrectAnswers": 2,
+                    "completedAt": "2026-05-27T12:33:33.488Z",
+                    "modeId": "tebak_suara",
+                    "bestScore": 100,
+                    "levelId": "tebak_suara_1",
+                    "levelNumber": 1,
+                    "isUnlocked": true,
+                    "attemptCount": 1,
+                    "stars": 3,
+                    "status": "completed",
+                    "updatedAt": "2026-05-27T12:33:33.488Z"
+                  },
+                  "subcollections": {}
+                },
+                "tebak_suara_2": {
+                  "id": "tebak_suara_2",
+                  "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/level_progress/tebak_suara_2",
+                  "exists": true,
+                  "data": {
+                    "score": 0,
+                    "bestCorrectAnswers": 0,
+                    "modeId": "tebak_suara",
+                    "bestScore": 0,
+                    "levelId": "tebak_suara_2",
+                    "levelNumber": 2,
+                    "isUnlocked": true,
+                    "attemptCount": 0,
+                    "stars": 0,
+                    "status": "unlocked",
+                    "updatedAt": "2026-05-27T12:33:33.488Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "quiz_attempts": {
+              "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/quiz_attempts",
+              "count": 1,
+              "documents": {
+                "G58iB9KvENiGvhEhPac2": {
+                  "id": "G58iB9KvENiGvhEhPac2",
+                  "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/quiz_attempts/G58iB9KvENiGvhEhPac2",
+                  "exists": true,
+                  "data": {
+                    "totalQuestions": 2,
+                    "score": 100,
+                    "wrongAnswers": 0,
+                    "modeId": "tebak_suara",
+                    "durationSeconds": 5,
+                    "earnedXp": 30,
+                    "levelId": "tebak_suara_1",
+                    "startedAt": "2026-05-27T12:33:26.039Z",
+                    "correctAnswers": 2,
+                    "earnedCoin": 10,
+                    "createdAt": "2026-05-27T12:33:33.701Z",
+                    "finishedAt": "2026-05-27T12:33:33.701Z"
+                  },
+                  "subcollections": {
+                    "answers": {
+                      "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/quiz_attempts/G58iB9KvENiGvhEhPac2/answers",
+                      "count": 2,
+                      "documents": {
+                        "q1": {
+                          "id": "q1",
+                          "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/quiz_attempts/G58iB9KvENiGvhEhPac2/answers/q1",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_suara_1_q1",
+                            "userAnswer": "Angklung",
+                            "timeSpentSeconds": 0,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/quiz-media/tebak_suara/level_1/suara_angklung.mp3",
+                            "mediaType": "audio",
+                            "correctAnswer": "Angklung",
+                            "questionNumber": 1,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:33:33.701Z"
+                          },
+                          "subcollections": {}
+                        },
+                        "q2": {
+                          "id": "q2",
+                          "path": "users/qtbiZQujlOensXw1w6mWcRWdPCR2/quiz_attempts/G58iB9KvENiGvhEhPac2/answers/q2",
+                          "exists": true,
+                          "data": {
+                            "pointsEarned": 10,
+                            "questionId": "tebak_suara_1_q2",
+                            "userAnswer": "Angklung",
+                            "timeSpentSeconds": 3,
+                            "mediaUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/quiz-media/1779777788969-179fff9latd.mp3",
+                            "mediaType": "audio",
+                            "correctAnswer": "Angklung",
+                            "questionNumber": 2,
+                            "isCorrect": true,
+                            "createdAt": "2026-05-27T12:33:33.701Z"
+                          },
+                          "subcollections": {}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tMWFpgE2FhQullGgPTjaXk16xRR2": {
+          "id": "tMWFpgE2FhQullGgPTjaXk16xRR2",
+          "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2",
+          "exists": true,
+          "data": {
+            "email": "tes@mail.com",
+            "level": 1,
+            "username": "tes",
+            "isDarkMode": true,
+            "badgesEarned": 1,
+            "createdAt": "2026-05-26T12:44:58.483Z",
+            "role": "user",
+            "name": "Ryan Gosling",
+            "isActive": true,
+            "status": "aktif",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/tMWFpgE2FhQullGgPTjaXk16xRR2/profile_1779804134895.jpg",
+            "wrongAnswerCount": 10,
+            "quizCompleted": 6,
+            "correctAnswerCount": 42,
+            "xp": 730,
+            "coin": 0,
+            "updatedAt": "2026-05-27T11:58:41.988Z"
+          },
+          "subcollections": {
+            "achievements": {
+              "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/achievements",
+              "count": 1,
+              "documents": {
+                "account_created": {
+                  "id": "account_created",
+                  "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/achievements/account_created",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-26T12:44:58.483Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "daily_login": {
+              "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/daily_login",
+              "count": 1,
+              "documents": {
+                "current": {
+                  "id": "current",
+                  "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/daily_login/current",
+                  "exists": true,
+                  "data": {
+                    "claimedToday": true,
+                    "currentStreak": 2,
+                    "lastLoginDate": "2026-05-27",
+                    "totalLoginDays": 2,
+                    "updatedAt": "2026-05-27T05:25:30.694Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "level_progress": {
+              "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/level_progress",
+              "count": 4,
+              "documents": {
+                "tebak_gambar_1": {
+                  "id": "tebak_gambar_1",
+                  "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/level_progress/tebak_gambar_1",
+                  "exists": true,
+                  "data": {
+                    "modeId": "tebak_gambar",
+                    "levelId": "tebak_gambar_1",
+                    "levelNumber": 1,
+                    "isUnlocked": true,
+                    "status": "completed",
+                    "score": 20,
+                    "bestCorrectAnswers": 2,
+                    "completedAt": "2026-05-27T10:27:44.823Z",
+                    "bestScore": 20,
+                    "attemptCount": 5,
+                    "stars": 1,
+                    "updatedAt": "2026-05-27T10:27:44.823Z"
+                  },
+                  "subcollections": {}
+                },
+                "tebak_gambar_2": {
+                  "id": "tebak_gambar_2",
+                  "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/level_progress/tebak_gambar_2",
+                  "exists": true,
+                  "data": {
+                    "score": 0,
+                    "bestCorrectAnswers": 0,
+                    "modeId": "tebak_gambar",
+                    "bestScore": 0,
+                    "levelId": "tebak_gambar_2",
+                    "levelNumber": 2,
+                    "isUnlocked": true,
+                    "attemptCount": 0,
+                    "stars": 0,
+                    "status": "unlocked",
+                    "updatedAt": "2026-05-27T10:11:28.004Z"
+                  },
+                  "subcollections": {}
+                },
+                "tebak_suara_1": {
+                  "id": "tebak_suara_1",
+                  "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/level_progress/tebak_suara_1",
+                  "exists": true,
+                  "data": {
+                    "score": 100,
+                    "bestCorrectAnswers": 2,
+                    "completedAt": "2026-05-27T11:56:16.373Z",
+                    "modeId": "tebak_suara",
+                    "bestScore": 100,
+                    "levelId": "tebak_suara_1",
+                    "levelNumber": 1,
+                    "isUnlocked": true,
+                    "attemptCount": 1,
+                    "stars": 3,
+                    "status": "completed",
+                    "updatedAt": "2026-05-27T11:56:16.373Z"
+                  },
+                  "subcollections": {}
+                },
+                "tebak_suara_2": {
+                  "id": "tebak_suara_2",
+                  "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/level_progress/tebak_suara_2",
+                  "exists": true,
+                  "data": {
+                    "score": 0,
+                    "bestCorrectAnswers": 0,
+                    "modeId": "tebak_suara",
+                    "bestScore": 0,
+                    "levelId": "tebak_suara_2",
+                    "levelNumber": 2,
+                    "isUnlocked": true,
+                    "attemptCount": 0,
+                    "stars": 0,
+                    "status": "unlocked",
+                    "updatedAt": "2026-05-27T11:56:16.373Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "owned_instruments": {
+              "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/owned_instruments",
+              "count": 1,
+              "documents": {
+                "sasando": {
+                  "id": "sasando",
+                  "path": "users/tMWFpgE2FhQullGgPTjaXk16xRR2/owned_instruments/sasando",
+                  "exists": true,
+                  "data": {
+                    "unlockedAt": "2026-05-27T11:58:41.988Z",
+                    "isUnlocked": true,
+                    "source": "coin_purchase"
+                  },
+                  "subcollections": {}
+                }
+              }
+            }
+          }
+        },
+        "xlnlTNs2L8TniBxCJWLqXCZaDi83": {
+          "id": "xlnlTNs2L8TniBxCJWLqXCZaDi83",
+          "path": "users/xlnlTNs2L8TniBxCJWLqXCZaDi83",
+          "exists": true,
+          "data": {
+            "email": "kampes@mail.com",
+            "quizCompleted": 0,
+            "isDarkMode": true,
+            "wrongAnswerCount": 0,
+            "level": 1,
+            "username": "kampes",
+            "badgesEarned": 1,
+            "correctAnswerCount": 0,
+            "avatarUrl": "assets/image/user_profile.png",
+            "createdAt": "2026-05-23T12:15:06.251Z",
+            "xp": 50,
+            "coin": 100,
+            "role": "user",
+            "name": "halobandung",
+            "isActive": true,
+            "status": "aktif",
+            "updatedAt": "2026-05-26T14:00:00.000Z"
+          },
+          "subcollections": {
+            "achievements": {
+              "path": "users/xlnlTNs2L8TniBxCJWLqXCZaDi83/achievements",
+              "count": 1,
+              "documents": {
+                "account_created": {
+                  "id": "account_created",
+                  "path": "users/xlnlTNs2L8TniBxCJWLqXCZaDi83/achievements/account_created",
+                  "exists": true,
+                  "data": {
+                    "earnedAt": "2026-05-23T12:15:06.251Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            },
+            "daily_login": {
+              "path": "users/xlnlTNs2L8TniBxCJWLqXCZaDi83/daily_login",
+              "count": 1,
+              "documents": {
+                "current": {
+                  "id": "current",
+                  "path": "users/xlnlTNs2L8TniBxCJWLqXCZaDi83/daily_login/current",
+                  "exists": true,
+                  "data": {
+                    "currentStreak": 1,
+                    "claimedToday": true,
+                    "lastLoginDate": "2026-05-23",
+                    "totalLoginDays": 1,
+                    "updatedAt": "2026-05-23T12:15:16.059Z"
+                  },
+                  "subcollections": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "knownCollectionPaths": {
+    "leaderboards/global/entries": {
+      "path": "leaderboards/global/entries",
+      "count": 10,
+      "documents": {
+        "3tzTUxo2xKNGrFnW8WSi0ww8jbf2": {
+          "id": "3tzTUxo2xKNGrFnW8WSi0ww8jbf2",
+          "path": "leaderboards/global/entries/3tzTUxo2xKNGrFnW8WSi0ww8jbf2",
+          "exists": true,
+          "data": {
+            "quizCompleted": 0,
+            "periodType": "global",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/3tzTUxo2xKNGrFnW8WSi0ww8jbf2/profile_1779673889582.jpg",
+            "level": 1,
+            "name": "nar",
+            "rank": 4,
+            "periodKey": "global",
+            "username": "nar",
+            "score": 50,
+            "xp": 50,
+            "updatedAt": "2026-05-27T12:16:14.834Z"
+          },
+          "subcollections": {}
+        },
+        "4zjKf3QeakbvmTOfdUqSTDf4Gyr2": {
+          "id": "4zjKf3QeakbvmTOfdUqSTDf4Gyr2",
+          "path": "leaderboards/global/entries/4zjKf3QeakbvmTOfdUqSTDf4Gyr2",
+          "exists": true,
+          "data": {
+            "quizCompleted": 0,
+            "score": 50,
+            "periodType": "global",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/4zjKf3QeakbvmTOfdUqSTDf4Gyr2/profile_1779861827272.jpg",
+            "level": 1,
+            "name": "Ahmad Elizabeth",
+            "xp": 50,
+            "rank": 5,
+            "periodKey": "global",
+            "username": "Elizabeth",
+            "updatedAt": "2026-05-27T12:16:14.834Z"
+          },
+          "subcollections": {}
+        },
+        "5wxKG9ALNDNhIAvUhdlj1huvNtF2": {
+          "id": "5wxKG9ALNDNhIAvUhdlj1huvNtF2",
+          "path": "leaderboards/global/entries/5wxKG9ALNDNhIAvUhdlj1huvNtF2",
+          "exists": true,
+          "data": {
+            "periodType": "global",
+            "level": 1,
+            "periodKey": "global",
+            "username": "akunainar004",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/5wxKG9ALNDNhIAvUhdlj1huvNtF2/profile_1779885280578.jpg",
+            "name": "HyKaq",
+            "quizCompleted": 2,
+            "score": 230,
+            "xp": 230,
+            "updatedAt": "2026-05-28T01:28:47.663Z"
+          },
+          "subcollections": {}
+        },
+        "AnLZrep7soRxsoc02dPjEd06sve2": {
+          "id": "AnLZrep7soRxsoc02dPjEd06sve2",
+          "path": "leaderboards/global/entries/AnLZrep7soRxsoc02dPjEd06sve2",
+          "exists": true,
+          "data": {
+            "quizCompleted": 0,
+            "score": 200,
+            "periodType": "global",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/AnLZrep7soRxsoc02dPjEd06sve2/profile_1779696437905.jpg",
+            "level": 1,
+            "name": "halo",
+            "xp": 200,
+            "rank": 2,
+            "periodKey": "global",
+            "username": "halo",
+            "updatedAt": "2026-05-27T12:16:14.834Z"
+          },
+          "subcollections": {}
+        },
+        "GIoQl7cuviTI2BKDFj01Y5iM5Hy1": {
+          "id": "GIoQl7cuviTI2BKDFj01Y5iM5Hy1",
+          "path": "leaderboards/global/entries/GIoQl7cuviTI2BKDFj01Y5iM5Hy1",
+          "exists": true,
+          "data": {
+            "periodType": "global",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/GIoQl7cuviTI2BKDFj01Y5iM5Hy1/profile_1779553710787.jpg",
+            "level": 1,
+            "name": "Nararya",
+            "periodKey": "global",
+            "username": "nararyawirazahranprasetyo",
+            "rank": 6,
+            "quizCompleted": 1,
+            "score": 65,
+            "xp": 65,
+            "updatedAt": "2026-05-27T12:34:03.161Z"
+          },
+          "subcollections": {}
+        },
+        "VuTiMvdstqP26cOp5bArpvNWJjw2": {
+          "id": "VuTiMvdstqP26cOp5bArpvNWJjw2",
+          "path": "leaderboards/global/entries/VuTiMvdstqP26cOp5bArpvNWJjw2",
+          "exists": true,
+          "data": {
+            "quizCompleted": 0,
+            "score": 0,
+            "periodType": "global",
+            "level": 1,
+            "xp": 0,
+            "periodKey": "global",
+            "username": "nararya09",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/VuTiMvdstqP26cOp5bArpvNWJjw2/profile_1779696512472.jpg",
+            "name": "Nirnur",
+            "rank": 8,
+            "updatedAt": "2026-05-27T12:16:14.834Z"
+          },
+          "subcollections": {}
+        },
+        "_template": {
+          "id": "_template",
+          "path": "leaderboards/global/entries/_template",
+          "exists": true,
+          "data": {
+            "quizCompleted": 0,
+            "score": 0,
+            "periodType": "global",
+            "avatarUrl": "",
+            "level": 0,
+            "name": "",
+            "xp": 0,
+            "rank": 0,
+            "periodKey": "global",
+            "updatedAt": null,
+            "username": ""
+          },
+          "subcollections": {}
+        },
+        "qtbiZQujlOensXw1w6mWcRWdPCR2": {
+          "id": "qtbiZQujlOensXw1w6mWcRWdPCR2",
+          "path": "leaderboards/global/entries/qtbiZQujlOensXw1w6mWcRWdPCR2",
+          "exists": true,
+          "data": {
+            "periodType": "global",
+            "level": 1,
+            "name": "Narr",
+            "periodKey": "global",
+            "username": "aryaganzz09",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/qtbiZQujlOensXw1w6mWcRWdPCR2/profile_1779764572704.jpg",
+            "rank": 3,
+            "quizCompleted": 4,
+            "score": 245,
+            "xp": 245,
+            "updatedAt": "2026-05-27T12:33:33.148Z"
+          },
+          "subcollections": {}
+        },
+        "tMWFpgE2FhQullGgPTjaXk16xRR2": {
+          "id": "tMWFpgE2FhQullGgPTjaXk16xRR2",
+          "path": "leaderboards/global/entries/tMWFpgE2FhQullGgPTjaXk16xRR2",
+          "exists": true,
+          "data": {
+            "quizCompleted": 6,
+            "score": 730,
+            "periodType": "global",
+            "avatarUrl": "https://osqknrakoqfvweuywzxi.supabase.co/storage/v1/object/public/avatars/tMWFpgE2FhQullGgPTjaXk16xRR2/profile_1779804134895.jpg",
+            "level": 1,
+            "name": "Ryan Gosling",
+            "xp": 730,
+            "rank": 1,
+            "periodKey": "global",
+            "username": "tes",
+            "updatedAt": "2026-05-27T12:16:14.834Z"
+          },
+          "subcollections": {}
+        },
+        "xlnlTNs2L8TniBxCJWLqXCZaDi83": {
+          "id": "xlnlTNs2L8TniBxCJWLqXCZaDi83",
+          "path": "leaderboards/global/entries/xlnlTNs2L8TniBxCJWLqXCZaDi83",
+          "exists": true,
+          "data": {
+            "quizCompleted": 0,
+            "score": 50,
+            "periodType": "global",
+            "avatarUrl": "assets/image/user_profile.png",
+            "level": 1,
+            "xp": 50,
+            "periodKey": "global",
+            "username": "kampes",
+            "name": "halobandung",
+            "rank": 7,
+            "updatedAt": "2026-05-27T12:16:14.834Z"
+          },
+          "subcollections": {}
+        }
+      }
+    }
+  }
+}

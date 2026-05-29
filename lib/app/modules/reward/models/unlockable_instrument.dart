@@ -1,13 +1,24 @@
+import 'package:swaranusaquiz/app/data/models/backend_models.dart';
+
 class UnlockableInstrument {
-  final String imagePath;
+  final String id;
+  final String imageSource;
   final String name;
-  final String description;
   final int price;
 
   const UnlockableInstrument({
-    required this.imagePath,
+    required this.id,
+    required this.imageSource,
     required this.name,
-    required this.description,
     required this.price,
   });
+
+  factory UnlockableInstrument.fromDoc(InstrumentDoc doc) {
+    return UnlockableInstrument(
+      id: doc.id,
+      imageSource: doc.imageUrl,
+      name: doc.name,
+      price: doc.price,
+    );
+  }
 }

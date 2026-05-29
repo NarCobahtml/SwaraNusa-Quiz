@@ -100,7 +100,7 @@ class DailyLoginBonusCard extends StatelessWidget {
                     ),
                   )
                 else
-                  _DailyBonusAmount(),
+                  _DailyBonusAmount(amount: controller.dailyRewardCoin.value),
               ],
             ),
           ),
@@ -111,7 +111,9 @@ class DailyLoginBonusCard extends StatelessWidget {
 }
 
 class _DailyBonusAmount extends StatelessWidget {
-  const _DailyBonusAmount();
+  final int amount;
+
+  const _DailyBonusAmount({required this.amount});
 
   @override
   Widget build(BuildContext context) {
@@ -124,9 +126,9 @@ class _DailyBonusAmount extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Text(
-            '+100',
-            style: TextStyle(
+          Text(
+            '+$amount',
+            style: const TextStyle(
               color: AppColors.textLight,
               fontSize: 12,
               fontWeight: FontWeight.bold,

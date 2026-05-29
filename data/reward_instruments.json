@@ -1,0 +1,59 @@
+[
+  {
+    "id": "angklung",
+    "name": "Angklung",
+    "region": "Jawa Barat",
+    "imageUrl": "assets/image/Reward.png",
+    "noteUrls": [
+      "assets/audio/suara_angklung.mp3"
+    ],
+    "sortOrder": 1,
+    "price": 5000,
+    "opensMinigame": false,
+    "isActive": true
+  },
+  {
+    "id": "gamelan",
+    "name": "Gamelan",
+    "region": "Jawa Tengah",
+    "imageUrl": "assets/image/Reward.png",
+    "noteUrls": [
+      "assets/audio/n1.mp3",
+      "assets/audio/n2.mp3",
+      "assets/audio/n3.mp3",
+      "assets/audio/n4.mp3",
+      "assets/audio/n5.mp3",
+      "assets/audio/n6.mpeg"
+    ],
+    "sortOrder": 2,
+    "price": 0,
+    "opensMinigame": true,
+    "isActive": true
+  },
+  {
+    "id": "kolintang",
+    "name": "Kolintang",
+    "region": "Sulawesi Utara",
+    "imageUrl": "assets/image/Reward.png",
+    "noteUrls": [
+      "assets/audio/2.mp3"
+    ],
+    "sortOrder": 3,
+    "price": 0,
+    "opensMinigame": false,
+    "isActive": true
+  },
+  {
+    "id": "sasando",
+    "name": "Sasando",
+    "region": "Nusa Tenggara Timur",
+    "imageUrl": "assets/image/Reward.png",
+    "noteUrls": [
+      "assets/audio/3.mp3"
+    ],
+    "sortOrder": 4,
+    "price": 0,
+    "opensMinigame": false,
+    "isActive": true
+  }
+]

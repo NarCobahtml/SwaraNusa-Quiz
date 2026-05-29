@@ -13,6 +13,9 @@ class ResultBinding extends Bindings {
             totalQuestions: 10,
           );
 
-    Get.lazyPut<QuizResultController>(() => QuizResultController(summary));
+    if (Get.isRegistered<QuizResultController>()) {
+      Get.delete<QuizResultController>(force: true);
+    }
+    Get.put<QuizResultController>(QuizResultController(summary));
   }
 }

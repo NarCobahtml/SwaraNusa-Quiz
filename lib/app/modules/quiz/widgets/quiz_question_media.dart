@@ -9,10 +9,7 @@ import 'package:swaranusaquiz/app/utils/app_colors.dart';
 class QuizQuestionMedia extends StatefulWidget {
   final QuizQuestion question;
 
-  const QuizQuestionMedia({
-    super.key,
-    required this.question,
-  });
+  const QuizQuestionMedia({super.key, required this.question});
 
   @override
   State<QuizQuestionMedia> createState() => _QuizQuestionMediaState();
@@ -59,13 +56,14 @@ class _QuizQuestionMediaState extends State<QuizQuestionMedia> {
         ? _buildAudioCard()
         : _buildImageCard();
 
+    // questionText ditampilkan di BAWAH media agar posisi gambar selalu konsisten
     return Column(
       children: [
-        if (widget.question.questionText.isNotEmpty) ...[
-          _QuestionPrompt(text: widget.question.questionText),
-          const SizedBox(height: 18),
-        ],
         media,
+        if (widget.question.questionText.isNotEmpty) ...[
+          const SizedBox(height: 14),
+          _QuestionPrompt(text: widget.question.questionText),
+        ],
       ],
     );
   }
@@ -182,10 +180,7 @@ class _MediaFrame extends StatelessWidget {
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: child,
-      ),
+      child: ClipRRect(borderRadius: BorderRadius.circular(16), child: child),
     );
   }
 }

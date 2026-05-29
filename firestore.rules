@@ -1,0 +1,109 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function isPublicTemplate(docId) {
+      return docId == '_template';
+    }
+
+    match /quiz_modes/{modeId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /levels/{levelId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /questions/{questionId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /instruments/{instrumentId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /missions/{missionId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /achievements/{achievementId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /daily_login_rewards/{rewardId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /leaderboards/{periodKey}/entries/{uid} {
+      allow read: if true;
+      allow create, update: if isOwner(uid);
+      allow delete: if false;
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isPublicTemplate(uid);
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid);
+      allow delete: if false;
+
+      match /level_progress/{levelId} {
+        allow read, create, update: if isOwner(uid);
+        allow delete: if false;
+      }
+
+      match /quiz_attempts/{attemptId} {
+        allow read, create, update: if isOwner(uid);
+        allow delete: if false;
+
+        match /answers/{answerId} {
+          allow read, create, update: if isOwner(uid);
+          allow delete: if false;
+        }
+      }
+
+      match /mission_progress/{missionId} {
+        allow read, create, update: if isOwner(uid);
+        allow delete: if false;
+      }
+
+      match /owned_instruments/{instrumentId} {
+        allow read, create, update: if isOwner(uid);
+        allow delete: if false;
+      }
+
+      match /achievements/{achievementId} {
+        allow read, create, update: if isOwner(uid);
+        allow delete: if false;
+      }
+
+      match /daily_login/{docId} {
+        allow read, create, update: if isOwner(uid);
+        allow delete: if false;
+      }
+
+      match /instrument_mastery/{instrumentId} {
+        allow read, create, update: if isOwner(uid);
+        allow delete: if false;
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

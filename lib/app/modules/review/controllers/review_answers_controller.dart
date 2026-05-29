@@ -7,17 +7,14 @@ class ReviewAnswersController {
   const ReviewAnswersController(this.answers);
 
   List<ReviewAnswerItem> get displayItems {
-    final visibleCount = answers.length < 3 ? 3 : answers.length;
-
-    return List<ReviewAnswerItem>.generate(visibleCount, (index) {
-      final answer = index < answers.length ? answers[index] : null;
-
+    return List<ReviewAnswerItem>.generate(answers.length, (index) {
+      final answer = answers[index];
       return ReviewAnswerItem(
-        questionNumber: index + 1,
-        imagePath: answer?.imagePath,
-        userAnswer: answer?.userAnswer ?? '',
-        correctAnswer: answer?.correctAnswer ?? '',
-        isCorrect: answer?.isCorrect ?? true,
+        questionNumber: answer.questionNumber,
+        imagePath: answer.imagePath,
+        userAnswer: answer.userAnswer,
+        correctAnswer: answer.correctAnswer,
+        isCorrect: answer.isCorrect,
       );
     });
   }

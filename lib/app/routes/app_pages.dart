@@ -63,7 +63,9 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.mainNavigation,
-      page: () => const MainNavigation(),
+      page: () => MainNavigation(
+        initialIndex: Get.arguments is int ? Get.arguments as int : 0,
+      ),
       binding: MainNavigationBinding(),
     ),
     GetPage(
@@ -140,7 +142,7 @@ abstract class AppPages {
       page: () => ReviewAnswersScreen(
         answers: Get.arguments is List<QuizAnswer>
             ? Get.arguments as List<QuizAnswer>
-            : ReviewAnswersData.getSampleData(),
+            : const <QuizAnswer>[],
       ),
       binding: ReviewBinding(),
     ),

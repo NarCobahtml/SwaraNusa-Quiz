@@ -47,8 +47,8 @@ class ModePage extends StatelessWidget {
                 const SizedBox(height: 20),
                 _ModeCard(
                   imagePath: 'assets/image/sejarah_alat.png',
-                  title: 'Sejarah Alat Musik',
-                  description: 'Uji pengetahuanmu tentang sejarah!',
+                  title: 'Pengetahuan Alat Musik',
+                  description: 'Uji pengetahuanmu tentang alat musik!',
                   onTap: () => Get.toNamed(AppRoutes.levelSejarah),
                 ),
               ],

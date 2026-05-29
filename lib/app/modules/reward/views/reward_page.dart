@@ -17,32 +17,56 @@ class RewardPage extends StatelessWidget {
 
     return Column(
       children: [
+        Padding(
+          padding: EdgeInsets.only(left: 20, right: 20, top: topPadding + 16),
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Obx(() => CoinBalanceBadge(balance: controller.coinBalance)),
+          ),
+        ),
+        const SizedBox(height: 16),
         Expanded(
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               left: 20,
               right: 20,
-              top: topPadding + 16,
+              top: 24,
               bottom: 100,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Obx(() => CoinBalanceBadge(balance: controller.coinBalance)),
-                const SizedBox(height: 24),
-                InstrumentCollectionSection(
-                  instruments: controller.instruments,
-                  onInstrumentTap: (instrument) {
-                    controller.openInstrument(instrument);
-                  },
+                Obx(
+                  () => InstrumentCollectionSection(
+                    instruments: controller.instruments,
+                    onInstrumentTap: (instrument) {
+                      controller.openInstrument(instrument);
+                    },
+                  ),
                 ),
                 const SizedBox(height: 24),
                 const DailyLoginBonusCard(),
                 const SizedBox(height: 24),
-                ActiveMissionsSection(missions: controller.activeMissions),
+                Obx(
+                  () => ActiveMissionsSection(
+                    missions: controller.activeMissions,
+                    claimingMissionId: controller.claimingMissionId.value,
+                    onClaimMission: controller.claimMission,
+                  ),
+                ),
                 const SizedBox(height: 24),
-                UnlockInstrumentCard(
-                  instrument: controller.unlockableInstrument,
+                Obx(
+                  () {
+                    final instrument = controller.unlockableInstrument;
+                    if (instrument.id.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+                    return UnlockInstrumentCard(
+                      instrument: instrument,
+                      isPurchasing: controller.isPurchasingInstrument.value,
+                      onPurchase: controller.purchaseUnlockableInstrument,
+                    );
+                  },
                 ),
                 const SizedBox(height: 20),
               ],

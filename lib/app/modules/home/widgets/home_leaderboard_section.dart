@@ -46,9 +46,17 @@ class HomeLeaderboardItem extends StatelessWidget {
             size: 28,
           ),
           const SizedBox(width: 12),
-          CircleAvatar(
-            radius: 20,
-            child: Image.asset('assets/image/user_papan.png'),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.divider, width: 1.5),
+              image: DecorationImage(
+                image: _avatarImage(entry.avatarPath),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -86,5 +94,12 @@ class HomeLeaderboardItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  ImageProvider _avatarImage(String? path) {
+    if (path != null && path.startsWith('http')) {
+      return NetworkImage(path);
+    }
+    return AssetImage(path ?? 'assets/image/profil1.png');
   }
 }

@@ -151,8 +151,10 @@ class UserRepository {
           quizCompleted: 0,
           correctAnswerCount: 0,
           wrongAnswerCount: 0,
+          perfectScoreCount: 0,
+          ownedInstrumentCount: 0,
+          instrumentMasteryCount: 0,
           badgesEarned: 1,
-          isDarkMode: true,
         ).toCreateMap(),
       );
       transaction.set(_firestore.doc(FirestorePaths.userDailyLogin(uid)), {
@@ -211,8 +213,20 @@ class ContentRepository {
         .where('isActive', isEqualTo: true)
         .get();
     final docs = snapshot.docs.map(InstrumentDoc.fromSnapshot).toList();
-    docs.sort((a, b) => a.name.compareTo(b.name));
+    docs.sort((a, b) {
+      final orderCompare = a.sortOrder.compareTo(b.sortOrder);
+      if (orderCompare != 0) return orderCompare;
+      return a.name.compareTo(b.name);
+    });
     return docs;
+  }
+
+  Future<Set<String>> loadOwnedInstrumentIds(String uid) async {
+    final snapshot = await _firestore
+        .collection('${FirestorePaths.users}/$uid/owned_instruments')
+        .where('isUnlocked', isEqualTo: true)
+        .get();
+    return snapshot.docs.map((doc) => doc.id).toSet();
   }
 
   Future<List<MissionDoc>> loadMissions() async {
@@ -223,6 +237,16 @@ class ContentRepository {
     return snapshot.docs.map(MissionDoc.fromSnapshot).toList();
   }
 
+  Future<Map<String, MissionProgressDoc>> loadMissionProgress(String uid) async {
+    final snapshot = await _firestore
+        .collection('${FirestorePaths.users}/$uid/mission_progress')
+        .get();
+    return {
+      for (final doc in snapshot.docs)
+        doc.id: MissionProgressDoc.fromSnapshot(doc),
+    };
+  }
+
   Future<List<BadgeDoc>> loadBadges() async {
     final snapshot = await _firestore
         .collection(FirestorePaths.achievements)
@@ -231,19 +255,23 @@ class ContentRepository {
     return snapshot.docs.map(BadgeDoc.fromSnapshot).toList();
   }
 
+  Future<Map<String, dynamic>?> loadDailyLoginReward(String rewardId) async {
+    final snapshot = await _firestore
+        .doc('${FirestorePaths.dailyLoginRewards}/$rewardId')
+        .get();
+    return snapshot.data();
+  }
+
   Future<List<LeaderboardEntryDoc>> loadLeaderboard({
     String periodKey = 'global',
     int limit = 50,
   }) async {
     final snapshot = await _firestore
-        .collection(FirestorePaths.users)
-        .orderBy('xp', descending: true)
+        .collection('${FirestorePaths.leaderboards}/$periodKey/entries')
+        .orderBy('score', descending: true)
         .limit(limit)
         .get();
-    final docs = snapshot.docs
-        .where((doc) => !doc.id.startsWith('_'))
-        .map(_leaderboardEntryFromUserSnapshot)
-        .toList();
+    final docs = snapshot.docs.map(LeaderboardEntryDoc.fromSnapshot).toList();
     return [
       for (var i = 0; i < docs.length; i++)
         LeaderboardEntryDoc(
@@ -265,15 +293,12 @@ class ContentRepository {
     int limit = 50,
   }) {
     return _firestore
-        .collection(FirestorePaths.users)
-        .orderBy('xp', descending: true)
+        .collection('${FirestorePaths.leaderboards}/$periodKey/entries')
+        .orderBy('score', descending: true)
         .limit(limit)
         .snapshots()
         .map((snapshot) {
-          final docs = snapshot.docs
-              .where((doc) => !doc.id.startsWith('_'))
-              .map(_leaderboardEntryFromUserSnapshot)
-              .toList();
+          final docs = snapshot.docs.map(LeaderboardEntryDoc.fromSnapshot).toList();
           return [
             for (var i = 0; i < docs.length; i++)
               LeaderboardEntryDoc(
@@ -290,35 +315,4 @@ class ContentRepository {
           ];
         });
   }
-
-  LeaderboardEntryDoc _leaderboardEntryFromUserSnapshot(
-    QueryDocumentSnapshot<Map<String, dynamic>> snapshot,
-  ) {
-    final data = snapshot.data();
-    final xp = _repositoryIntValue(data['xp']);
-    final name = _repositoryStringValue(data['name']).trim();
-    final username = _repositoryStringValue(data['username']).trim();
-    final email = _repositoryStringValue(data['email']).trim();
-
-    return LeaderboardEntryDoc(
-      uid: snapshot.id,
-      rank: 0,
-      name: name.isNotEmpty
-          ? name
-          : username.isNotEmpty
-              ? username
-              : email.isNotEmpty
-                  ? email
-                  : 'User',
-      username: username,
-      avatarUrl: _repositoryStringValue(data['avatarUrl']),
-      level: _repositoryIntValue(data['level']),
-      xp: xp,
-      score: xp,
-      quizCompleted: _repositoryIntValue(data['quizCompleted']),
-    );
-  }
 }
-
-int _repositoryIntValue(Object? value) => value is num ? value.toInt() : 0;
-String _repositoryStringValue(Object? value) => value?.toString() ?? '';

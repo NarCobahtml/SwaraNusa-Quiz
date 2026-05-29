@@ -1,10 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:swaranusaquiz/app/data/providers/firestore_paths.dart';
+import 'package:swaranusaquiz/app/data/services/local_level_progress_service.dart';
 import 'package:swaranusaquiz/app/modules/level_selection/models/level_data.dart';
 import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_config.dart';
 import 'package:swaranusaquiz/app/modules/quiz/views/quiz_session_page.dart';
 
 class LevelSelectionController {
+  static const int unlockScore = 100;
+
   final String quizTitle;
   final String modeId;
   final Duration transitionDuration;
@@ -16,22 +22,93 @@ class LevelSelectionController {
   });
 
   List<LevelData> get levels {
-    return const [
-      LevelData(number: 1, status: 'completed', stars: 2),
-      LevelData(number: 2),
-      LevelData(number: 3),
-      LevelData(number: 4),
-      LevelData(number: 5),
-      LevelData(number: 6),
-      LevelData(number: 7),
-      LevelData(number: 8),
-      LevelData(number: 9),
-      LevelData(number: 10),
+    return _buildLevels(const {});
+  }
+
+  Stream<List<LevelData>> watchLevels() {
+    final uid = auth.FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return Stream.value(levels);
+
+    return FirebaseFirestore.instance
+        .collection('${FirestorePaths.users}/$uid/level_progress')
+        .snapshots()
+        .map((snapshot) {
+          final progressByNumber = <int, Map<String, dynamic>>{};
+          for (final doc in snapshot.docs) {
+            if (!doc.id.startsWith('${modeId}_')) continue;
+            final levelNumber = int.tryParse(doc.id.split('_').last);
+            if (levelNumber == null) continue;
+            progressByNumber[levelNumber] = doc.data();
+          }
+          return _buildLevels(progressByNumber);
+        });
+  }
+
+  List<LevelData> _buildLevels(Map<int, Map<String, dynamic>> progressByNumber) {
+    final mergedProgress = Map<int, Map<String, dynamic>>.of(progressByNumber);
+    for (var number = 1; number <= 10; number++) {
+      final localProgress = LocalLevelProgressService.progressFor(
+        modeId,
+        number,
+      );
+      if (localProgress == null) continue;
+      final remoteBestScore = _intValue(mergedProgress[number]?['bestScore']);
+      final localBestScore = _intValue(localProgress['bestScore']);
+      mergedProgress[number] = {
+        ...?mergedProgress[number],
+        ...localProgress,
+        'bestScore': remoteBestScore > localBestScore
+            ? remoteBestScore
+            : localBestScore,
+      };
+    }
+
+    return [
+      for (var number = 1; number <= 10; number++)
+        _levelData(number, mergedProgress),
     ];
   }
 
+  LevelData _levelData(
+    int number,
+    Map<int, Map<String, dynamic>> progressByNumber,
+  ) {
+    final progress = progressByNumber[number];
+    final isCompleted = progress?['status'] == 'completed';
+    final isMarkedUnlocked =
+        isCompleted ||
+        progress?['status'] == 'unlocked' ||
+        _boolValue(progress?['isUnlocked']);
+    final isUnlocked =
+        number == 1 ||
+        isMarkedUnlocked ||
+        _scoreForLevel(number - 1, progressByNumber) >= unlockScore;
+
+    return LevelData(
+      number: number,
+      status: isCompleted ? 'completed' : (isUnlocked ? 'unlocked' : 'locked'),
+      stars: _intValue(progress?['stars']),
+    );
+  }
+
+  int _scoreForLevel(
+    int number,
+    Map<int, Map<String, dynamic>> progressByNumber,
+  ) {
+    final progress = progressByNumber[number];
+    return _intValue(progress?['bestScore'] ?? progress?['score']);
+  }
+
+  int _intValue(Object? value) {
+    return value is num ? value.toInt() : 0;
+  }
+
+  bool _boolValue(Object? value) {
+    return value is bool && value;
+  }
+
   void openLevel(BuildContext context, LevelData level) {
-    if (level.isLocked || level.number != 1) return;
+    if (level.isLocked) return;
 
     Get.to(
       () => QuizSessionPage(

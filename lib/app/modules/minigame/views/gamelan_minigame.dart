@@ -29,8 +29,7 @@ class GamelanMinigamePage extends StatelessWidget {
                       child: Obx(
                         () {
                           return GamelanBoard(
-                            noteCount:
-                                GamelanMinigameController.notes.length,
+                            noteCount: controller.noteCount,
                             activePotIndex: controller.activePotIndex.value,
                             onPotPressed: controller.playNote,
                           );

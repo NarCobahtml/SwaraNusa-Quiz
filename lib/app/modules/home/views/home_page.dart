@@ -41,9 +41,19 @@ class HomePage extends StatelessWidget {
                   onTap: onNavigateToMode ?? controller.openMode,
                 ),
                 const SizedBox(height: 24),
-                DailyMissionsSection(missions: controller.dailyMissions),
+                Obx(
+                  () => DailyMissionsSection(
+                    missions: controller.dailyMissions,
+                  ),
+                ),
                 const SizedBox(height: 24),
-                HomeLeaderboardSection(entries: controller.leaderboardEntries),
+                Obx(
+                  () => HomeLeaderboardSection(
+                    entries: controller.leaderboardEntries.toList(
+                      growable: false,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

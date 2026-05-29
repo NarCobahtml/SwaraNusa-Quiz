@@ -11,29 +11,32 @@ class ProfileStatsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: ProfileStatCard(
-              value: profile.quizCompleted.toString(),
-              label: 'Kuis\nDiselesaikan',
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: ProfileStatCard(
+                value: profile.quizCompleted.toString(),
+                label: 'Kuis\nDiselesaikan',
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: ProfileStatCard(
-              value: '${profile.correctAnswerPercentage}%',
-              label: 'Jawaban\nBenar',
+            const SizedBox(width: 12),
+            Expanded(
+              child: ProfileStatCard(
+                value: '${profile.correctAnswerPercentage}%',
+                label: 'Jawaban\nBenar',
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: ProfileStatCard(
-              value: profile.badgesEarned.toString(),
-              label: 'Lencana\nDidapatkan',
+            const SizedBox(width: 12),
+            Expanded(
+              child: ProfileStatCard(
+                value: profile.badgesEarned.toString(),
+                label: 'Lencana\nDidapatkan',
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -48,20 +51,24 @@ class ProfileStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(32),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            value,
-            style: const TextStyle(
-              color: AppColors.primary,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              height: 1.0,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              value,
+              style: const TextStyle(
+                color: AppColors.primary,
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                height: 1.0,
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -70,7 +77,7 @@ class ProfileStatCard extends StatelessWidget {
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: AppColors.textDark,
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
               height: 1.3,
             ),

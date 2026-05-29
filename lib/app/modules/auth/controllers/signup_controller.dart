@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/data/repositories/firebase_repositories.dart';
+import 'package:swaranusaquiz/app/data/services/backend_services.dart';
 import 'package:swaranusaquiz/app/modules/auth/controllers/auth_error_message.dart';
 import 'package:swaranusaquiz/app/routes/app_pages.dart';
 import 'package:swaranusaquiz/app/utils/app_snackbar.dart';
@@ -58,6 +59,7 @@ class SignUpController extends GetxController {
         name: name,
         username: username,
       );
+      await LeaderboardSyncService.instance.syncUser(user.uid);
       Get.offAllNamed(AppRoutes.mainNavigation);
       // Delay agar AppSnackbarHost di halaman baru sempat mount
       await Future.delayed(const Duration(milliseconds: 300));
@@ -124,6 +126,7 @@ class SignUpController extends GetxController {
       name: name,
       username: _usernameFromEmail(email),
     );
+    await LeaderboardSyncService.instance.syncUser(user.uid);
     Get.offAllNamed(AppRoutes.mainNavigation);
     // Delay agar AppSnackbarHost di halaman baru sempat mount
     await Future.delayed(const Duration(milliseconds: 300));

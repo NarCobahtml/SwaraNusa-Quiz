@@ -2,8 +2,47 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:flutter/foundation.dart';
 import 'package:swaranusaquiz/app/data/providers/backend_bootstrap.dart';
 import 'package:swaranusaquiz/app/data/providers/firestore_paths.dart';
+import 'package:swaranusaquiz/app/data/services/local_level_progress_service.dart';
+
+int _numberValue(Object? value) => value is num ? value.toInt() : 0;
+
+String _textValue(Object? value) => value?.toString() ?? '';
+
+String _firstNonEmptyText(List<Object?> values) {
+  for (final value in values) {
+    final text = _textValue(value).trim();
+    if (text.isNotEmpty) return text;
+  }
+  return 'User';
+}
+
+Map<String, Object?> _leaderboardData(
+  Map<String, dynamic> userData, {
+  required int xp,
+  required int level,
+  required int quizCompleted,
+}) {
+  return {
+    'periodType': 'global',
+    'periodKey': 'global',
+    'name': _firstNonEmptyText([
+      userData['name'],
+      userData['username'],
+      userData['email'],
+      'User',
+    ]),
+    'username': _textValue(userData['username']),
+    'avatarUrl': _textValue(userData['avatarUrl']),
+    'level': level,
+    'xp': xp,
+    'score': xp,
+    'quizCompleted': quizCompleted,
+    'updatedAt': FieldValue.serverTimestamp(),
+  };
+}
 
 class QuizAnswerRecord {
   final String questionId;
@@ -112,7 +151,9 @@ class QuizEngineService {
     final question = BackendBootstrap.instance.questionsById[questionId];
     final authoritativeCorrectAnswer = question?.correctAnswer ?? correctAnswer;
     final authoritativePoints = question?.points ?? points;
-    final isCorrect = selectedAnswer == authoritativeCorrectAnswer;
+    final isCorrect =
+        selectedAnswer.trim().toLowerCase() ==
+        authoritativeCorrectAnswer.trim().toLowerCase();
     _answers.removeWhere((answer) => answer.questionNumber == questionNumber);
     _answers.add(
       QuizAnswerRecord(
@@ -147,23 +188,32 @@ class QuizEngineService {
 
   Future<QuizSessionSummary> finish() async {
     if (_isFinished) return _lastSummary ?? currentSummary();
-    _isFinished = true;
     final summary = currentSummary();
     _lastSummary = summary;
+    LocalLevelProgressService.markCompleted(
+      modeId: _modeId,
+      levelId: _levelId,
+      score: summary.score,
+    );
 
     final user = _auth.currentUser;
-    if (user == null) return summary;
+    if (user == null) {
+      debugPrint('Hasil kuis tidak disimpan: FirebaseAuth currentUser null.');
+      _isFinished = true;
+      return summary;
+    }
+    debugPrint(
+      'Menyimpan hasil kuis untuk uid=${user.uid}, '
+      'score=${summary.score}, benar=${summary.correctAnswers}, '
+      'salah=${summary.wrongAnswers}.',
+    );
 
-    final attemptId = _firestore.collection('_ids').doc().id;
     final startedAt = _startedAt ?? DateTime.now();
     final durationSeconds = DateTime.now().difference(startedAt).inSeconds;
     final earnedXp = summary.correctAnswers * 15;
     final earnedCoin = summary.correctAnswers * 5;
 
     final userRef = _firestore.doc(FirestorePaths.user(user.uid));
-    final attemptRef = _firestore.doc(
-      FirestorePaths.userQuizAttempt(user.uid, attemptId),
-    );
     final levelProgressRef = _firestore.doc(
       FirestorePaths.userLevelProgress(user.uid, _levelId),
     );
@@ -171,24 +221,144 @@ class QuizEngineService {
     final nextLevelRef = nextLevel == null
         ? null
         : _firestore.doc(FirestorePaths.userLevelProgress(user.uid, nextLevel));
-    final leaderboardRef = _firestore.doc(
-      FirestorePaths.leaderboardEntry('global', user.uid),
+    await _saveRequiredQuizProgress(
+      userRef: userRef,
+      levelProgressRef: levelProgressRef,
+      nextLevelRef: nextLevelRef,
+      nextLevel: nextLevel,
+      uid: user.uid,
+      summary: summary,
+      earnedXp: earnedXp,
+      earnedCoin: earnedCoin,
     );
+
+    _isFinished = true;
+
+    try {
+      await _saveOptionalQuizRecords(
+        user: user,
+        startedAt: startedAt,
+        durationSeconds: durationSeconds,
+        earnedXp: earnedXp,
+        earnedCoin: earnedCoin,
+        summary: summary,
+      );
+      await MissionService.instance.incrementProgress('complete_quiz', by: 1);
+      await BadgeService.instance.checkAndAwardBadges();
+    } catch (error) {
+      debugPrint('Gagal menyimpan data tambahan kuis: $error');
+    }
+
+    return summary;
+  }
+
+  Future<void> _saveRequiredQuizProgress({
+    required DocumentReference<Map<String, dynamic>> userRef,
+    required DocumentReference<Map<String, dynamic>> levelProgressRef,
+    required DocumentReference<Map<String, dynamic>>? nextLevelRef,
+    required String? nextLevel,
+    required String uid,
+    required QuizSessionSummary summary,
+    required int earnedXp,
+    required int earnedCoin,
+  }) async {
+    final stars = _starsForScore(summary.score);
 
     await _firestore.runTransaction((transaction) async {
       final userSnapshot = await transaction.get(userRef);
       final userData = userSnapshot.data() ?? {};
-      final currentXp = (userData['xp'] as num?)?.toInt() ?? 0;
-      final currentCoin = (userData['coin'] as num?)?.toInt() ?? 0;
-      final quizCompleted = (userData['quizCompleted'] as num?)?.toInt() ?? 0;
-      final correctCount =
-          (userData['correctAnswerCount'] as num?)?.toInt() ?? 0;
-      final wrongCount = (userData['wrongAnswerCount'] as num?)?.toInt() ?? 0;
-      final newXp = currentXp + earnedXp;
-      final newCoin = currentCoin + earnedCoin;
-      final newLevel = max(1, (newXp / 500).floor() + 1);
+      final nextXp = _numberValue(userData['xp']) + earnedXp;
+      final nextCoin = _numberValue(userData['coin']) + earnedCoin;
+      final nextLevel = max(1, (nextXp / 500).floor() + 1);
+      final nextQuizCompleted = _numberValue(userData['quizCompleted']) + 1;
+      final nextCorrectCount =
+          _numberValue(userData['correctAnswerCount']) +
+          summary.correctAnswers;
+      final nextWrongCount =
+          _numberValue(userData['wrongAnswerCount']) + summary.wrongAnswers;
+      final nextPerfectScoreCount =
+          _numberValue(userData['perfectScoreCount']) +
+          (summary.score >= 100 ? 1 : 0);
 
-      transaction.set(attemptRef, {
+      transaction.set(userRef, {
+        'xp': nextXp,
+        'coin': nextCoin,
+        'level': nextLevel,
+        'quizCompleted': nextQuizCompleted,
+        'correctAnswerCount': nextCorrectCount,
+        'wrongAnswerCount': nextWrongCount,
+        'perfectScoreCount': nextPerfectScoreCount,
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      transaction.set(
+        _firestore.doc(FirestorePaths.leaderboardEntry('global', uid)),
+        _leaderboardData(
+          userData,
+          xp: nextXp,
+          level: nextLevel,
+          quizCompleted: nextQuizCompleted,
+        ),
+        SetOptions(merge: true),
+      );
+    });
+    debugPrint('Statistik user berhasil disimpan ke ${userRef.path}.');
+
+    try {
+      final batch = _firestore.batch();
+      batch.set(levelProgressRef, {
+        'modeId': _modeId,
+        'levelId': _levelId,
+        'levelNumber': _levelNumberFromId(_levelId),
+        'status': 'completed',
+        'isUnlocked': true,
+        'stars': stars,
+        'score': summary.score,
+        'bestScore': summary.score,
+        'bestCorrectAnswers': summary.correctAnswers,
+        'attemptCount': FieldValue.increment(1),
+        'completedAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      if (nextLevel != null && nextLevelRef != null && summary.score >= 100) {
+        batch.set(nextLevelRef, {
+          'modeId': _modeId,
+          'levelId': nextLevel,
+          'levelNumber': _levelNumberFromId(nextLevel),
+          'status': 'unlocked',
+          'isUnlocked': true,
+          'stars': 0,
+          'score': 0,
+          'bestScore': 0,
+          'bestCorrectAnswers': 0,
+          'attemptCount': 0,
+          'updatedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+      }
+
+      await batch.commit();
+    } catch (error) {
+      debugPrint('Gagal menyimpan progress level: $error');
+    }
+  }
+
+  Future<void> _saveOptionalQuizRecords({
+    required auth.User user,
+    required DateTime startedAt,
+    required int durationSeconds,
+    required int earnedXp,
+    required int earnedCoin,
+    required QuizSessionSummary summary,
+  }) async {
+    final attemptId = _firestore.collection('_ids').doc().id;
+    final attemptRef = _firestore.doc(
+      FirestorePaths.userQuizAttempt(user.uid, attemptId),
+    );
+
+    final batch = _firestore.batch();
+
+    batch.set(attemptRef, {
         'modeId': _modeId,
         'levelId': _levelId,
         'totalQuestions': summary.totalQuestions,
@@ -203,72 +373,20 @@ class QuizEngineService {
         'createdAt': FieldValue.serverTimestamp(),
       });
 
-      for (final answer in _answers) {
-        transaction.set(
-          _firestore.doc(
-            FirestorePaths.userQuizAttemptAnswer(
-              user.uid,
-              attemptId,
-              'q${answer.questionNumber}',
-            ),
+    for (final answer in _answers) {
+      batch.set(
+        _firestore.doc(
+          FirestorePaths.userQuizAttemptAnswer(
+            user.uid,
+            attemptId,
+            'q${answer.questionNumber}',
           ),
-          answer.toMap(),
-        );
-      }
+        ),
+        answer.toMap(),
+      );
+    }
 
-      transaction.set(userRef, {
-        'xp': newXp,
-        'coin': newCoin,
-        'level': newLevel,
-        'quizCompleted': quizCompleted + 1,
-        'correctAnswerCount': correctCount + summary.correctAnswers,
-        'wrongAnswerCount': wrongCount + summary.wrongAnswers,
-        'updatedAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
-
-      transaction.set(levelProgressRef, {
-        'modeId': _modeId,
-        'status': 'completed',
-        'isUnlocked': true,
-        'stars': _starsForScore(summary.score),
-        'bestScore': summary.score,
-        'bestCorrectAnswers': summary.correctAnswers,
-        'attemptCount': FieldValue.increment(1),
-        'completedAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
-
-      if (nextLevelRef != null) {
-        transaction.set(nextLevelRef, {
-          'modeId': _modeId,
-          'status': 'unlocked',
-          'isUnlocked': true,
-          'stars': 0,
-          'bestScore': 0,
-          'bestCorrectAnswers': 0,
-          'attemptCount': 0,
-          'updatedAt': FieldValue.serverTimestamp(),
-        }, SetOptions(merge: true));
-      }
-
-      transaction.set(leaderboardRef, {
-        'periodType': 'global',
-        'periodKey': 'global',
-        'name': userData['name'] ?? user.displayName ?? user.email ?? 'User',
-        'username': userData['username'] ?? '',
-        'avatarUrl': userData['avatarUrl'] ?? '',
-        'level': newLevel,
-        'xp': newXp,
-        'score': newXp,
-        'quizCompleted': quizCompleted + 1,
-        'updatedAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
-    });
-
-    await MissionService.instance.incrementProgress('play_game', by: 1);
-    await MissionService.instance.incrementProgress('complete_quiz', by: 1);
-    await BadgeService.instance.checkAndAwardBadges();
-    return summary;
+    await batch.commit();
   }
 
   int _starsForScore(int score) {
@@ -283,6 +401,69 @@ class QuizEngineService {
     final number = int.tryParse(parts.last);
     if (number == null || number >= 10) return null;
     return '${parts.take(parts.length - 1).join('_')}_${number + 1}';
+  }
+
+  int _levelNumberFromId(String levelId) {
+    final parts = levelId.split('_');
+    return int.tryParse(parts.last) ?? 1;
+  }
+}
+
+class LeaderboardSyncService {
+  LeaderboardSyncService({
+    FirebaseFirestore? firestore,
+    auth.FirebaseAuth? firebaseAuth,
+  }) : _firestore = firestore ?? FirebaseFirestore.instance,
+       _auth = firebaseAuth ?? auth.FirebaseAuth.instance;
+
+  static final LeaderboardSyncService instance = LeaderboardSyncService();
+
+  final FirebaseFirestore _firestore;
+  final auth.FirebaseAuth _auth;
+
+  Future<void> syncCurrentUser() async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+    await syncUser(user.uid);
+  }
+
+  Future<void> syncUser(String uid) async {
+    final userSnapshot = await _firestore.doc(FirestorePaths.user(uid)).get();
+    if (!userSnapshot.exists) return;
+
+    final data = userSnapshot.data() ?? {};
+    final xp = _intValue(data['xp']);
+    final name = _firstNonEmpty([
+      data['name'],
+      data['username'],
+      data['email'],
+      'User',
+    ]);
+
+    await _firestore.doc(FirestorePaths.leaderboardEntry('global', uid)).set({
+      'periodType': 'global',
+      'periodKey': 'global',
+      'name': name,
+      'username': _stringValue(data['username']),
+      'avatarUrl': _stringValue(data['avatarUrl']),
+      'level': _intValue(data['level']),
+      'xp': xp,
+      'score': xp,
+      'quizCompleted': _intValue(data['quizCompleted']),
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
+  int _intValue(Object? value) => value is num ? value.toInt() : 0;
+
+  String _stringValue(Object? value) => value?.toString() ?? '';
+
+  String _firstNonEmpty(List<Object?> values) {
+    for (final value in values) {
+      final text = _stringValue(value).trim();
+      if (text.isNotEmpty) return text;
+    }
+    return 'User';
   }
 }
 
@@ -301,6 +482,7 @@ class MissionService {
   Future<void> incrementProgress(String targetType, {int by = 1}) async {
     final user = _auth.currentUser;
     if (user == null) return;
+    final today = DateTime.now().toIso8601String().substring(0, 10);
     final missions = await _firestore
         .collection(FirestorePaths.missions)
         .where('targetType', isEqualTo: targetType)
@@ -309,25 +491,42 @@ class MissionService {
     if (missions.docs.isEmpty) return;
 
     await _firestore.runTransaction((transaction) async {
-      for (final mission in missions.docs) {
+      final progressRefs = [
+        for (final mission in missions.docs)
+          _firestore.doc(
+            FirestorePaths.userMissionProgress(user.uid, mission.id),
+          ),
+      ];
+      final progressSnapshots = <DocumentSnapshot<Map<String, dynamic>>>[];
+      for (final progressRef in progressRefs) {
+        progressSnapshots.add(await transaction.get(progressRef));
+      }
+
+      for (var i = 0; i < missions.docs.length; i++) {
+        final mission = missions.docs[i];
+        final progressRef = progressRefs[i];
+        final progressData = progressSnapshots[i].data() ?? {};
         final data = mission.data();
         final target = (data['targetValue'] as num?)?.toInt() ?? 0;
-        final progressRef = _firestore.doc(
-          FirestorePaths.userMissionProgress(user.uid, mission.id),
-        );
-        final progressSnapshot = await transaction.get(progressRef);
-        final progressData = progressSnapshot.data() ?? {};
-        final current = (progressData['progress'] as num?)?.toInt() ?? 0;
+        final isDaily = data['type']?.toString() == 'daily';
+        final shouldReset =
+            isDaily && progressData['dateKey']?.toString() != today;
+        final current = shouldReset
+            ? 0
+            : (progressData['progress'] as num?)?.toInt() ?? 0;
         final next = min(target, current + by);
         transaction.set(progressRef, {
           'progress': next,
           'target': target,
           'isCompleted': target > 0 && next >= target,
-          'isClaimed': progressData['isClaimed'] == true,
-          'dateKey': DateTime.now().toIso8601String().substring(0, 10),
+          'isClaimed': shouldReset ? false : progressData['isClaimed'] == true,
+          'dateKey': isDaily ? today : progressData['dateKey']?.toString() ?? '',
           'completedAt': target > 0 && next >= target
               ? FieldValue.serverTimestamp()
+              : shouldReset
+              ? null
               : progressData['completedAt'],
+          'claimedAt': shouldReset ? null : progressData['claimedAt'],
           'updatedAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
       }
@@ -342,32 +541,75 @@ class MissionService {
       FirestorePaths.userMissionProgress(user.uid, missionId),
     );
     final userRef = _firestore.doc(FirestorePaths.user(user.uid));
-    await _firestore.runTransaction((transaction) async {
+    final leaderboardRef = _firestore.doc(
+      FirestorePaths.leaderboardEntry('global', user.uid),
+    );
+    final unlockedNewInstrument = await _firestore.runTransaction<bool>((
+      transaction,
+    ) async {
       final mission = await transaction.get(missionRef);
       final progress = await transaction.get(progressRef);
-      if (!mission.exists || !progress.exists) return;
+      final userSnapshot = await transaction.get(userRef);
+      if (!mission.exists || !progress.exists) return false;
+      if (!userSnapshot.exists) return false;
       final missionData = mission.data() as Map<String, dynamic>;
       final progressData = progress.data() as Map<String, dynamic>;
+      final userData = userSnapshot.data() ?? {};
       if (progressData['isCompleted'] != true ||
           progressData['isClaimed'] == true) {
-        return;
+        return false;
       }
+      final isDaily = missionData['type']?.toString() == 'daily';
+      final today = DateTime.now().toIso8601String().substring(0, 10);
+      if (isDaily && progressData['dateKey']?.toString() != today) {
+        return false;
+      }
+      final rewardXp = (missionData['rewardXp'] as num?)?.toInt() ?? 0;
+      final rewardCoin = (missionData['rewardCoin'] as num?)?.toInt() ?? 0;
+      final rewardInstrumentId =
+          missionData['rewardInstrumentId']?.toString() ?? '';
+      DocumentSnapshot<Map<String, dynamic>>? ownershipSnapshot;
+      if (rewardInstrumentId.isNotEmpty) {
+        ownershipSnapshot = await transaction.get(
+          _firestore.doc(
+            FirestorePaths.userInstrument(user.uid, rewardInstrumentId),
+          ),
+        );
+      }
+      final nextXp = _numberValue(userData['xp']) + rewardXp;
+      final nextCoin = _numberValue(userData['coin']) + rewardCoin;
+      final nextLevel = max(1, (nextXp / 500).floor() + 1);
+      final quizCompleted = _numberValue(userData['quizCompleted']);
+      final isNewInstrument =
+          rewardInstrumentId.isNotEmpty &&
+          (ownershipSnapshot == null ||
+              ownershipSnapshot.data()?['isUnlocked'] != true);
+      final nextOwnedInstrumentCount =
+          _numberValue(userData['ownedInstrumentCount']) +
+          (isNewInstrument ? 1 : 0);
+
       transaction.set(progressRef, {
         'isClaimed': true,
         'claimedAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
       transaction.set(userRef, {
-        'xp': FieldValue.increment(
-          (missionData['rewardXp'] as num?)?.toInt() ?? 0,
-        ),
-        'coin': FieldValue.increment(
-          (missionData['rewardCoin'] as num?)?.toInt() ?? 0,
-        ),
+        'xp': nextXp,
+        'coin': nextCoin,
+        'level': nextLevel,
+        'ownedInstrumentCount': nextOwnedInstrumentCount,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
-      final rewardInstrumentId =
-          missionData['rewardInstrumentId']?.toString() ?? '';
+      transaction.set(
+        leaderboardRef,
+        _leaderboardData(
+          userData,
+          xp: nextXp,
+          level: nextLevel,
+          quizCompleted: quizCompleted,
+        ),
+        SetOptions(merge: true),
+      );
       if (rewardInstrumentId.isNotEmpty) {
         transaction.set(
           _firestore.doc(
@@ -381,7 +623,15 @@ class MissionService {
           SetOptions(merge: true),
         );
       }
+      return isNewInstrument;
     });
+    if (unlockedNewInstrument) {
+      await MissionService.instance.incrementProgress(
+        'unlock_instrument',
+        by: 1,
+      );
+    }
+    await BadgeService.instance.checkAndAwardBadges();
   }
 }
 
@@ -406,14 +656,14 @@ class RewardService {
     );
     final userRef = _firestore.doc(FirestorePaths.user(user.uid));
 
-    await _firestore.runTransaction((transaction) async {
+    final purchased = await _firestore.runTransaction<bool>((transaction) async {
       final instrument = await transaction.get(instrumentRef);
       final ownership = await transaction.get(ownershipRef);
       final userSnapshot = await transaction.get(userRef);
-      if (!instrument.exists || !userSnapshot.exists) return;
+      if (!instrument.exists || !userSnapshot.exists) return false;
       final owned =
           ownership.exists && (ownership.data()?['isUnlocked'] == true);
-      if (owned) return;
+      if (owned) return false;
       final instrumentData = instrument.data()!;
       final userData = userSnapshot.data()!;
       final price = (instrumentData['price'] as num?)?.toInt() ?? 0;
@@ -423,6 +673,7 @@ class RewardService {
       }
       transaction.set(userRef, {
         'coin': coin - price,
+        'ownedInstrumentCount': FieldValue.increment(1),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
       transaction.set(ownershipRef, {
@@ -430,10 +681,20 @@ class RewardService {
         'unlockedAt': FieldValue.serverTimestamp(),
         'source': 'coin_purchase',
       }, SetOptions(merge: true));
+      return true;
     });
+    if (!purchased) return;
 
-    await MissionService.instance.incrementProgress('unlock_instrument', by: 1);
-    await BadgeService.instance.checkAndAwardBadges();
+    try {
+      await MissionService.instance.incrementProgress(
+        'unlock_instrument',
+        by: 1,
+      );
+      await BadgeService.instance.checkAndAwardBadges();
+      await LeaderboardSyncService.instance.syncUser(user.uid);
+    } catch (error) {
+      debugPrint('Gagal menyimpan data tambahan reward: $error');
+    }
   }
 
   Future<void> claimDailyLogin() async {
@@ -442,12 +703,20 @@ class RewardService {
     final today = DateTime.now().toIso8601String().substring(0, 10);
     final loginRef = _firestore.doc(FirestorePaths.userDailyLogin(user.uid));
     final userRef = _firestore.doc(FirestorePaths.user(user.uid));
+    final leaderboardRef = _firestore.doc(
+      FirestorePaths.leaderboardEntry('global', user.uid),
+    );
 
-    await _firestore.runTransaction((transaction) async {
+    final unlockedNewInstrument = await _firestore.runTransaction<bool>((
+      transaction,
+    ) async {
       final login = await transaction.get(loginRef);
+      final userSnapshot = await transaction.get(userRef);
+      if (!userSnapshot.exists) return false;
       final data = login.data() ?? {};
+      final userData = userSnapshot.data() ?? {};
       if (data['lastLoginDate'] == today && data['claimedToday'] == true) {
-        return;
+        return false;
       }
       final streak = (data['currentStreak'] as num?)?.toInt() ?? 0;
       final nextStreak = streak + 1;
@@ -460,6 +729,24 @@ class RewardService {
       // Fallback: jika dokumen reward belum ada di Firestore, pakai nilai default
       final rewardCoin = (rewardData['rewardCoin'] as num?)?.toInt() ?? 100;
       final rewardXp = (rewardData['rewardXp'] as num?)?.toInt() ?? 50;
+      final instrumentId = rewardData['rewardInstrumentId']?.toString() ?? '';
+      DocumentSnapshot<Map<String, dynamic>>? ownershipSnapshot;
+      if (instrumentId.isNotEmpty) {
+        ownershipSnapshot = await transaction.get(
+          _firestore.doc(FirestorePaths.userInstrument(user.uid, instrumentId)),
+        );
+      }
+      final nextXp = _numberValue(userData['xp']) + rewardXp;
+      final nextCoin = _numberValue(userData['coin']) + rewardCoin;
+      final nextLevel = max(1, (nextXp / 500).floor() + 1);
+      final quizCompleted = _numberValue(userData['quizCompleted']);
+      final isNewInstrument =
+          instrumentId.isNotEmpty &&
+          (ownershipSnapshot == null ||
+              ownershipSnapshot.data()?['isUnlocked'] != true);
+      final nextOwnedInstrumentCount =
+          _numberValue(userData['ownedInstrumentCount']) +
+          (isNewInstrument ? 1 : 0);
 
       transaction.set(loginRef, {
         'currentStreak': nextStreak,
@@ -469,11 +756,22 @@ class RewardService {
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
       transaction.set(userRef, {
-        'xp': FieldValue.increment(rewardXp),
-        'coin': FieldValue.increment(rewardCoin),
+        'xp': nextXp,
+        'coin': nextCoin,
+        'level': nextLevel,
+        'ownedInstrumentCount': nextOwnedInstrumentCount,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
-      final instrumentId = rewardData['rewardInstrumentId']?.toString() ?? '';
+      transaction.set(
+        leaderboardRef,
+        _leaderboardData(
+          userData,
+          xp: nextXp,
+          level: nextLevel,
+          quizCompleted: quizCompleted,
+        ),
+        SetOptions(merge: true),
+      );
       if (instrumentId.isNotEmpty) {
         transaction.set(
           _firestore.doc(FirestorePaths.userInstrument(user.uid, instrumentId)),
@@ -485,7 +783,54 @@ class RewardService {
           SetOptions(merge: true),
         );
       }
+      return isNewInstrument;
     });
+    if (unlockedNewInstrument) {
+      await MissionService.instance.incrementProgress(
+        'unlock_instrument',
+        by: 1,
+      );
+    }
+    await BadgeService.instance.checkAndAwardBadges();
+  }
+}
+
+class InstrumentMasteryService {
+  InstrumentMasteryService({
+    FirebaseFirestore? firestore,
+    auth.FirebaseAuth? firebaseAuth,
+  }) : _firestore = firestore ?? FirebaseFirestore.instance,
+       _auth = firebaseAuth ?? auth.FirebaseAuth.instance;
+
+  static final InstrumentMasteryService instance = InstrumentMasteryService();
+
+  final FirebaseFirestore _firestore;
+  final auth.FirebaseAuth _auth;
+
+  Future<void> markMastered(String instrumentId) async {
+    final user = _auth.currentUser;
+    if (user == null || instrumentId.isEmpty) return;
+
+    final masteryRef = _firestore.doc(
+      '${FirestorePaths.user(user.uid)}/instrument_mastery/$instrumentId',
+    );
+    final userRef = _firestore.doc(FirestorePaths.user(user.uid));
+
+    await _firestore.runTransaction((transaction) async {
+      final masterySnapshot = await transaction.get(masteryRef);
+      if (masterySnapshot.exists) return;
+
+      transaction.set(masteryRef, {
+        'instrumentId': instrumentId,
+        'masteredAt': FieldValue.serverTimestamp(),
+      });
+      transaction.set(userRef, {
+        'instrumentMasteryCount': FieldValue.increment(1),
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    });
+
+    await BadgeService.instance.checkAndAwardBadges();
   }
 }
 
@@ -511,13 +856,21 @@ class BadgeService {
       final userSnapshot = await transaction.get(userRef);
       if (!userSnapshot.exists) return;
       final userData = userSnapshot.data()!;
+      final badgeRefs = [
+        for (final badge in badges.docs)
+          _firestore.doc(FirestorePaths.userBadge(user.uid, badge.id)),
+      ];
+      final badgeSnapshots = <DocumentSnapshot<Map<String, dynamic>>>[];
+      for (final badgeRef in badgeRefs) {
+        badgeSnapshots.add(await transaction.get(badgeRef));
+      }
+
       var awarded = 0;
-      for (final badge in badges.docs) {
+      for (var i = 0; i < badges.docs.length; i++) {
+        final badge = badges.docs[i];
         final data = badge.data();
-        final badgeRef = _firestore.doc(
-          FirestorePaths.userBadge(user.uid, badge.id),
-        );
-        final badgeSnapshot = await transaction.get(badgeRef);
+        final badgeRef = badgeRefs[i];
+        final badgeSnapshot = badgeSnapshots[i];
         if (badgeSnapshot.exists) continue;
         if (_badgeConditionMet(data, userData)) {
           transaction.set(badgeRef, {'earnedAt': FieldValue.serverTimestamp()});
@@ -545,12 +898,14 @@ class BadgeService {
       case 'quiz_completed':
         return ((user['quizCompleted'] as num?)?.toInt() ?? 0) >= value;
       case 'perfect_score':
-        return false;
+        return ((user['perfectScoreCount'] as num?)?.toInt() ?? 0) >= value;
       case 'xp_reached':
         return ((user['xp'] as num?)?.toInt() ?? 0) >= value;
       case 'instrument_collected':
+        return ((user['ownedInstrumentCount'] as num?)?.toInt() ?? 0) >= value;
       case 'instrument_mastery':
-        return false;
+        return ((user['instrumentMasteryCount'] as num?)?.toInt() ?? 0) >=
+            value;
       default:
         return false;
     }

@@ -4,8 +4,15 @@ import 'package:swaranusaquiz/app/modules/reward/models/reward_mission.dart';
 
 class ActiveMissionsSection extends StatelessWidget {
   final List<RewardMission> missions;
+  final ValueChanged<RewardMission> onClaimMission;
+  final String? claimingMissionId;
 
-  const ActiveMissionsSection({super.key, required this.missions});
+  const ActiveMissionsSection({
+    super.key,
+    required this.missions,
+    required this.onClaimMission,
+    this.claimingMissionId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +41,11 @@ class ActiveMissionsSection extends StatelessWidget {
         const SizedBox(height: 16),
         for (var index = 0; index < missions.length; index++) ...[
           if (index > 0) const SizedBox(height: 12),
-          RewardMissionCard(mission: missions[index]),
+          RewardMissionCard(
+            mission: missions[index],
+            isClaiming: claimingMissionId == missions[index].id,
+            onClaim: () => onClaimMission(missions[index]),
+          ),
         ],
       ],
     );
@@ -43,8 +54,15 @@ class ActiveMissionsSection extends StatelessWidget {
 
 class RewardMissionCard extends StatelessWidget {
   final RewardMission mission;
+  final bool isClaiming;
+  final VoidCallback onClaim;
 
-  const RewardMissionCard({super.key, required this.mission});
+  const RewardMissionCard({
+    super.key,
+    required this.mission,
+    required this.isClaiming,
+    required this.onClaim,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +98,7 @@ class RewardMissionCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '+${mission.reward}',
+                    '+${mission.rewardCoin}',
                     style: const TextStyle(
                       color: AppColors.gold,
                       fontSize: 16,
@@ -101,6 +119,34 @@ class RewardMissionCard extends StatelessWidget {
                   const AlwaysStoppedAnimation<Color>(AppColors.primary),
               minHeight: 8,
             ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${mission.progressValue}/${mission.targetValue}',
+                style: const TextStyle(
+                  color: AppColors.textMuted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (mission.isClaimed)
+                const Text(
+                  'Diklaim',
+                  style: TextStyle(
+                    color: AppColors.success,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              else if (mission.isCompleted)
+                TextButton(
+                  onPressed: isClaiming ? null : onClaim,
+                  child: Text(isClaiming ? '...' : 'Klaim'),
+                ),
+            ],
           ),
         ],
       ),

@@ -3,6 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 int _intValue(Object? value) => value is num ? value.toInt() : 0;
 bool _boolValue(Object? value) => value == true;
 String _stringValue(Object? value) => value?.toString() ?? '';
+String _firstStringValue(
+  Map<String, dynamic> data,
+  List<String> fieldNames,
+) {
+  for (final fieldName in fieldNames) {
+    final value = _stringValue(data[fieldName]).trim();
+    if (value.isNotEmpty) return value;
+  }
+  return '';
+}
 List<String> _stringList(Object? value) {
   if (value is Iterable) return value.map((item) => item.toString()).toList();
   return const [];
@@ -20,8 +30,10 @@ class AppUser {
   final int quizCompleted;
   final int correctAnswerCount;
   final int wrongAnswerCount;
+  final int perfectScoreCount;
+  final int ownedInstrumentCount;
+  final int instrumentMasteryCount;
   final int badgesEarned;
-  final bool isDarkMode;
 
   const AppUser({
     required this.uid,
@@ -35,8 +47,10 @@ class AppUser {
     required this.quizCompleted,
     required this.correctAnswerCount,
     required this.wrongAnswerCount,
+    this.perfectScoreCount = 0,
+    this.ownedInstrumentCount = 0,
+    this.instrumentMasteryCount = 0,
     required this.badgesEarned,
-    required this.isDarkMode,
   });
 
   factory AppUser.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -53,8 +67,10 @@ class AppUser {
       quizCompleted: _intValue(data['quizCompleted']),
       correctAnswerCount: _intValue(data['correctAnswerCount']),
       wrongAnswerCount: _intValue(data['wrongAnswerCount']),
+      perfectScoreCount: _intValue(data['perfectScoreCount']),
+      ownedInstrumentCount: _intValue(data['ownedInstrumentCount']),
+      instrumentMasteryCount: _intValue(data['instrumentMasteryCount']),
       badgesEarned: _intValue(data['badgesEarned']),
-      isDarkMode: _boolValue(data['isDarkMode']),
     );
   }
 
@@ -69,8 +85,10 @@ class AppUser {
         'quizCompleted': quizCompleted,
         'correctAnswerCount': correctAnswerCount,
         'wrongAnswerCount': wrongAnswerCount,
+        'perfectScoreCount': perfectScoreCount,
+        'ownedInstrumentCount': ownedInstrumentCount,
+        'instrumentMasteryCount': instrumentMasteryCount,
         'badgesEarned': badgesEarned,
-        'isDarkMode': isDarkMode,
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       };
@@ -248,11 +266,10 @@ class InstrumentDoc {
   final String id;
   final String name;
   final String region;
-  final String description;
   final String imageUrl;
-  final String audioUrl;
+  final List<String> noteUrls;
+  final int sortOrder;
   final int price;
-  final bool isUnlockable;
   final bool opensMinigame;
   final bool isActive;
   final bool owned;
@@ -261,11 +278,10 @@ class InstrumentDoc {
     required this.id,
     required this.name,
     required this.region,
-    required this.description,
     required this.imageUrl,
-    required this.audioUrl,
+    required this.noteUrls,
+    required this.sortOrder,
     required this.price,
-    required this.isUnlockable,
     required this.opensMinigame,
     required this.isActive,
     this.owned = false,
@@ -275,11 +291,10 @@ class InstrumentDoc {
         id: id,
         name: name,
         region: region,
-        description: description,
         imageUrl: imageUrl,
-        audioUrl: audioUrl,
+        noteUrls: noteUrls,
+        sortOrder: sortOrder,
         price: price,
-        isUnlockable: isUnlockable,
         opensMinigame: opensMinigame,
         isActive: isActive,
         owned: owned ?? this.owned,
@@ -293,11 +308,20 @@ class InstrumentDoc {
       id: snapshot.id,
       name: _stringValue(data['name']),
       region: _stringValue(data['region']),
-      description: _stringValue(data['description']),
-      imageUrl: _stringValue(data['imageUrl']),
-      audioUrl: _stringValue(data['audioUrl']),
+      imageUrl: _firstStringValue(data, const [
+        'imageUrl',
+        'imageURL',
+        'image',
+        'imagePath',
+        'coverUrl',
+        'coverImageUrl',
+        'iconUrl',
+        'photoUrl',
+        'thumbnailUrl',
+      ]),
+      noteUrls: _stringList(data['noteUrls']),
+      sortOrder: _intValue(data['sortOrder']),
       price: _intValue(data['price']),
-      isUnlockable: _boolValue(data['isUnlockable']),
       opensMinigame: _boolValue(data['opensMinigame']),
       isActive: _boolValue(data['isActive']),
     );
@@ -353,6 +377,7 @@ class MissionProgressDoc {
   final String missionId;
   final int progress;
   final int target;
+  final String dateKey;
   final bool isCompleted;
   final bool isClaimed;
 
@@ -360,6 +385,7 @@ class MissionProgressDoc {
     required this.missionId,
     required this.progress,
     required this.target,
+    required this.dateKey,
     required this.isCompleted,
     required this.isClaimed,
   });
@@ -372,6 +398,7 @@ class MissionProgressDoc {
       missionId: snapshot.id,
       progress: _intValue(data['progress']),
       target: _intValue(data['target']),
+      dateKey: _stringValue(data['dateKey']),
       isCompleted: _boolValue(data['isCompleted']),
       isClaimed: _boolValue(data['isClaimed']),
     );

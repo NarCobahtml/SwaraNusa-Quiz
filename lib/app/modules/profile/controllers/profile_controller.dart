@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:swaranusaquiz/app/data/repositories/firebase_repositories.dart';
+import 'package:swaranusaquiz/app/data/services/backend_services.dart';
 import 'package:swaranusaquiz/app/data/services/supabase_avatar_service.dart';
 import 'package:swaranusaquiz/app/data/services/user_service.dart';
 import 'package:swaranusaquiz/app/modules/profile/models/profile_badge.dart';
@@ -18,12 +19,10 @@ class ProfileController extends GetxController {
   final UserRepository _userRepository;
   UserService get _userService => UserService.to;
 
-  final isDarkMode = true.obs;
   final isLoggingOut = false.obs;
   final isSaving = false.obs;
   final RxList<ProfileBadge> _badges = <ProfileBadge>[].obs;
 
-  bool get isDarkModeValue => isDarkMode.value;
   List<ProfileBadge> get badges => _badges;
 
   ProfileData get profile {
@@ -61,12 +60,10 @@ class ProfileController extends GetxController {
     super.onInit();
     final user = _userService.currentUser.value;
     if (user != null) {
-      isDarkMode.value = user.isDarkMode;
       _loadBadges(user.uid);
     }
     ever(_userService.currentUser, (user) {
       if (user != null) {
-        isDarkMode.value = user.isDarkMode;
         _loadBadges(user.uid);
       }
     });
@@ -96,10 +93,6 @@ class ProfileController extends GetxController {
       'instrument_mastery': 'Maestro',
     };
     return labels[id] ?? id;
-  }
-
-  void setLightMode(bool value) {
-    isDarkMode.value = !value;
   }
 
   Future<void> editName(BuildContext context) async {
@@ -144,6 +137,7 @@ class ProfileController extends GetxController {
     try {
       await _userRepository.updateProfile(uid: uid, name: newName);
       await _userService.reload();
+      await LeaderboardSyncService.instance.syncUser(uid);
       AppSnackbar.success(
         'Berhasil',
         'Nama berhasil diperbarui.',
@@ -214,6 +208,7 @@ class ProfileController extends GetxController {
         } catch (_) {}
       }
       await _userService.reload();
+      await LeaderboardSyncService.instance.syncUser(uid);
       AppSnackbar.success(
         'Berhasil',
         'Foto profil berhasil diperbarui.',

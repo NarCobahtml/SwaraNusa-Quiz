@@ -24,13 +24,7 @@ class QuizResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.isRegistered<QuizResultController>()
         ? Get.find<QuizResultController>()
-        : QuizResultController(
-            QuizResultSummary(
-              correctAnswers: correctAnswers,
-              wrongAnswers: wrongAnswers,
-              totalQuestions: totalQuestions,
-            ),
-          );
+        : QuizResultController(_summaryFromArguments());
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -61,14 +55,14 @@ class QuizResultScreen extends StatelessWidget {
                         icon: Icons.check_circle,
                         iconColor: AppColors.success,
                         label: 'Jawaban Benar',
-                        value: correctAnswers.toString(),
+                        value: controller.correctAnswers.toString(),
                       ),
                       const SizedBox(height: 16),
                       ResultStatCard(
                         icon: Icons.cancel,
                         iconColor: Colors.red,
                         label: 'Jawaban Salah',
-                        value: wrongAnswers.toString(),
+                        value: controller.wrongAnswers.toString(),
                       ),
                     ],
                   ),
@@ -86,11 +80,11 @@ class QuizResultScreen extends StatelessWidget {
                       ResultActionButton(
                         label: 'Main Ulang',
                         type: ResultActionButtonType.outline,
-                        onPressed: () {},
+                        onPressed: controller.retryQuiz,
                       ),
                       const SizedBox(height: 16),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: controller.backToMode,
                         child: const Text(
                           'Balik ke Mode',
                           style: TextStyle(
@@ -109,6 +103,18 @@ class QuizResultScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  QuizResultSummary _summaryFromArguments() {
+    if (Get.arguments is QuizResultSummary) {
+      return Get.arguments as QuizResultSummary;
+    }
+
+    return QuizResultSummary(
+      correctAnswers: correctAnswers,
+      wrongAnswers: wrongAnswers,
+      totalQuestions: totalQuestions,
     );
   }
 }
