@@ -154,30 +154,16 @@ class LoginPage extends StatelessWidget {
               ),
               const SizedBox(height: 25),
               Obx(
-                () => Row(
-                  children: [
-                    Expanded(
-                      child: AuthSocialButton(
-                        label: 'Facebook',
-                        assetName: 'assets/icon/fb.svg',
-                        fallbackIcon: Icons.facebook,
-                        onPressed: controller.isLoading.value
-                            ? null
-                            : controller.loginWithFacebook,
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: AuthSocialButton(
-                        label: 'Google',
-                        assetName: 'assets/icon/google.svg',
-                        fallbackIcon: Icons.g_mobiledata,
-                        onPressed: controller.isLoading.value
-                            ? null
-                            : controller.loginWithGoogle,
-                      ),
-                    ),
-                  ],
+                () => SizedBox(
+                  width: double.infinity,
+                  child: AuthSocialButton(
+                    label: 'Google',
+                    assetName: 'assets/icon/google.svg',
+                    fallbackIcon: Icons.g_mobiledata,
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : controller.loginWithGoogle,
+                  ),
                 ),
               ),
             ],

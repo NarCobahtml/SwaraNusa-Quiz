@@ -130,30 +130,16 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 25),
               Obx(
-                () => Row(
-                  children: [
-                    Expanded(
-                      child: AuthSocialButton(
-                        label: 'Facebook',
-                        assetName: 'assets/icon/fb.svg',
-                        fallbackIcon: Icons.facebook,
-                        onPressed: controller.isLoading.value
-                            ? null
-                            : controller.registerWithFacebook,
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: AuthSocialButton(
-                        label: 'Google',
-                        assetName: 'assets/icon/google.svg',
-                        fallbackIcon: Icons.g_mobiledata,
-                        onPressed: controller.isLoading.value
-                            ? null
-                            : controller.registerWithGoogle,
-                      ),
-                    ),
-                  ],
+                () => SizedBox(
+                  width: double.infinity,
+                  child: AuthSocialButton(
+                    label: 'Google',
+                    assetName: 'assets/icon/google.svg',
+                    fallbackIcon: Icons.g_mobiledata,
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : controller.registerWithGoogle,
+                  ),
                 ),
               ),
               const SizedBox(height: 24),

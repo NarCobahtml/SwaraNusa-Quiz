@@ -93,12 +93,12 @@ class _PlayBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.textLight.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: AppColors.textLight.withValues(alpha: 0.35)),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
       ),
       child: const Text(
-        'Main sekarang',
+        'Main sekarang!',
         style: TextStyle(
-          color: AppColors.textLight,
+          color: AppColors.gold,
           fontSize: 12,
           fontWeight: FontWeight.w800,
         ),

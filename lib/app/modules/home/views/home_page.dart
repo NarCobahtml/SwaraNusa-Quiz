@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/data/services/user_service.dart';
 import 'package:swaranusaquiz/app/modules/home/controllers/home_controller.dart';
-import 'package:swaranusaquiz/app/modules/home/widgets/continue_playing_section.dart';
 import 'package:swaranusaquiz/app/modules/home/widgets/daily_quiz_cta_card.dart';
 import 'package:swaranusaquiz/app/modules/home/widgets/daily_missions_section.dart';
 import 'package:swaranusaquiz/app/modules/home/widgets/home_leaderboard_section.dart';
 import 'package:swaranusaquiz/app/modules/home/widgets/home_profile_card.dart';
+import 'package:swaranusaquiz/app/utils/app_colors.dart';
 
 class HomePage extends StatelessWidget {
   final VoidCallback? onNavigateToMode;
@@ -40,16 +40,21 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 24),
                 DailyQuizCtaCard(onTap: controller.openDailyQuiz),
                 const SizedBox(height: 24),
-                ContinuePlayingSection(
-                  onTap: onNavigateToMode ?? controller.openMode,
-                ),
-                const SizedBox(height: 24),
                 Obx(
                   () => DailyMissionsSection(
                     missions: controller.dailyMissions,
                   ),
                 ),
                 const SizedBox(height: 24),
+                const Text(
+                  'Pengguna Teratas',
+                  style: TextStyle(
+                    color: AppColors.textDark,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
                 Obx(
                   () => HomeLeaderboardSection(
                     entries: controller.leaderboardEntries.toList(

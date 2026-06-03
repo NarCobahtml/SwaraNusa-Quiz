@@ -144,7 +144,14 @@ class RewardMissionCard extends StatelessWidget {
               else if (mission.isCompleted)
                 TextButton(
                   onPressed: isClaiming ? null : onClaim,
-                  child: Text(isClaiming ? '...' : 'Klaim'),
+                  child: Text(
+                    isClaiming ? '...' : 'Klaim',
+                    style: const TextStyle(
+                      color: AppColors.success,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
             ],
           ),
