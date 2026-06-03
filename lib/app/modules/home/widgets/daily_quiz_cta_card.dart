@@ -61,7 +61,7 @@ class DailyQuizCtaCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          '10 soal acak dari semua mode',
+                          '10 soal acak dari semua mode!',
                           style: TextStyle(
                             color: AppColors.textLight.withValues(alpha: 0.9),
                             fontSize: 13,
@@ -69,29 +69,8 @@ class DailyQuizCtaCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 14),
-                        const Wrap(
-                          spacing: 10,
-                          runSpacing: 8,
-                          children: [
-                            _RewardBadge(reward: 100),
-                            _PlayBadge(),
-                          ],
-                        ),
+                        const _PlayBadge(),
                       ],
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Container(
-                    width: 54,
-                    height: 54,
-                    decoration: BoxDecoration(
-                      color: AppColors.gold,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.arrow_forward,
-                      color: AppColors.primary,
-                      size: 28,
                     ),
                   ),
                 ],
@@ -99,42 +78,6 @@ class DailyQuizCtaCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _RewardBadge extends StatelessWidget {
-  final int reward;
-
-  const _RewardBadge({required this.reward});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      decoration: BoxDecoration(
-        color: AppColors.gold,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.monetization_on,
-            color: AppColors.primary,
-            size: 16,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            '100% +$reward',
-            style: const TextStyle(
-              color: AppColors.primary,
-              fontSize: 12,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-        ],
       ),
     );
   }

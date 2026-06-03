@@ -11,10 +11,20 @@ class FirestorePaths {
   static const badges = achievements;
   static const dailyLoginRewards = 'daily_login_rewards';
   static const leaderboards = 'leaderboards';
+  static const appConfig = 'app_config';
+  static const seasonConfig = '$appConfig/season';
 
   static String user(String uid) => '$users/$uid';
   static String userLevelProgress(String uid, String levelId) =>
       '$users/$uid/level_progress/$levelId';
+  static String userSeasonLevels(String uid, String seasonId) =>
+      '$users/$uid/season_progress/$seasonId/levels';
+  static String userSeasonLevelProgress(
+    String uid,
+    String seasonId,
+    String levelId,
+  ) =>
+      '${userSeasonLevels(uid, seasonId)}/$levelId';
   static String userQuizAttempt(String uid, String attemptId) =>
       '$users/$uid/quiz_attempts/$attemptId';
   static String userQuizAttemptAnswer(

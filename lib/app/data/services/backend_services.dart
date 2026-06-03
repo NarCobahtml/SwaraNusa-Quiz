@@ -3,9 +3,10 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/data/providers/backend_bootstrap.dart';
 import 'package:swaranusaquiz/app/data/providers/firestore_paths.dart';
-import 'package:swaranusaquiz/app/data/services/local_level_progress_service.dart';
+import 'package:swaranusaquiz/app/data/services/season_service.dart';
 
 int _numberValue(Object? value) => value is num ? value.toInt() : 0;
 
@@ -26,15 +27,27 @@ String _todayKey() {
   return '${now.year}-$month-$day';
 }
 
+Future<String> _activeSeasonId() async {
+  if (Get.isRegistered<SeasonService>()) {
+    await SeasonService.to.ensureLoaded();
+    final seasonId = SeasonService.to.activeSeasonId.value.trim();
+    if (seasonId.isNotEmpty) return seasonId;
+  }
+  return SeasonService.fallbackSeasonId;
+}
+
 Map<String, Object?> _leaderboardData(
   Map<String, dynamic> userData, {
   required int xp,
   required int level,
   required int quizCompleted,
+  String periodType = 'global',
+  String periodKey = 'global',
+  int? score,
 }) {
   return {
-    'periodType': 'global',
-    'periodKey': 'global',
+    'periodType': periodType,
+    'periodKey': periodKey,
     'name': _firstNonEmptyText([
       userData['name'],
       userData['username'],
@@ -45,7 +58,7 @@ Map<String, Object?> _leaderboardData(
     'avatarUrl': _textValue(userData['avatarUrl']),
     'level': level,
     'xp': xp,
-    'score': xp,
+    'score': score ?? xp,
     'quizCompleted': quizCompleted,
     'updatedAt': FieldValue.serverTimestamp(),
   };
@@ -258,14 +271,6 @@ class QuizEngineService {
     if (_isFinished) return _lastSummary ?? currentSummary();
     var summary = currentSummary();
 
-    if (!_isDailyQuiz) {
-      LocalLevelProgressService.markCompleted(
-        modeId: _modeId,
-        levelId: _levelId,
-        score: summary.score,
-      );
-    }
-
     final user = _auth.currentUser;
     if (user == null) {
       debugPrint('Hasil kuis tidak disimpan: FirebaseAuth currentUser null.');
@@ -285,10 +290,12 @@ class QuizEngineService {
     final earnedCoin = _isDailyQuiz ? 0 : summary.correctAnswers * 5;
 
     final userRef = _firestore.doc(FirestorePaths.user(user.uid));
+    final seasonId = await _activeSeasonId();
     if (_isDailyQuiz) {
       final reward = await _saveDailyQuizProgress(
         userRef: userRef,
         uid: user.uid,
+        seasonId: seasonId,
         summary: summary,
         earnedXp: earnedXp,
       );
@@ -300,13 +307,17 @@ class QuizEngineService {
       );
     } else {
       final levelProgressRef = _firestore.doc(
-        FirestorePaths.userLevelProgress(user.uid, _levelId),
+        FirestorePaths.userSeasonLevelProgress(user.uid, seasonId, _levelId),
       );
       final nextLevel = _nextLevelId(_levelId);
       final nextLevelRef = nextLevel == null
           ? null
           : _firestore.doc(
-              FirestorePaths.userLevelProgress(user.uid, nextLevel),
+              FirestorePaths.userSeasonLevelProgress(
+                user.uid,
+                seasonId,
+                nextLevel,
+              ),
             );
       await _saveRequiredQuizProgress(
         userRef: userRef,
@@ -314,6 +325,7 @@ class QuizEngineService {
         nextLevelRef: nextLevelRef,
         nextLevel: nextLevel,
         uid: user.uid,
+        seasonId: seasonId,
         summary: summary,
         earnedXp: earnedXp,
         earnedCoin: earnedCoin,
@@ -331,6 +343,7 @@ class QuizEngineService {
         durationSeconds: durationSeconds,
         earnedXp: earnedXp,
         earnedCoin: earnedCoin + summary.bonusCoin,
+        seasonId: seasonId,
         summary: summary,
       );
       await MissionService.instance.incrementProgress('complete_quiz', by: 1);
@@ -348,19 +361,28 @@ class QuizEngineService {
     required DocumentReference<Map<String, dynamic>>? nextLevelRef,
     required String? nextLevel,
     required String uid,
+    required String seasonId,
     required QuizSessionSummary summary,
     required int earnedXp,
     required int earnedCoin,
   }) async {
     final stars = _starsForScore(summary.score);
+    final leaderboardRef = _firestore.doc(
+      FirestorePaths.leaderboardEntry(seasonId, uid),
+    );
 
     await _firestore.runTransaction((transaction) async {
       final userSnapshot = await transaction.get(userRef);
+      final leaderboardSnapshot = await transaction.get(leaderboardRef);
       final userData = userSnapshot.data() ?? {};
+      final leaderboardData = leaderboardSnapshot.data() ?? {};
       final nextXp = _numberValue(userData['xp']) + earnedXp;
       final nextCoin = _numberValue(userData['coin']) + earnedCoin;
       final nextLevel = max(1, (nextXp / 500).floor() + 1);
       final nextQuizCompleted = _numberValue(userData['quizCompleted']) + 1;
+      final nextSeasonScore = _numberValue(leaderboardData['score']) + earnedXp;
+      final nextSeasonQuizCompleted =
+          _numberValue(leaderboardData['quizCompleted']) + 1;
       final nextCorrectCount =
           _numberValue(userData['correctAnswerCount']) +
           summary.correctAnswers;
@@ -382,12 +404,15 @@ class QuizEngineService {
       }, SetOptions(merge: true));
 
       transaction.set(
-        _firestore.doc(FirestorePaths.leaderboardEntry('global', uid)),
+        leaderboardRef,
         _leaderboardData(
           userData,
           xp: nextXp,
           level: nextLevel,
-          quizCompleted: nextQuizCompleted,
+          quizCompleted: nextSeasonQuizCompleted,
+          periodType: 'season',
+          periodKey: seasonId,
+          score: nextSeasonScore,
         ),
         SetOptions(merge: true),
       );
@@ -436,6 +461,7 @@ class QuizEngineService {
   Future<_DailyQuizSaveResult> _saveDailyQuizProgress({
     required DocumentReference<Map<String, dynamic>> userRef,
     required String uid,
+    required String seasonId,
     required QuizSessionSummary summary,
     required int earnedXp,
   }) {
@@ -443,12 +469,17 @@ class QuizEngineService {
     final dailyQuizRef = _firestore.doc(
       FirestorePaths.userDailyQuiz(uid, dateKey),
     );
+    final leaderboardRef = _firestore.doc(
+      FirestorePaths.leaderboardEntry(seasonId, uid),
+    );
 
     return _firestore.runTransaction<_DailyQuizSaveResult>((transaction) async {
       final userSnapshot = await transaction.get(userRef);
       final dailySnapshot = await transaction.get(dailyQuizRef);
+      final leaderboardSnapshot = await transaction.get(leaderboardRef);
       final userData = userSnapshot.data() ?? {};
       final dailyData = dailySnapshot.data() ?? {};
+      final leaderboardData = leaderboardSnapshot.data() ?? {};
 
       final alreadyClaimed = dailyData['rewardClaimed'] == true;
       final shouldAwardBonus = summary.score >= 100 && !alreadyClaimed;
@@ -457,6 +488,9 @@ class QuizEngineService {
       final nextCoin = _numberValue(userData['coin']) + bonusCoin;
       final nextLevel = max(1, (nextXp / 500).floor() + 1);
       final nextQuizCompleted = _numberValue(userData['quizCompleted']) + 1;
+      final nextSeasonScore = _numberValue(leaderboardData['score']) + earnedXp;
+      final nextSeasonQuizCompleted =
+          _numberValue(leaderboardData['quizCompleted']) + 1;
       final nextCorrectCount =
           _numberValue(userData['correctAnswerCount']) +
           summary.correctAnswers;
@@ -478,12 +512,15 @@ class QuizEngineService {
       }, SetOptions(merge: true));
 
       transaction.set(
-        _firestore.doc(FirestorePaths.leaderboardEntry('global', uid)),
+        leaderboardRef,
         _leaderboardData(
           userData,
           xp: nextXp,
           level: nextLevel,
-          quizCompleted: nextQuizCompleted,
+          quizCompleted: nextSeasonQuizCompleted,
+          periodType: 'season',
+          periodKey: seasonId,
+          score: nextSeasonScore,
         ),
         SetOptions(merge: true),
       );
@@ -522,6 +559,7 @@ class QuizEngineService {
     required int durationSeconds,
     required int earnedXp,
     required int earnedCoin,
+    required String seasonId,
     required QuizSessionSummary summary,
   }) async {
     final attemptId = _firestore.collection('_ids').doc().id;
@@ -533,6 +571,7 @@ class QuizEngineService {
 
     batch.set(attemptRef, {
       'sessionType': _isDailyQuiz ? 'daily' : 'level',
+      'seasonId': seasonId,
       'modeId': _modeId,
       'levelId': _levelId,
       'totalQuestions': summary.totalQuestions,

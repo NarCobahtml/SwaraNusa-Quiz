@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:swaranusaquiz/app/data/services/season_service.dart';
 import 'package:swaranusaquiz/app/utils/app_colors.dart';
 
 class LeaderboardTabBar extends StatelessWidget {
@@ -19,13 +21,38 @@ class LeaderboardTabBar extends StatelessWidget {
             topRight: Radius.circular(30),
           ),
         ),
-        child: const Text(
-          'Global',
-          style: TextStyle(
-            color: AppColors.textLight,
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-          ),
+        child: Get.isRegistered<SeasonService>()
+            ? Obx(
+                () => _LeaderboardTabLabel(
+                  text: SeasonService.to.activeSeasonTitle.value,
+                ),
+              )
+            : const _LeaderboardTabLabel(text: 'Season'),
+      ),
+    );
+  }
+}
+
+class _LeaderboardTabLabel extends StatelessWidget {
+  final String text;
+
+  const _LeaderboardTabLabel({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    final label = text.trim().isEmpty ? 'Season' : text.trim();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Text(
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: AppColors.textLight,
+          fontSize: 15,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );

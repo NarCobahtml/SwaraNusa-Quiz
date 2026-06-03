@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/data/providers/firestore_paths.dart';
-import 'package:swaranusaquiz/app/data/services/local_level_progress_service.dart';
+import 'package:swaranusaquiz/app/data/services/season_service.dart';
 import 'package:swaranusaquiz/app/modules/level_selection/models/level_data.dart';
 import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_config.dart';
 import 'package:swaranusaquiz/app/modules/quiz/views/quiz_session_page.dart';
@@ -25,12 +25,17 @@ class LevelSelectionController {
     return _buildLevels(const {});
   }
 
-  Stream<List<LevelData>> watchLevels() {
+  Stream<List<LevelData>> watchLevels({String? seasonId}) {
     final uid = auth.FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return Stream.value(levels);
+    final activeSeasonId =
+        seasonId ??
+        (Get.isRegistered<SeasonService>()
+            ? SeasonService.to.activeSeasonId.value
+            : SeasonService.fallbackSeasonId);
 
     return FirebaseFirestore.instance
-        .collection('${FirestorePaths.users}/$uid/level_progress')
+        .collection(FirestorePaths.userSeasonLevels(uid, activeSeasonId))
         .snapshots()
         .map((snapshot) {
           final progressByNumber = <int, Map<String, dynamic>>{};
@@ -46,22 +51,6 @@ class LevelSelectionController {
 
   List<LevelData> _buildLevels(Map<int, Map<String, dynamic>> progressByNumber) {
     final mergedProgress = Map<int, Map<String, dynamic>>.of(progressByNumber);
-    for (var number = 1; number <= 10; number++) {
-      final localProgress = LocalLevelProgressService.progressFor(
-        modeId,
-        number,
-      );
-      if (localProgress == null) continue;
-      final remoteBestScore = _intValue(mergedProgress[number]?['bestScore']);
-      final localBestScore = _intValue(localProgress['bestScore']);
-      mergedProgress[number] = {
-        ...?mergedProgress[number],
-        ...localProgress,
-        'bestScore': remoteBestScore > localBestScore
-            ? remoteBestScore
-            : localBestScore,
-      };
-    }
 
     return [
       for (var number = 1; number <= 10; number++)

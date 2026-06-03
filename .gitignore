@@ -39,7 +39,8 @@ firebase-adminsdk-*.json
 .env
 assets/env/.env
 !.env.example
-
+package-lock.json
+package.json
 
 # Symbolication related
 app.*.symbols

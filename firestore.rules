@@ -49,6 +49,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /app_config/{configId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     match /leaderboards/{periodKey}/entries/{uid} {
       allow read: if true;
       allow create, update: if isOwner(uid);
@@ -62,6 +67,11 @@ service cloud.firestore {
       allow delete: if false;
 
       match /level_progress/{levelId} {
+        allow read, create, update: if isOwner(uid);
+        allow delete: if false;
+      }
+
+      match /season_progress/{seasonId}/levels/{levelId} {
         allow read, create, update: if isOwner(uid);
         allow delete: if false;
       }

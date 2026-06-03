@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/data/models/backend_models.dart';
 import 'package:swaranusaquiz/app/data/repositories/firebase_repositories.dart';
+import 'package:swaranusaquiz/app/data/services/season_service.dart';
 import 'package:swaranusaquiz/app/data/services/user_service.dart';
 import 'package:swaranusaquiz/app/modules/home/models/home_leaderboard_entry.dart';
 import 'package:swaranusaquiz/app/modules/home/models/home_mission.dart';
@@ -22,6 +23,8 @@ class HomeController extends GetxController {
   final _missionProgressById = <String, MissionProgressDoc>{}.obs;
   StreamSubscription<List<HomeLeaderboardEntry>>? _leaderboardSubscription;
   Worker? _userWorker;
+  Worker? _seasonWorker;
+  int _leaderboardRequestId = 0;
 
   // Baca langsung dari UserService — tidak perlu fetch sendiri
   UserService get _userService => UserService.to;
@@ -32,6 +35,12 @@ class HomeController extends GetxController {
     _watchLeaderboard();
     loadDailyMissions();
     _userWorker = ever(_userService.currentUser, (_) => loadDailyMissions());
+    if (Get.isRegistered<SeasonService>()) {
+      _seasonWorker = ever(
+        SeasonService.to.activeSeasonId,
+        (_) => _watchLeaderboard(),
+      );
+    }
   }
 
   HomeProfile get profile {
@@ -104,10 +113,23 @@ class HomeController extends GetxController {
   }
 
   void _watchLeaderboard() {
+    unawaited(_watchLeaderboardForActiveSeason());
+  }
+
+  Future<void> _watchLeaderboardForActiveSeason() async {
+    final requestId = ++_leaderboardRequestId;
     final currentUid = auth.FirebaseAuth.instance.currentUser?.uid;
+    final periodKey = await _activeLeaderboardPeriodKey();
+    if (periodKey == null) {
+      _leaderboardSubscription?.cancel();
+      leaderboardEntries.clear();
+      return;
+    }
+    if (requestId != _leaderboardRequestId) return;
+
     _leaderboardSubscription?.cancel();
     _leaderboardSubscription = _contentRepository
-        .watchLeaderboard(periodKey: 'global', limit: 3)
+        .watchLeaderboard(periodKey: periodKey, limit: 3)
         .map(
           (entries) => entries
               .map(
@@ -129,6 +151,19 @@ class HomeController extends GetxController {
         );
   }
 
+  Future<String?> _activeLeaderboardPeriodKey() async {
+    if (!Get.isRegistered<SeasonService>()) {
+      return SeasonService.fallbackSeasonId;
+    }
+
+    await SeasonService.to.ensureLoaded();
+    if (SeasonService.to.errorMessage.value != null) {
+      return null;
+    }
+    final seasonId = SeasonService.to.activeSeasonId.value.trim();
+    return seasonId.isEmpty ? SeasonService.fallbackSeasonId : seasonId;
+  }
+
   void openMode() {
     Get.toNamed(AppRoutes.mode);
   }
@@ -145,6 +180,7 @@ class HomeController extends GetxController {
   void onClose() {
     _leaderboardSubscription?.cancel();
     _userWorker?.dispose();
+    _seasonWorker?.dispose();
     super.onClose();
   }
 }

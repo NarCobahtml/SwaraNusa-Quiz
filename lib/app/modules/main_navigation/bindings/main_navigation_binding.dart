@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:swaranusaquiz/app/data/services/season_service.dart';
 import 'package:swaranusaquiz/app/data/services/user_service.dart';
 import 'package:swaranusaquiz/app/modules/home/controllers/home_controller.dart';
 import 'package:swaranusaquiz/app/modules/leaderboard/controllers/leaderboard_controller.dart';
@@ -10,7 +11,12 @@ class MainNavigationBinding extends Bindings {
   @override
   void dependencies() {
     // UserService di-put (bukan lazyPut) agar langsung fetch data user
-    Get.put<UserService>(UserService(), permanent: false);
+    if (!Get.isRegistered<UserService>()) {
+      Get.put<UserService>(UserService(), permanent: false);
+    }
+    if (!Get.isRegistered<SeasonService>()) {
+      Get.put<SeasonService>(SeasonService(), permanent: true);
+    }
     Get.lazyPut<MainNavigationController>(() => MainNavigationController());
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<LeaderboardController>(() => LeaderboardController());
