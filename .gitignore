@@ -39,7 +39,7 @@ firebase-adminsdk-*.json
 .env
 assets/env/.env
 !.env.example
-.codex
+
 
 # Symbolication related
 app.*.symbols

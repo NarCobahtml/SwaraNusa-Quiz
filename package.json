@@ -8,6 +8,7 @@
     "test": "test"
   },
   "scripts": {
+    "extract:firestore-structure": "node scripts/extract_firestore_structure.js",
     "seed:firestore": "node scripts/seed_firestore.js",
     "import:questions": "node scripts/import_quiz_questions.js",
     "import:instruments": "node scripts/import_reward_instruments.js",

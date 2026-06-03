@@ -1,0 +1,1051 @@
+{
+  "projectId": "swaranusa-quiz",
+  "generatedAt": "2026-05-30T08:39:44.338Z",
+  "sampleSizePerCollection": 25,
+  "maxDepth": 5,
+  "includesSamples": false,
+  "collections": {
+    "achievements": {
+      "id": "achievements",
+      "path": "achievements",
+      "pathPattern": "achievements",
+      "depth": 0,
+      "documentsScanned": 8,
+      "fields": {
+        "createdAt": {
+          "types": {
+            "null": 7,
+            "timestamp": 1
+          },
+          "occurrences": 8
+        },
+        "name": {
+          "types": {
+            "string": 8
+          },
+          "occurrences": 8
+        },
+        "conditionValue": {
+          "types": {
+            "integer": 8
+          },
+          "occurrences": 8
+        },
+        "description": {
+          "types": {
+            "string": 8
+          },
+          "occurrences": 8
+        },
+        "conditionType": {
+          "types": {
+            "string": 8
+          },
+          "occurrences": 8
+        },
+        "iconUrl": {
+          "types": {
+            "string": 8
+          },
+          "occurrences": 8
+        },
+        "stars": {
+          "types": {
+            "integer": 8
+          },
+          "occurrences": 8
+        },
+        "isActive": {
+          "types": {
+            "boolean": 8
+          },
+          "occurrences": 8
+        },
+        "updatedAt": {
+          "types": {
+            "null": 7,
+            "timestamp": 1
+          },
+          "occurrences": 8
+        }
+      },
+      "subcollections": {}
+    },
+    "daily_login_rewards": {
+      "id": "daily_login_rewards",
+      "path": "daily_login_rewards",
+      "pathPattern": "daily_login_rewards",
+      "depth": 0,
+      "documentsScanned": 8,
+      "fields": {
+        "rewardCoin": {
+          "types": {
+            "integer": 8
+          },
+          "occurrences": 8
+        },
+        "dayNumber": {
+          "types": {
+            "integer": 8
+          },
+          "occurrences": 8
+        },
+        "isActive": {
+          "types": {
+            "boolean": 8
+          },
+          "occurrences": 8
+        },
+        "rewardInstrumentId": {
+          "types": {
+            "string": 8
+          },
+          "occurrences": 8
+        },
+        "rewardXp": {
+          "types": {
+            "integer": 8
+          },
+          "occurrences": 8
+        },
+        "day": {
+          "types": {
+            "integer": 7
+          },
+          "occurrences": 7
+        }
+      },
+      "subcollections": {}
+    },
+    "instruments": {
+      "id": "instruments",
+      "path": "instruments",
+      "pathPattern": "instruments",
+      "depth": 0,
+      "documentsScanned": 5,
+      "fields": {
+        "createdAt": {
+          "types": {
+            "null": 1,
+            "timestamp": 4
+          },
+          "occurrences": 5
+        },
+        "opensMinigame": {
+          "types": {
+            "boolean": 5
+          },
+          "occurrences": 5
+        },
+        "price": {
+          "types": {
+            "integer": 5
+          },
+          "occurrences": 5
+        },
+        "imageUrl": {
+          "types": {
+            "string": 5
+          },
+          "occurrences": 5
+        },
+        "sortOrder": {
+          "types": {
+            "integer": 5
+          },
+          "occurrences": 5
+        },
+        "name": {
+          "types": {
+            "string": 5
+          },
+          "occurrences": 5
+        },
+        "noteUrls": {
+          "types": {
+            "array": 5
+          },
+          "occurrences": 5,
+          "elementTypes": {
+            "string": 9
+          }
+        },
+        "isActive": {
+          "types": {
+            "boolean": 5
+          },
+          "occurrences": 5
+        },
+        "region": {
+          "types": {
+            "string": 5
+          },
+          "occurrences": 5
+        },
+        "updatedAt": {
+          "types": {
+            "null": 1,
+            "timestamp": 4
+          },
+          "occurrences": 5
+        }
+      },
+      "subcollections": {}
+    },
+    "leaderboards": {
+      "id": "leaderboards",
+      "path": "leaderboards",
+      "pathPattern": "leaderboards",
+      "depth": 0,
+      "documentsScanned": 0,
+      "fields": {},
+      "subcollections": {}
+    },
+    "levels": {
+      "id": "levels",
+      "path": "levels",
+      "pathPattern": "levels",
+      "depth": 0,
+      "documentsScanned": 4,
+      "fields": {
+        "unlockAfterLevelId": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "createdAt": {
+          "types": {
+            "null": 1,
+            "timestamp": 3
+          },
+          "occurrences": 4
+        },
+        "totalQuestions": {
+          "types": {
+            "integer": 4
+          },
+          "occurrences": 4
+        },
+        "requiredXp": {
+          "types": {
+            "integer": 4
+          },
+          "occurrences": 4
+        },
+        "modeId": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "rewardCoin": {
+          "types": {
+            "integer": 4
+          },
+          "occurrences": 4
+        },
+        "levelNumber": {
+          "types": {
+            "integer": 4
+          },
+          "occurrences": 4
+        },
+        "description": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "isActive": {
+          "types": {
+            "boolean": 4
+          },
+          "occurrences": 4
+        },
+        "title": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "rewardXp": {
+          "types": {
+            "integer": 4
+          },
+          "occurrences": 4
+        },
+        "updatedAt": {
+          "types": {
+            "null": 1,
+            "timestamp": 3
+          },
+          "occurrences": 4
+        }
+      },
+      "subcollections": {}
+    },
+    "missions": {
+      "id": "missions",
+      "path": "missions",
+      "pathPattern": "missions",
+      "depth": 0,
+      "documentsScanned": 4,
+      "fields": {
+        "createdAt": {
+          "types": {
+            "null": 4
+          },
+          "occurrences": 4
+        },
+        "rewardCoin": {
+          "types": {
+            "integer": 4
+          },
+          "occurrences": 4
+        },
+        "targetValue": {
+          "types": {
+            "integer": 4
+          },
+          "occurrences": 4
+        },
+        "description": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "targetType": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "iconUrl": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "isActive": {
+          "types": {
+            "boolean": 4
+          },
+          "occurrences": 4
+        },
+        "title": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "type": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "rewardInstrumentId": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "rewardXp": {
+          "types": {
+            "integer": 4
+          },
+          "occurrences": 4
+        },
+        "updatedAt": {
+          "types": {
+            "null": 4
+          },
+          "occurrences": 4
+        }
+      },
+      "subcollections": {}
+    },
+    "questions": {
+      "id": "questions",
+      "path": "questions",
+      "pathPattern": "questions",
+      "depth": 0,
+      "documentsScanned": 24,
+      "fields": {
+        "mediaUrl": {
+          "types": {
+            "string": 24
+          },
+          "occurrences": 24
+        },
+        "mediaType": {
+          "types": {
+            "string": 24
+          },
+          "occurrences": 24
+        },
+        "explanation": {
+          "types": {
+            "string": 24
+          },
+          "occurrences": 24
+        },
+        "isActive": {
+          "types": {
+            "boolean": 24
+          },
+          "occurrences": 24
+        },
+        "title": {
+          "types": {
+            "string": 24
+          },
+          "occurrences": 24
+        },
+        "questionText": {
+          "types": {
+            "string": 24
+          },
+          "occurrences": 24
+        },
+        "points": {
+          "types": {
+            "integer": 24
+          },
+          "occurrences": 24
+        },
+        "questionNumber": {
+          "types": {
+            "integer": 24
+          },
+          "occurrences": 24
+        },
+        "createdAt": {
+          "types": {
+            "null": 1,
+            "timestamp": 11
+          },
+          "occurrences": 12
+        },
+        "modeId": {
+          "types": {
+            "string": 24
+          },
+          "occurrences": 24
+        },
+        "levelId": {
+          "types": {
+            "string": 24
+          },
+          "occurrences": 24
+        },
+        "timeLimitSeconds": {
+          "types": {
+            "integer": 24
+          },
+          "occurrences": 24
+        },
+        "options": {
+          "types": {
+            "array": 24
+          },
+          "occurrences": 24,
+          "elementTypes": {
+            "string": 96
+          }
+        },
+        "correctAnswer": {
+          "types": {
+            "string": 24
+          },
+          "occurrences": 24
+        },
+        "updatedAt": {
+          "types": {
+            "null": 1,
+            "timestamp": 23
+          },
+          "occurrences": 24
+        }
+      },
+      "subcollections": {}
+    },
+    "quiz_modes": {
+      "id": "quiz_modes",
+      "path": "quiz_modes",
+      "pathPattern": "quiz_modes",
+      "depth": 0,
+      "documentsScanned": 4,
+      "fields": {
+        "createdAt": {
+          "types": {
+            "null": 1
+          },
+          "occurrences": 1
+        },
+        "description": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "iconUrl": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "isActive": {
+          "types": {
+            "boolean": 4
+          },
+          "occurrences": 4
+        },
+        "title": {
+          "types": {
+            "string": 4
+          },
+          "occurrences": 4
+        },
+        "order": {
+          "types": {
+            "integer": 4
+          },
+          "occurrences": 4
+        },
+        "updatedAt": {
+          "types": {
+            "null": 1,
+            "timestamp": 3
+          },
+          "occurrences": 4
+        }
+      },
+      "subcollections": {}
+    },
+    "users": {
+      "id": "users",
+      "path": "users",
+      "pathPattern": "users",
+      "depth": 0,
+      "documentsScanned": 12,
+      "fields": {
+        "badgesEarned": {
+          "types": {
+            "integer": 12
+          },
+          "occurrences": 12
+        },
+        "quizCompleted": {
+          "types": {
+            "integer": 12
+          },
+          "occurrences": 12
+        },
+        "wrongAnswerCount": {
+          "types": {
+            "integer": 12
+          },
+          "occurrences": 12
+        },
+        "level": {
+          "types": {
+            "integer": 12
+          },
+          "occurrences": 12
+        },
+        "username": {
+          "types": {
+            "string": 12
+          },
+          "occurrences": 12
+        },
+        "correctAnswerCount": {
+          "types": {
+            "integer": 12
+          },
+          "occurrences": 12
+        },
+        "email": {
+          "types": {
+            "string": 12
+          },
+          "occurrences": 12
+        },
+        "isDarkMode": {
+          "types": {
+            "boolean": 9
+          },
+          "occurrences": 9
+        },
+        "createdAt": {
+          "types": {
+            "timestamp": 11,
+            "null": 1
+          },
+          "occurrences": 12
+        },
+        "avatarUrl": {
+          "types": {
+            "string": 12
+          },
+          "occurrences": 12
+        },
+        "name": {
+          "types": {
+            "string": 12
+          },
+          "occurrences": 12
+        },
+        "xp": {
+          "types": {
+            "integer": 12
+          },
+          "occurrences": 12
+        },
+        "coin": {
+          "types": {
+            "integer": 12
+          },
+          "occurrences": 12
+        },
+        "updatedAt": {
+          "types": {
+            "timestamp": 11,
+            "null": 1
+          },
+          "occurrences": 12
+        },
+        "ownedInstrumentCount": {
+          "types": {
+            "integer": 4
+          },
+          "occurrences": 4
+        },
+        "perfectScoreCount": {
+          "types": {
+            "integer": 5
+          },
+          "occurrences": 5
+        },
+        "role": {
+          "types": {
+            "string": 3
+          },
+          "occurrences": 3
+        },
+        "isActive": {
+          "types": {
+            "boolean": 3
+          },
+          "occurrences": 3
+        },
+        "status": {
+          "types": {
+            "string": 3
+          },
+          "occurrences": 3
+        },
+        "instrumentMasteryCount": {
+          "types": {
+            "integer": 3
+          },
+          "occurrences": 3
+        }
+      },
+      "subcollections": {
+        "achievements": {
+          "id": "achievements",
+          "path": "users/3tzTUxo2xKNGrFnW8WSi0ww8jbf2/achievements",
+          "pathPattern": "users/{usersId}/achievements",
+          "depth": 1,
+          "documentsScanned": 17,
+          "fields": {
+            "earnedAt": {
+              "types": {
+                "timestamp": 16,
+                "null": 1
+              },
+              "occurrences": 17
+            }
+          },
+          "subcollections": {}
+        },
+        "daily_login": {
+          "id": "daily_login",
+          "path": "users/3tzTUxo2xKNGrFnW8WSi0ww8jbf2/daily_login",
+          "pathPattern": "users/{usersId}/daily_login",
+          "depth": 1,
+          "documentsScanned": 12,
+          "fields": {
+            "currentStreak": {
+              "types": {
+                "integer": 12
+              },
+              "occurrences": 12
+            },
+            "claimedToday": {
+              "types": {
+                "boolean": 12
+              },
+              "occurrences": 12
+            },
+            "lastLoginDate": {
+              "types": {
+                "string": 12
+              },
+              "occurrences": 12
+            },
+            "totalLoginDays": {
+              "types": {
+                "integer": 12
+              },
+              "occurrences": 12
+            },
+            "updatedAt": {
+              "types": {
+                "timestamp": 11,
+                "null": 1
+              },
+              "occurrences": 12
+            }
+          },
+          "subcollections": {}
+        },
+        "level_progress": {
+          "id": "level_progress",
+          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/level_progress",
+          "pathPattern": "users/{usersId}/level_progress",
+          "depth": 1,
+          "documentsScanned": 21,
+          "fields": {
+            "modeId": {
+              "types": {
+                "string": 21
+              },
+              "occurrences": 21
+            },
+            "levelId": {
+              "types": {
+                "string": 20
+              },
+              "occurrences": 20
+            },
+            "levelNumber": {
+              "types": {
+                "integer": 20
+              },
+              "occurrences": 20
+            },
+            "isUnlocked": {
+              "types": {
+                "boolean": 21
+              },
+              "occurrences": 21
+            },
+            "status": {
+              "types": {
+                "string": 21
+              },
+              "occurrences": 21
+            },
+            "score": {
+              "types": {
+                "integer": 20
+              },
+              "occurrences": 20
+            },
+            "bestCorrectAnswers": {
+              "types": {
+                "integer": 21
+              },
+              "occurrences": 21
+            },
+            "completedAt": {
+              "types": {
+                "timestamp": 10,
+                "null": 1
+              },
+              "occurrences": 11
+            },
+            "bestScore": {
+              "types": {
+                "integer": 21
+              },
+              "occurrences": 21
+            },
+            "attemptCount": {
+              "types": {
+                "integer": 21
+              },
+              "occurrences": 21
+            },
+            "stars": {
+              "types": {
+                "integer": 21
+              },
+              "occurrences": 21
+            },
+            "updatedAt": {
+              "types": {
+                "timestamp": 20,
+                "null": 1
+              },
+              "occurrences": 21
+            }
+          },
+          "subcollections": {}
+        },
+        "mission_progress": {
+          "id": "mission_progress",
+          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/mission_progress",
+          "pathPattern": "users/{usersId}/mission_progress",
+          "depth": 1,
+          "documentsScanned": 4,
+          "fields": {
+            "progress": {
+              "types": {
+                "integer": 4
+              },
+              "occurrences": 4
+            },
+            "target": {
+              "types": {
+                "integer": 4
+              },
+              "occurrences": 4
+            },
+            "isCompleted": {
+              "types": {
+                "boolean": 4
+              },
+              "occurrences": 4
+            },
+            "dateKey": {
+              "types": {
+                "string": 4
+              },
+              "occurrences": 4
+            },
+            "claimedAt": {
+              "types": {
+                "timestamp": 1,
+                "null": 3
+              },
+              "occurrences": 4
+            },
+            "isClaimed": {
+              "types": {
+                "boolean": 4
+              },
+              "occurrences": 4
+            },
+            "completedAt": {
+              "types": {
+                "timestamp": 3,
+                "null": 1
+              },
+              "occurrences": 4
+            },
+            "updatedAt": {
+              "types": {
+                "timestamp": 3,
+                "null": 1
+              },
+              "occurrences": 4
+            }
+          },
+          "subcollections": {}
+        },
+        "quiz_attempts": {
+          "id": "quiz_attempts",
+          "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts",
+          "pathPattern": "users/{usersId}/quiz_attempts",
+          "depth": 1,
+          "documentsScanned": 18,
+          "fields": {
+            "totalQuestions": {
+              "types": {
+                "integer": 18
+              },
+              "occurrences": 18
+            },
+            "score": {
+              "types": {
+                "integer": 18
+              },
+              "occurrences": 18
+            },
+            "wrongAnswers": {
+              "types": {
+                "integer": 18
+              },
+              "occurrences": 18
+            },
+            "modeId": {
+              "types": {
+                "string": 18
+              },
+              "occurrences": 18
+            },
+            "durationSeconds": {
+              "types": {
+                "integer": 18
+              },
+              "occurrences": 18
+            },
+            "earnedXp": {
+              "types": {
+                "integer": 18
+              },
+              "occurrences": 18
+            },
+            "levelId": {
+              "types": {
+                "string": 18
+              },
+              "occurrences": 18
+            },
+            "startedAt": {
+              "types": {
+                "timestamp": 17,
+                "null": 1
+              },
+              "occurrences": 18
+            },
+            "correctAnswers": {
+              "types": {
+                "integer": 18
+              },
+              "occurrences": 18
+            },
+            "earnedCoin": {
+              "types": {
+                "integer": 18
+              },
+              "occurrences": 18
+            },
+            "createdAt": {
+              "types": {
+                "timestamp": 17,
+                "null": 1
+              },
+              "occurrences": 18
+            },
+            "finishedAt": {
+              "types": {
+                "timestamp": 17,
+                "null": 1
+              },
+              "occurrences": 18
+            }
+          },
+          "subcollections": {
+            "answers": {
+              "id": "answers",
+              "path": "users/5wxKG9ALNDNhIAvUhdlj1huvNtF2/quiz_attempts/1k5PwHDbx6zlETm4B4pI/answers",
+              "pathPattern": "users/{usersId}/quiz_attempts/{quiz_attemptsId}/answers",
+              "depth": 2,
+              "documentsScanned": 54,
+              "fields": {
+                "pointsEarned": {
+                  "types": {
+                    "integer": 54
+                  },
+                  "occurrences": 54
+                },
+                "questionId": {
+                  "types": {
+                    "string": 54
+                  },
+                  "occurrences": 54
+                },
+                "userAnswer": {
+                  "types": {
+                    "string": 54
+                  },
+                  "occurrences": 54
+                },
+                "timeSpentSeconds": {
+                  "types": {
+                    "integer": 54
+                  },
+                  "occurrences": 54
+                },
+                "mediaUrl": {
+                  "types": {
+                    "string": 53
+                  },
+                  "occurrences": 53
+                },
+                "mediaType": {
+                  "types": {
+                    "string": 53
+                  },
+                  "occurrences": 53
+                },
+                "correctAnswer": {
+                  "types": {
+                    "string": 54
+                  },
+                  "occurrences": 54
+                },
+                "questionNumber": {
+                  "types": {
+                    "integer": 54
+                  },
+                  "occurrences": 54
+                },
+                "isCorrect": {
+                  "types": {
+                    "boolean": 54
+                  },
+                  "occurrences": 54
+                },
+                "createdAt": {
+                  "types": {
+                    "timestamp": 53,
+                    "null": 1
+                  },
+                  "occurrences": 54
+                }
+              },
+              "subcollections": {}
+            }
+          }
+        },
+        "owned_instruments": {
+          "id": "owned_instruments",
+          "path": "users/_template/owned_instruments",
+          "pathPattern": "users/{usersId}/owned_instruments",
+          "depth": 1,
+          "documentsScanned": 2,
+          "fields": {
+            "unlockedAt": {
+              "types": {
+                "null": 1,
+                "timestamp": 1
+              },
+              "occurrences": 2
+            },
+            "isUnlocked": {
+              "types": {
+                "boolean": 2
+              },
+              "occurrences": 2
+            },
+            "source": {
+              "types": {
+                "string": 2
+              },
+              "occurrences": 2
+            }
+          },
+          "subcollections": {}
+        }
+      }
+    }
+  }
+}

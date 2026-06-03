@@ -196,7 +196,7 @@ class _QuestionPrompt extends StatelessWidget {
       text,
       textAlign: TextAlign.center,
       style: const TextStyle(
-        color: AppColors.textLight,
+        color: AppColors.textDark,
         fontSize: 16,
         fontWeight: FontWeight.w600,
       ),
@@ -216,7 +216,7 @@ class _TextQuestionCard extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 200),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.gold,
+        color: AppColors.primary,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -231,7 +231,7 @@ class _TextQuestionCard extends StatelessWidget {
           text,
           textAlign: TextAlign.center,
           style: const TextStyle(
-            color: AppColors.primary,
+            color: AppColors.textLight,
             fontSize: 16,
             fontWeight: FontWeight.bold,
             height: 1.35,

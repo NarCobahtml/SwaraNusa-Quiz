@@ -32,6 +32,8 @@ enum QuizMediaType {
         return QuizMediaType.audio;
       case 'text':
       case 'history':
+      case 'none':
+      case 'no_media':
         return QuizMediaType.text;
       case 'image':
       case 'gambar':

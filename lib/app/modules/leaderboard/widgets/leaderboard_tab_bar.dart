@@ -22,7 +22,7 @@ class LeaderboardTabBar extends StatelessWidget {
         child: const Text(
           'Global',
           style: TextStyle(
-            color: AppColors.gold,
+            color: AppColors.textLight,
             fontSize: 15,
             fontWeight: FontWeight.w700,
           ),
