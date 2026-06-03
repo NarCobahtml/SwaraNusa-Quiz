@@ -19,6 +19,13 @@ String _firstNonEmptyText(List<Object?> values) {
   return 'User';
 }
 
+String _todayKey() {
+  final now = DateTime.now();
+  final month = now.month.toString().padLeft(2, '0');
+  final day = now.day.toString().padLeft(2, '0');
+  return '${now.year}-$month-$day';
+}
+
 Map<String, Object?> _leaderboardData(
   Map<String, dynamic> userData, {
   required int xp,
@@ -86,12 +93,61 @@ class QuizSessionSummary {
   final int wrongAnswers;
   final int totalQuestions;
   final int score;
+  final int earnedXp;
+  final int earnedCoin;
+  final int bonusCoin;
+  final int perfectRewardCoin;
+  final bool isDailyQuiz;
+  final bool rewardAlreadyClaimed;
 
   const QuizSessionSummary({
     required this.correctAnswers,
     required this.wrongAnswers,
     required this.totalQuestions,
     required this.score,
+    this.earnedXp = 0,
+    this.earnedCoin = 0,
+    this.bonusCoin = 0,
+    this.perfectRewardCoin = 0,
+    this.isDailyQuiz = false,
+    this.rewardAlreadyClaimed = false,
+  });
+
+  QuizSessionSummary copyWith({
+    int? correctAnswers,
+    int? wrongAnswers,
+    int? totalQuestions,
+    int? score,
+    int? earnedXp,
+    int? earnedCoin,
+    int? bonusCoin,
+    int? perfectRewardCoin,
+    bool? isDailyQuiz,
+    bool? rewardAlreadyClaimed,
+  }) {
+    return QuizSessionSummary(
+      correctAnswers: correctAnswers ?? this.correctAnswers,
+      wrongAnswers: wrongAnswers ?? this.wrongAnswers,
+      totalQuestions: totalQuestions ?? this.totalQuestions,
+      score: score ?? this.score,
+      earnedXp: earnedXp ?? this.earnedXp,
+      earnedCoin: earnedCoin ?? this.earnedCoin,
+      bonusCoin: bonusCoin ?? this.bonusCoin,
+      perfectRewardCoin: perfectRewardCoin ?? this.perfectRewardCoin,
+      isDailyQuiz: isDailyQuiz ?? this.isDailyQuiz,
+      rewardAlreadyClaimed:
+          rewardAlreadyClaimed ?? this.rewardAlreadyClaimed,
+    );
+  }
+}
+
+class _DailyQuizSaveResult {
+  final int bonusCoin;
+  final bool rewardAlreadyClaimed;
+
+  const _DailyQuizSaveResult({
+    required this.bonusCoin,
+    required this.rewardAlreadyClaimed,
   });
 }
 
@@ -111,6 +167,9 @@ class QuizEngineService {
   String _modeId = 'tebak_gambar';
   String _levelId = 'tebak_gambar_1';
   int _totalQuestions = 10;
+  bool _isDailyQuiz = false;
+  int _dailyPerfectRewardCoin = 100;
+  String _dailyDateKey = '';
   bool _isFinished = false;
   QuizSessionSummary? _lastSummary;
 
@@ -121,12 +180,17 @@ class QuizEngineService {
     String modeId = 'tebak_gambar',
     String levelId = 'tebak_gambar_1',
     int totalQuestions = 10,
+    bool isDailyQuiz = false,
+    int dailyPerfectRewardCoin = 100,
   }) {
     _answers.clear();
     _startedAt = DateTime.now();
     _modeId = modeId;
     _levelId = levelId;
     _totalQuestions = totalQuestions;
+    _isDailyQuiz = isDailyQuiz;
+    _dailyPerfectRewardCoin = dailyPerfectRewardCoin;
+    _dailyDateKey = _todayKey();
     _isFinished = false;
     _lastSummary = null;
   }
@@ -146,6 +210,8 @@ class QuizEngineService {
         modeId: _modeId,
         levelId: _levelId,
         totalQuestions: _totalQuestions,
+        isDailyQuiz: _isDailyQuiz,
+        dailyPerfectRewardCoin: _dailyPerfectRewardCoin,
       );
     }
     final question = BackendBootstrap.instance.questionsById[questionId];
@@ -183,23 +249,28 @@ class QuizEngineService {
       wrongAnswers: wrong,
       totalQuestions: _totalQuestions,
       score: score,
+      perfectRewardCoin: _isDailyQuiz ? _dailyPerfectRewardCoin : 0,
+      isDailyQuiz: _isDailyQuiz,
     );
   }
 
   Future<QuizSessionSummary> finish() async {
     if (_isFinished) return _lastSummary ?? currentSummary();
-    final summary = currentSummary();
-    _lastSummary = summary;
-    LocalLevelProgressService.markCompleted(
-      modeId: _modeId,
-      levelId: _levelId,
-      score: summary.score,
-    );
+    var summary = currentSummary();
+
+    if (!_isDailyQuiz) {
+      LocalLevelProgressService.markCompleted(
+        modeId: _modeId,
+        levelId: _levelId,
+        score: summary.score,
+      );
+    }
 
     final user = _auth.currentUser;
     if (user == null) {
       debugPrint('Hasil kuis tidak disimpan: FirebaseAuth currentUser null.');
       _isFinished = true;
+      _lastSummary = summary;
       return summary;
     }
     debugPrint(
@@ -210,29 +281,48 @@ class QuizEngineService {
 
     final startedAt = _startedAt ?? DateTime.now();
     final durationSeconds = DateTime.now().difference(startedAt).inSeconds;
-    final earnedXp = summary.correctAnswers * 15;
-    final earnedCoin = summary.correctAnswers * 5;
+    final earnedXp = _isDailyQuiz ? 0 : summary.correctAnswers * 15;
+    final earnedCoin = _isDailyQuiz ? 0 : summary.correctAnswers * 5;
 
     final userRef = _firestore.doc(FirestorePaths.user(user.uid));
-    final levelProgressRef = _firestore.doc(
-      FirestorePaths.userLevelProgress(user.uid, _levelId),
-    );
-    final nextLevel = _nextLevelId(_levelId);
-    final nextLevelRef = nextLevel == null
-        ? null
-        : _firestore.doc(FirestorePaths.userLevelProgress(user.uid, nextLevel));
-    await _saveRequiredQuizProgress(
-      userRef: userRef,
-      levelProgressRef: levelProgressRef,
-      nextLevelRef: nextLevelRef,
-      nextLevel: nextLevel,
-      uid: user.uid,
-      summary: summary,
-      earnedXp: earnedXp,
-      earnedCoin: earnedCoin,
-    );
+    if (_isDailyQuiz) {
+      final reward = await _saveDailyQuizProgress(
+        userRef: userRef,
+        uid: user.uid,
+        summary: summary,
+        earnedXp: earnedXp,
+      );
+      summary = summary.copyWith(
+        earnedXp: earnedXp,
+        earnedCoin: earnedCoin,
+        bonusCoin: reward.bonusCoin,
+        rewardAlreadyClaimed: reward.rewardAlreadyClaimed,
+      );
+    } else {
+      final levelProgressRef = _firestore.doc(
+        FirestorePaths.userLevelProgress(user.uid, _levelId),
+      );
+      final nextLevel = _nextLevelId(_levelId);
+      final nextLevelRef = nextLevel == null
+          ? null
+          : _firestore.doc(
+              FirestorePaths.userLevelProgress(user.uid, nextLevel),
+            );
+      await _saveRequiredQuizProgress(
+        userRef: userRef,
+        levelProgressRef: levelProgressRef,
+        nextLevelRef: nextLevelRef,
+        nextLevel: nextLevel,
+        uid: user.uid,
+        summary: summary,
+        earnedXp: earnedXp,
+        earnedCoin: earnedCoin,
+      );
+      summary = summary.copyWith(earnedXp: earnedXp, earnedCoin: earnedCoin);
+    }
 
     _isFinished = true;
+    _lastSummary = summary;
 
     try {
       await _saveOptionalQuizRecords(
@@ -240,7 +330,7 @@ class QuizEngineService {
         startedAt: startedAt,
         durationSeconds: durationSeconds,
         earnedXp: earnedXp,
-        earnedCoin: earnedCoin,
+        earnedCoin: earnedCoin + summary.bonusCoin,
         summary: summary,
       );
       await MissionService.instance.incrementProgress('complete_quiz', by: 1);
@@ -343,6 +433,89 @@ class QuizEngineService {
     }
   }
 
+  Future<_DailyQuizSaveResult> _saveDailyQuizProgress({
+    required DocumentReference<Map<String, dynamic>> userRef,
+    required String uid,
+    required QuizSessionSummary summary,
+    required int earnedXp,
+  }) {
+    final dateKey = _dailyDateKey.isEmpty ? _todayKey() : _dailyDateKey;
+    final dailyQuizRef = _firestore.doc(
+      FirestorePaths.userDailyQuiz(uid, dateKey),
+    );
+
+    return _firestore.runTransaction<_DailyQuizSaveResult>((transaction) async {
+      final userSnapshot = await transaction.get(userRef);
+      final dailySnapshot = await transaction.get(dailyQuizRef);
+      final userData = userSnapshot.data() ?? {};
+      final dailyData = dailySnapshot.data() ?? {};
+
+      final alreadyClaimed = dailyData['rewardClaimed'] == true;
+      final shouldAwardBonus = summary.score >= 100 && !alreadyClaimed;
+      final bonusCoin = shouldAwardBonus ? _dailyPerfectRewardCoin : 0;
+      final nextXp = _numberValue(userData['xp']) + earnedXp;
+      final nextCoin = _numberValue(userData['coin']) + bonusCoin;
+      final nextLevel = max(1, (nextXp / 500).floor() + 1);
+      final nextQuizCompleted = _numberValue(userData['quizCompleted']) + 1;
+      final nextCorrectCount =
+          _numberValue(userData['correctAnswerCount']) +
+          summary.correctAnswers;
+      final nextWrongCount =
+          _numberValue(userData['wrongAnswerCount']) + summary.wrongAnswers;
+      final nextPerfectScoreCount =
+          _numberValue(userData['perfectScoreCount']) +
+          (shouldAwardBonus ? 1 : 0);
+
+      transaction.set(userRef, {
+        'xp': nextXp,
+        'coin': nextCoin,
+        'level': nextLevel,
+        'quizCompleted': nextQuizCompleted,
+        'correctAnswerCount': nextCorrectCount,
+        'wrongAnswerCount': nextWrongCount,
+        'perfectScoreCount': nextPerfectScoreCount,
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      transaction.set(
+        _firestore.doc(FirestorePaths.leaderboardEntry('global', uid)),
+        _leaderboardData(
+          userData,
+          xp: nextXp,
+          level: nextLevel,
+          quizCompleted: nextQuizCompleted,
+        ),
+        SetOptions(merge: true),
+      );
+
+      transaction.set(dailyQuizRef, {
+        'dateKey': dateKey,
+        'modeId': _modeId,
+        'levelId': _levelId,
+        'attemptCount': FieldValue.increment(1),
+        'lastScore': summary.score,
+        'bestScore': max(_numberValue(dailyData['bestScore']), summary.score),
+        'lastCorrectAnswers': summary.correctAnswers,
+        'bestCorrectAnswers': max(
+          _numberValue(dailyData['bestCorrectAnswers']),
+          summary.correctAnswers,
+        ),
+        'totalQuestions': summary.totalQuestions,
+        'rewardCoin': _dailyPerfectRewardCoin,
+        'rewardClaimed': alreadyClaimed || shouldAwardBonus,
+        'lastCompletedAt': FieldValue.serverTimestamp(),
+        if (shouldAwardBonus) 'rewardedAt': FieldValue.serverTimestamp(),
+        if (!dailySnapshot.exists) 'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      return _DailyQuizSaveResult(
+        bonusCoin: bonusCoin,
+        rewardAlreadyClaimed: alreadyClaimed && summary.score >= 100,
+      );
+    });
+  }
+
   Future<void> _saveOptionalQuizRecords({
     required auth.User user,
     required DateTime startedAt,
@@ -359,19 +532,21 @@ class QuizEngineService {
     final batch = _firestore.batch();
 
     batch.set(attemptRef, {
-        'modeId': _modeId,
-        'levelId': _levelId,
-        'totalQuestions': summary.totalQuestions,
-        'correctAnswers': summary.correctAnswers,
-        'wrongAnswers': summary.wrongAnswers,
-        'score': summary.score,
-        'earnedXp': earnedXp,
-        'earnedCoin': earnedCoin,
-        'durationSeconds': durationSeconds,
-        'startedAt': Timestamp.fromDate(startedAt),
-        'finishedAt': FieldValue.serverTimestamp(),
-        'createdAt': FieldValue.serverTimestamp(),
-      });
+      'sessionType': _isDailyQuiz ? 'daily' : 'level',
+      'modeId': _modeId,
+      'levelId': _levelId,
+      'totalQuestions': summary.totalQuestions,
+      'correctAnswers': summary.correctAnswers,
+      'wrongAnswers': summary.wrongAnswers,
+      'score': summary.score,
+      'earnedXp': earnedXp,
+      'earnedCoin': earnedCoin,
+      'bonusCoin': summary.bonusCoin,
+      'durationSeconds': durationSeconds,
+      'startedAt': Timestamp.fromDate(startedAt),
+      'finishedAt': FieldValue.serverTimestamp(),
+      'createdAt': FieldValue.serverTimestamp(),
+    });
 
     for (final answer in _answers) {
       batch.set(

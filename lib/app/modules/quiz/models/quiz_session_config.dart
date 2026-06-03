@@ -16,9 +16,26 @@ class QuizLevel {
 }
 
 class QuizSessionConfig extends QuizLevel {
+  final bool isDailyQuiz;
+  final int questionLimit;
+  final int perfectRewardCoin;
+
   const QuizSessionConfig({
     required super.title,
     required super.modeId,
     required super.levelId,
+    this.isDailyQuiz = false,
+    this.questionLimit = 10,
+    this.perfectRewardCoin = 100,
   });
+
+  const QuizSessionConfig.dailyQuiz()
+    : isDailyQuiz = true,
+      questionLimit = 10,
+      perfectRewardCoin = 100,
+      super(
+        title: 'Tantangan Harian',
+        modeId: 'daily_quiz',
+        levelId: 'daily_quiz',
+      );
 }

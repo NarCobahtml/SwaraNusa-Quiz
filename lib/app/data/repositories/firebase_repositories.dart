@@ -207,6 +207,24 @@ class ContentRepository {
     return docs;
   }
 
+  Future<List<QuestionDoc>> loadAllActiveQuestions() async {
+    final snapshot = await _firestore
+        .collection(FirestorePaths.questions)
+        .where('isActive', isEqualTo: true)
+        .get();
+    final docs = snapshot.docs.map(QuestionDoc.fromSnapshot).toList();
+    docs.sort((a, b) {
+      final modeCompare = a.modeId.compareTo(b.modeId);
+      if (modeCompare != 0) return modeCompare;
+      final levelCompare = a.levelId.compareTo(b.levelId);
+      if (levelCompare != 0) return levelCompare;
+      final numberCompare = a.questionNumber.compareTo(b.questionNumber);
+      if (numberCompare != 0) return numberCompare;
+      return a.id.compareTo(b.id);
+    });
+    return docs;
+  }
+
   Future<List<InstrumentDoc>> loadInstruments() async {
     final snapshot = await _firestore
         .collection(FirestorePaths.instruments)

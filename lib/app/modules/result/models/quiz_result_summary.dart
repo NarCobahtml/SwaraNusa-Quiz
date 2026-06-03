@@ -5,6 +5,11 @@ class QuizResultSummary {
   final String title;
   final String modeId;
   final String levelId;
+  final bool isDailyQuiz;
+  final int questionLimit;
+  final int perfectRewardCoin;
+  final int bonusCoin;
+  final bool rewardAlreadyClaimed;
 
   const QuizResultSummary({
     required this.correctAnswers,
@@ -13,6 +18,11 @@ class QuizResultSummary {
     this.title = '',
     this.modeId = '',
     this.levelId = '',
+    this.isDailyQuiz = false,
+    this.questionLimit = 10,
+    this.perfectRewardCoin = 0,
+    this.bonusCoin = 0,
+    this.rewardAlreadyClaimed = false,
   });
 
   int get scorePercentage {

@@ -8,6 +8,8 @@ import 'package:swaranusaquiz/app/data/services/user_service.dart';
 import 'package:swaranusaquiz/app/modules/home/models/home_leaderboard_entry.dart';
 import 'package:swaranusaquiz/app/modules/home/models/home_mission.dart';
 import 'package:swaranusaquiz/app/modules/home/models/home_profile.dart';
+import 'package:swaranusaquiz/app/modules/quiz/models/quiz_session_config.dart';
+import 'package:swaranusaquiz/app/modules/quiz/views/quiz_session_page.dart';
 import 'package:swaranusaquiz/app/routes/app_pages.dart';
 
 class HomeController extends GetxController {
@@ -129,6 +131,14 @@ class HomeController extends GetxController {
 
   void openMode() {
     Get.toNamed(AppRoutes.mode);
+  }
+
+  void openDailyQuiz() {
+    Get.to(
+      () => const QuizSessionPage(config: QuizSessionConfig.dailyQuiz()),
+      transition: Transition.fade,
+      duration: const Duration(milliseconds: 200),
+    );
   }
 
   @override

@@ -31,6 +31,8 @@ class FirestorePaths {
   static String userBadge(String uid, String badgeId) =>
       '$users/$uid/achievements/$badgeId';
   static String userDailyLogin(String uid) => '$users/$uid/daily_login/current';
+  static String userDailyQuiz(String uid, String dateKey) =>
+      '$users/$uid/daily_quiz/$dateKey';
   static String leaderboardEntry(String periodKey, String uid) =>
       '$leaderboards/$periodKey/entries/$uid';
 }

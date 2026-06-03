@@ -15,6 +15,18 @@ class QuizResultController extends GetxController {
 
   int get correctAnswers => summary.correctAnswers;
   int get wrongAnswers => summary.wrongAnswers;
+  bool get isDailyQuiz => summary.isDailyQuiz;
+
+  String get completionTitle {
+    if (!summary.isDailyQuiz) return 'Selamat User!';
+    if (summary.bonusCoin > 0) return 'Bonus Harian Diklaim!';
+    if (summary.scorePercentage >= 100) return 'Skor Sempurna!';
+    return 'Tantangan Selesai';
+  }
+
+  String get backButtonLabel {
+    return summary.isDailyQuiz ? 'Balik ke Beranda' : 'Balik ke Mode';
+  }
 
   void openReview() {
     final answers = QuizEngineService.instance.answers.map((answer) {
@@ -45,6 +57,9 @@ class QuizResultController extends GetxController {
           title: summary.title.isEmpty ? 'Kuis' : summary.title,
           modeId: summary.modeId,
           levelId: summary.levelId,
+          isDailyQuiz: summary.isDailyQuiz,
+          questionLimit: summary.questionLimit,
+          perfectRewardCoin: summary.perfectRewardCoin,
         ),
       ),
       transition: Transition.fade,
@@ -53,6 +68,9 @@ class QuizResultController extends GetxController {
   }
 
   void backToMode() {
-    Get.offAllNamed(AppRoutes.mainNavigation, arguments: 4);
+    Get.offAllNamed(
+      AppRoutes.mainNavigation,
+      arguments: summary.isDailyQuiz ? 0 : 4,
+    );
   }
 }

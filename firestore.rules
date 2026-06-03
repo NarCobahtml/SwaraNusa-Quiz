@@ -96,6 +96,11 @@ service cloud.firestore {
         allow delete: if false;
       }
 
+      match /daily_quiz/{docId} {
+        allow read, create, update: if isOwner(uid);
+        allow delete: if false;
+      }
+
       match /instrument_mastery/{instrumentId} {
         allow read, create, update: if isOwner(uid);
         allow delete: if false;

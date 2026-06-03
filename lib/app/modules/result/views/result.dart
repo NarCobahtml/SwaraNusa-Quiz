@@ -37,16 +37,23 @@ class QuizResultScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 ScoreCircle(percentage: controller.scorePercentage),
                 const SizedBox(height: 25),
-                const Text(
-                  'Selamat User!',
-                  style: TextStyle(
+                Text(
+                  controller.completionTitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
                     color: AppColors.textDark,
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    letterSpacing: 0.5,
                   ),
                 ),
-                const SizedBox(height: 90),
+                if (controller.isDailyQuiz) ...[
+                  const SizedBox(height: 12),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: _DailyQuizRewardBanner(summary: controller.summary),
+                  ),
+                ],
+                SizedBox(height: controller.isDailyQuiz ? 28 : 90),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
@@ -85,9 +92,9 @@ class QuizResultScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       TextButton(
                         onPressed: controller.backToMode,
-                        child: const Text(
-                          'Balik ke Mode',
-                          style: TextStyle(
+                        child: Text(
+                          controller.backButtonLabel,
+                          style: const TextStyle(
                             color: AppColors.textMuted,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -115,6 +122,75 @@ class QuizResultScreen extends StatelessWidget {
       correctAnswers: correctAnswers,
       wrongAnswers: wrongAnswers,
       totalQuestions: totalQuestions,
+    );
+  }
+}
+
+class _DailyQuizRewardBanner extends StatelessWidget {
+  final QuizResultSummary summary;
+
+  const _DailyQuizRewardBanner({required this.summary});
+
+  @override
+  Widget build(BuildContext context) {
+    final isPerfect = summary.scorePercentage >= 100;
+    final reward = summary.perfectRewardCoin > 0
+        ? summary.perfectRewardCoin
+        : 100;
+    final String message;
+    if (summary.bonusCoin > 0) {
+      message = '+${summary.bonusCoin} coin berhasil masuk ke saldo.';
+    } else if (isPerfect && summary.rewardAlreadyClaimed) {
+      message = 'Reward sempurna hari ini sudah diklaim.';
+    } else {
+      message = 'Skor 100% untuk klaim $reward coin harian.';
+    }
+
+    final Color color;
+    if (summary.bonusCoin > 0) {
+      color = AppColors.success;
+    } else if (isPerfect) {
+      color = AppColors.gold;
+    } else {
+      color = AppColors.primary;
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.monetization_on,
+              color: AppColors.textLight,
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(
+                color: AppColors.textDark,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

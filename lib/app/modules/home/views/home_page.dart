@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:swaranusaquiz/app/data/services/user_service.dart';
 import 'package:swaranusaquiz/app/modules/home/controllers/home_controller.dart';
 import 'package:swaranusaquiz/app/modules/home/widgets/continue_playing_section.dart';
+import 'package:swaranusaquiz/app/modules/home/widgets/daily_quiz_cta_card.dart';
 import 'package:swaranusaquiz/app/modules/home/widgets/daily_missions_section.dart';
 import 'package:swaranusaquiz/app/modules/home/widgets/home_leaderboard_section.dart';
 import 'package:swaranusaquiz/app/modules/home/widgets/home_profile_card.dart';
@@ -36,6 +37,8 @@ class HomePage extends StatelessWidget {
                   UserService.to.currentUser.value;
                   return HomeProfileCard(profile: controller.profile);
                 }),
+                const SizedBox(height: 24),
+                DailyQuizCtaCard(onTap: controller.openDailyQuiz),
                 const SizedBox(height: 24),
                 ContinuePlayingSection(
                   onTap: onNavigateToMode ?? controller.openMode,

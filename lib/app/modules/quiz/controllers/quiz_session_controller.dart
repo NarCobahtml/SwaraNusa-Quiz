@@ -75,7 +75,9 @@ class QuizSessionController extends GetxController {
 
     if (loadedQuestions.isEmpty) {
       phase.value = QuizSessionPhase.error;
-      errorMessage.value = 'Belum ada soal untuk level ini.';
+      errorMessage.value = config.isDailyQuiz
+          ? 'Belum ada soal aktif untuk tantangan harian.'
+          : 'Belum ada soal untuk level ini.';
       return;
     }
 
@@ -84,6 +86,8 @@ class QuizSessionController extends GetxController {
       modeId: config.modeId,
       levelId: config.levelId,
       totalQuestions: questions.length,
+      isDailyQuiz: config.isDailyQuiz,
+      dailyPerfectRewardCoin: config.perfectRewardCoin,
     );
     _showQuestionAt(0);
   }
@@ -181,6 +185,11 @@ class QuizSessionController extends GetxController {
         title: config.title,
         modeId: config.modeId,
         levelId: config.levelId,
+        isDailyQuiz: config.isDailyQuiz,
+        questionLimit: config.questionLimit,
+        perfectRewardCoin: config.perfectRewardCoin,
+        bonusCoin: summary.bonusCoin,
+        rewardAlreadyClaimed: summary.rewardAlreadyClaimed,
       ),
     );
   }
