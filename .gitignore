@@ -41,6 +41,8 @@ assets/env/.env
 !.env.example
 package-lock.json
 package.json
+firebase.json
+firestore.rules
 
 # Symbolication related
 app.*.symbols
